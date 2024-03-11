@@ -7,6 +7,7 @@ export function App() {
 
   return (
     <div>
+   
       <Board/>
     </div>
   );
