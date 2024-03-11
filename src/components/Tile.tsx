@@ -1,12 +1,13 @@
-import emptySpace from "../assets/GroundGravel_Sand.png"
-import React from 'react'
+import "./Tile.css";
 
-type Props = {}
+type Props = {
+  image: string;
+}
 
-const Tile = (props) => {
+const Tile = ({image}:Props) => {
   return (
-    <div>
-        <img src={props.image}/>
+    <div className="tile">
+        <img src={image}/>
     </div>
   )
 }

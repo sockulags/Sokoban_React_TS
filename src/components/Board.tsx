@@ -1,6 +1,5 @@
 import Tile from "./Tile";
-import emptySpace from "../assets/GroundGravel_Sand.png"
-import {level1} from "../data/levels"
+import {level1, level1Layout} from "../data/levels"
 import "./board.css"
 
 const Board = () => {
@@ -10,7 +9,7 @@ const Board = () => {
         <div className="board">
             {level1.map(row => {
             return <div className="row">{row.map(tile => {
-                return <Tile image={emptySpace}/>
+                return <Tile image={level1Layout[tile]}/>
             })}</div>
             })}
         </div>

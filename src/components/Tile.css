@@ -1,0 +1,10 @@
+.tile{
+    height: 64px;
+    width: 64px;
+    background-color: #ece3ce ;
+    img{
+        height: 100%;
+        width: 100%;
+        background-color: transparent ;
+    }
+}
