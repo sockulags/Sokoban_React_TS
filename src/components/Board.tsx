@@ -8,49 +8,71 @@ interface Position {
   y: number;
 }
 
+const storageLocations = getLocations(4);
+
+function getLocations(tileType: number) {
+  const array: Position[] = [];
+  level1.forEach((row, rowIndex) => {
+    row.forEach((tile, colIndex) => {
+      if (tile === tileType) {
+        array.push({ y: rowIndex, x: colIndex });
+      }
+    });
+  });
+  return array;
+}
+
 const Board = () => {
   const [board, setBoard] = useState<number[][]>(level1);
   const [charPos, setCharPos] = useState<Position | undefined>();
-  const [storageLocations, setStorageLocations] = useState<Position[]>([]);
- 
+  const [boxLocations, setBoxLocations] = useState<Position[]>(getLocations(2));
 
   const getCharStartPosition = () => {
     const posY = board.findIndex((row) => row.includes(5));
-    console.log(posY);
     const posX = board[posY].findIndex((x) => x === 5);
-    console.log(posX);
     return { x: posX, y: posY };
   };
 
-   const getStorageLocationPositions = () => {
-    const array:Position[] =[]
+  function getLocations(tileType: number) {
+    const array: Position[] = [];
     board.forEach((row, rowIndex) => {
-        row.forEach((tile, colIndex) => {
-            if (tile === 4) {
-                array.push({y:rowIndex, x:colIndex});
-            }
-        });
+      row.forEach((tile, colIndex) => {
+        if (tile === tileType) {
+          array.push({ y: rowIndex, x: colIndex });
+        }
+      });
     });
-     return array;
-    };
-  
+    return array;
+  }
 
-  useEffect(() => {    
+  useEffect(() => {
     const startPosition = getCharStartPosition();
-    setCharPos(startPosition);       
-    setStorageLocations(getStorageLocationPositions());
+    setCharPos(startPosition);
   }, []);
 
   const upDateCharPos = (y: number, x: number) => {
     const newBoard = [...board];
-    console.log("storage" + storageLocations)
-    
-    const isStorageLocation = storageLocations.some((pos) => pos.y == charPos!.y && pos.x == charPos!.x)
-    console.log(isStorageLocation)
-    newBoard[charPos!.y][charPos!.x] = isStorageLocation? 4 : 3;
+    const isStorageLocation = storageLocations.some(
+      (pos) => pos.y == charPos!.y && pos.x == charPos!.x
+    );
+    newBoard[charPos!.y][charPos!.x] = isStorageLocation ? 4 : 3;
     newBoard[y][x] = 5;
     setCharPos({ y: y, x: x });
     setBoard(newBoard);
+    setBoxLocations(getLocations(2));
+    checkCompletion();
+  };
+
+  const checkCompletion = () => {
+    let correct = 0;
+    for (const pos of storageLocations) {
+      if (boxLocations.some((box) => box.x === pos.x && box.y === pos.y)) {
+        correct++;
+        console.log(
+          "Boxes at store location: " + correct + "/" + storageLocations.length
+        );
+      }
+    }
   };
 
   const boxMove = (y: number, x: number) => {
