@@ -23,21 +23,21 @@ const getCharStartPosition = () => {
 useEffect(() => {
     const startPosition = getCharStartPosition();
     setCharPos(startPosition);
-  }, []);
+  }, );
 
-getCharStartPosition();
 
-  const tryMove = (x: number, y: number, key: string) => {
-    console.log(`Trying to move at position (${x}, ${y}) with key ${key}`);
-    // Add your move logic here
-  };
-
-  const upDateCharPos = (y, x) => {
+  const upDateCharPos = (y:number, x:number) => {
     const newBoard = [...board];
-    newBoard[charPos.y][charPos.x] = 3;
+    newBoard[charPos!.y][charPos!.x] = 3;
     newBoard[y][x] = 5;
     setCharPos({ y:y ,x:x });
     setBoard(newBoard);
+  }
+
+  const boxMove = (y:number, x:number) =>{
+    const newBoard = [...board];
+     newBoard[y][x] = 2;
+     setBoard(newBoard);
   }
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -46,30 +46,47 @@ getCharStartPosition();
         case "ArrowUp":
             if (board[charPos.y -1][charPos.x] === 3){
                 upDateCharPos(charPos.y - 1, charPos.x)
+            } else if (board[charPos.y -1][charPos.x] === 2){
+                if (board[charPos.y -2][charPos.x] === 3){
+                    boxMove(charPos.y - 2, charPos.x)
+                    upDateCharPos(charPos.y - 1, charPos.x)
+                }
             }
             break;
         case "ArrowDown":
             if (board[charPos.y + 1][charPos.x] === 3) {
                 upDateCharPos(charPos.y + 1, charPos.x);
+            }    else if (board[charPos.y + 1][charPos.x] === 2){
+                if (board[charPos.y +2][charPos.x] === 3){
+                    boxMove(charPos.y + 2, charPos.x)
+                    upDateCharPos(charPos.y + 1, charPos.x)
+                }
             }
             break;
         case "ArrowLeft":
             if (board[charPos.y][charPos.x - 1] === 3) {
                 upDateCharPos(charPos.y, charPos.x -1);
+            }    else if (board[charPos.y ][charPos.x -1] === 2){
+                if (board[charPos.y][charPos.x - 2] === 3){
+                    boxMove(charPos.y, charPos.x -2)
+                    upDateCharPos(charPos.y, charPos.x -1)
+                }
             }
             break;
         case "ArrowRight":
             if (board[charPos.y][charPos.x + 1] === 3) {
                 upDateCharPos(charPos.y, charPos.x + 1);
+            }    else if (board[charPos.y ][charPos.x +1] === 2){
+                if (board[charPos.y][charPos.x + 2] === 3){
+                    boxMove(charPos.y, charPos.x +2)
+                    upDateCharPos(charPos.y, charPos.x +1)
+                }
             }
             break;
             default:
                 return;       
     }
-    // console.log('Key pressed:', event.key);
-    // if(charPos)
-    // tryMove(charPos.x, charPos.y, event.key);
-    // Add your key event handling logic here, such as updating character position
+
   };
 
   return (

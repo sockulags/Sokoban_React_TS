@@ -6,7 +6,6 @@ type Props = {
 };
 
 const Tile = ({image}: Props) => {
-  // const [key, setKey] = useState<string>();
 
 
   return (   

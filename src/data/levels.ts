@@ -36,3 +36,5 @@ export const level1Layout = [
   storageLocation,
   character,
 ];
+
+
