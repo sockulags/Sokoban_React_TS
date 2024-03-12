@@ -11,6 +11,7 @@ interface Position {
 const Board = () => {
   const [board, setBoard] = useState<number[][]>(level1);
   const [charPos, setCharPos] = useState<Position | undefined>();
+  const [storageLocations, setStorageLocations] = useState<Position[]>([]);
  
 
   const getCharStartPosition = () => {
@@ -22,7 +23,7 @@ const Board = () => {
   };
 
    const getStorageLocationPositions = () => {
-    const array =[]
+    const array:Position[] =[]
     board.forEach((row, rowIndex) => {
         row.forEach((tile, colIndex) => {
             if (tile === 4) {
@@ -32,23 +33,21 @@ const Board = () => {
     });
      return array;
     };
+  
 
-     const storageLocation:Position[] = getStorageLocationPositions()
-
-  useEffect(() => {
-    
+  useEffect(() => {    
     const startPosition = getCharStartPosition();
-    setCharPos(startPosition);
-    
+    setCharPos(startPosition);       
+    setStorageLocations(getStorageLocationPositions());
   }, []);
 
   const upDateCharPos = (y: number, x: number) => {
     const newBoard = [...board];
-    console.log("storage" + storageLocation)
+    console.log("storage" + storageLocations)
     
-    //const isStorageLocation = storageLocation.filter((pos) => pos.y == charPos!.y && pos.x == charPos!.x)
-    //console.log(isStorageLocation)
-    newBoard[charPos!.y][charPos!.x] = level1[charPos!.y][charPos!.x] === 4? 4 : 3;
+    const isStorageLocation = storageLocations.some((pos) => pos.y == charPos!.y && pos.x == charPos!.x)
+    console.log(isStorageLocation)
+    newBoard[charPos!.y][charPos!.x] = isStorageLocation? 4 : 3;
     newBoard[y][x] = 5;
     setCharPos({ y: y, x: x });
     setBoard(newBoard);
