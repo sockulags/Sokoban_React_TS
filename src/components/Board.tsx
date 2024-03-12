@@ -11,6 +11,7 @@ interface Position {
 const Board = () => {
   const [board, setBoard] = useState<number[][]>(level1);
   const [charPos, setCharPos] = useState<Position | undefined>();
+ 
 
   const getCharStartPosition = () => {
     const posY = board.findIndex((row) => row.includes(5));
@@ -20,14 +21,34 @@ const Board = () => {
     return { x: posX, y: posY };
   };
 
+   const getStorageLocationPositions = () => {
+    const array =[]
+    board.forEach((row, rowIndex) => {
+        row.forEach((tile, colIndex) => {
+            if (tile === 4) {
+                array.push({y:rowIndex, x:colIndex});
+            }
+        });
+    });
+     return array;
+    };
+
+     const storageLocation:Position[] = getStorageLocationPositions()
+
   useEffect(() => {
+    
     const startPosition = getCharStartPosition();
     setCharPos(startPosition);
+    
   }, []);
 
   const upDateCharPos = (y: number, x: number) => {
     const newBoard = [...board];
-    newBoard[charPos!.y][charPos!.x] = 3;
+    console.log("storage" + storageLocation)
+    
+    //const isStorageLocation = storageLocation.filter((pos) => pos.y == charPos!.y && pos.x == charPos!.x)
+    //console.log(isStorageLocation)
+    newBoard[charPos!.y][charPos!.x] = level1[charPos!.y][charPos!.x] === 4? 4 : 3;
     newBoard[y][x] = 5;
     setCharPos({ y: y, x: x });
     setBoard(newBoard);
@@ -91,7 +112,7 @@ const Board = () => {
 
   return (
     <div className="board" tabIndex={0} onKeyDown={handleKeyDown} autoFocus>
-      {level1.map((row, rowIndex) => (
+      {board.map((row, rowIndex) => (
         <div className="row" key={rowIndex}>
           {row.map((tile, colInd) => (
             <Tile key={`${rowIndex}-${colInd}`} image={level1Layout[tile]} />
