@@ -30,6 +30,8 @@ const Board = () => {
   const [boxLocations, setBoxLocations] = useState<Position[]>(getLocations(2));
   const [moves, setMove] = useState<number>(0);
   const [pushes, setPushes] = useState<number>(0);
+  const [gameEnded, setGameEnded] = useState(false);
+  const [gameTime, setGameTime] = useState("");
 
   const getCharStartPosition = () => {
     const posY = board.findIndex((row) => row.includes(5));
@@ -81,9 +83,30 @@ const Board = () => {
         console.log(
           "Boxes at store location: " + correct + "/" + storageLocations.length
         );
+        countHighscore(100000, moves)
+      }
+      if (correct === 1){
+        console.log("GAME OVER")
+        setGameEnded(true);
+        console.log(gameEnded)
       }
     }
   };
+
+ const handleGameEnd = (time) => {
+   console.log("Spelet är klart. Tid:", time);
+   setGameTime(time); 
+   countHighscore(gameTime, moves)
+ };
+
+   function countHighscore(time, moves) {
+    time = time/1000
+     const weightTime = 1;
+     const weightMoves = 1; // Can be changed if time or number of moves should have a higher weight on the highscore
+
+     const highscore = 100000 * 1 / (weightTime * time + moves * weightMoves);
+     console.log(highscore);
+   }
 
   const boxMove = (y: number, x: number) => {
     const newBoard = [...board];
@@ -144,20 +167,24 @@ const Board = () => {
 
   return (
     <>
-    <div className="highscore-data">
-      <Highscore moves={moves} pushes={pushes}/>
-    </div>
-    <div className="board" tabIndex={0} onKeyDown={handleKeyDown} autoFocus>
-      {board.map((row, rowIndex) => (
-        <div className="row" key={rowIndex}>
-          {row.map((tile, colInd) => (
-            <Tile key={`${rowIndex}-${colInd}`} image={level1Layout[tile]} />
-          ))}
-        </div>
-      ))}
-    </div>
+      <div className="highscore-data">
+        <Highscore
+          moves={moves}
+          pushes={pushes}
+          gameEnded={gameEnded}
+          onGameEnd={handleGameEnd}
+        />
+      </div>
+      <div className="board" tabIndex={0} onKeyDown={handleKeyDown} autoFocus>
+        {board.map((row, rowIndex) => (
+          <div className="row" key={rowIndex}>
+            {row.map((tile, colInd) => (
+              <Tile key={`${rowIndex}-${colInd}`} image={level1Layout[tile]} />
+            ))}
+          </div>
+        ))}
+      </div>
     </>
-
   );
 };
 
