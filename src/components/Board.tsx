@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Tile from "./Tile";
-import { level1, level1Layout } from "../data/levels";
+import {level1Layout, level2 } from "../data/levels";
 import "./board.css";
 
 interface Position {
@@ -12,7 +12,7 @@ const storageLocations = getLocations(4);
 
 function getLocations(tileType: number) {
   const array: Position[] = [];
-  level1.forEach((row, rowIndex) => {
+  level2.forEach((row, rowIndex) => {
     row.forEach((tile, colIndex) => {
       if (tile === tileType) {
         array.push({ y: rowIndex, x: colIndex });
@@ -23,7 +23,7 @@ function getLocations(tileType: number) {
 }
 
 const Board = () => {
-  const [board, setBoard] = useState<number[][]>(level1);
+  const [board, setBoard] = useState<number[][]>(level2);
   const [charPos, setCharPos] = useState<Position | undefined>();
   const [boxLocations, setBoxLocations] = useState<Position[]>(getLocations(2));
   const [characterDirection, setCharacterDirection] = useState<"up" | "down" | "left" | "right">("down");
