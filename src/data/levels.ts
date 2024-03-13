@@ -12,7 +12,20 @@ import wall from "../assets/Wall_Brown.png";
 import box from "../assets/CrateDark_Red.png";
 import emptySpace from "../assets/GroundGravel_Sand.png";
 import storageLocation from "../assets/EndPoint_Red.png";
-import character from "../assets/Character1.png";
+import character from "../assets/Character4.png";
+
+
+export const level0 = [
+  [0, 1, 1, 1, 1, 1, 0, 0, 0],
+  [0, 1, 0, 0, 0, 1, 1, 1, 1],
+  [0, 1, 0, 0, 0, 1, 0, 0, 1],
+  [0, 1, 1, 0, 0, 0, 0, 4, 1],
+  [1, 1, 1, 0, 1, 1, 1, 4, 1],
+  [1, 0, 2, 0, 1, 0, 1, 4, 1],
+  [1, 0, 2, 2, 1, 0, 1, 1, 1],
+  [1, 5, 0, 0, 1, 0, 0, 0, 0],
+  [1, 1, 1, 1, 1, 0, 0, 0, 0],
+];
 
 export const level1 = [
   [0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -28,6 +41,19 @@ export const level1 = [
   [0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 ];
 
+export const level2 = [
+  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0],
+  [1, 4, 4, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1],
+  [1, 4, 4, 0, 0, 1, 0, 2, 0, 0, 2, 0, 0, 1],
+  [1, 4, 4, 0, 0, 1, 2, 1, 1, 1, 1, 0, 0, 1],
+  [1, 4, 4, 0, 0, 0, 0, 5, 0, 1, 1, 0, 0, 1],
+  [1, 4, 4, 0, 0, 1, 0, 1, 0, 0, 2, 0, 1, 1],
+  [1, 1, 1, 1, 1, 1, 0, 1, 1, 2, 0, 2, 0, 1],
+  [0, 0, 1, 0, 2, 0, 0, 2, 0, 2, 0, 2, 0, 1],
+  [0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1],
+  [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+];
+
 export const level1Layout = [
   outOfBounds,
   wall,
@@ -36,5 +62,3 @@ export const level1Layout = [
   storageLocation,
   character,
 ];
-
-

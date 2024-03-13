@@ -1,6 +1,4 @@
 import "./Tile.css";
-// import { useState } from "react";
-
 type Props = {
   image: string;
 };
