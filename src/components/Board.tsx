@@ -2,9 +2,8 @@ import React, { useState, useEffect } from "react";
 import Tile from "./Tile";
 import { level1, level1Layout } from "../data/levels";
 import "./board.css";
-import Moves from "./Moves";
-import Pushes from "./Pushes";
-import Time from "./Time";
+import Highscore from "./Highscore";
+
 
 interface Position {
   x: number;
@@ -146,9 +145,7 @@ const Board = () => {
   return (
     <>
     <div className="highscore-data">
-      <Moves moves={moves}/>
-      <Pushes pushes={pushes}/>
-      <Time />
+      <Highscore moves={moves} pushes={pushes}/>
     </div>
     <div className="board" tabIndex={0} onKeyDown={handleKeyDown} autoFocus>
       {board.map((row, rowIndex) => (

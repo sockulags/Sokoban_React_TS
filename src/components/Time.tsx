@@ -52,7 +52,6 @@ export default function Time() {
   return (
     <div className="clock">
       <p className="time">TIME: {time}</p>
-      
     </div>
   );
 }
