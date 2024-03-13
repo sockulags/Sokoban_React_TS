@@ -145,7 +145,7 @@ const Board = () => {
 
   return (
     <>
-    <div>
+    <div className="highscore-data">
       <Moves moves={moves}/>
       <Pushes pushes={pushes}/>
       <Time />

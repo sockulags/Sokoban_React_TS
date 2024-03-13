@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
+import "./time.css"
 
 
 export default function Time() {
   const [start, setStart] = useState(true);
   const [count, setCount] = useState(0);
   const [time, setTime] = useState("00:00:00");
-  //const [timeSetting, setTimeSetting] = useState({ m: 0, s: 0 });
 
   const initTime = new Date();   
 
   const showTimer = (ms:number) => {
     const milliseconds = Math.floor((ms % 1000) / 10)
       .toString()
-      .padStart(2, "0");
+      .padStart(2, "0");  // put a 0 at the start if less then two digits
     const second = Math.floor((ms / 1000) % 60)
       .toString()
       .padStart(2, "0");
@@ -37,10 +37,10 @@ export default function Time() {
       return;
     }
     const id = setInterval(() => {
-      const left = count + (new Date() - initTime); // compare the new date with the date fetched at start
-      setCount(left);
-      showTimer(left);
-      if (left <= 0) {
+      const time = count + (new Date() - initTime); // compare the new date with the date fetched at start
+      setCount(time);
+      showTimer(time);
+      if (time <= 0) {
         setTime("00:00:00:00");
         clearInterval(id);
       }
@@ -51,7 +51,7 @@ export default function Time() {
 
   return (
     <div className="clock">
-      <h1 className="time">{time}</h1>
+      <p className="time">TIME: {time}</p>
       
     </div>
   );
