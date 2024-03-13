@@ -26,6 +26,7 @@ const Board = () => {
   const [board, setBoard] = useState<number[][]>(level1);
   const [charPos, setCharPos] = useState<Position | undefined>();
   const [boxLocations, setBoxLocations] = useState<Position[]>(getLocations(2));
+  const [move, setMove] = useState<number>()
 
   const getCharStartPosition = () => {
     const posY = board.findIndex((row) => row.includes(5));
