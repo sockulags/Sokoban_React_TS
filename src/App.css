@@ -4,6 +4,13 @@
     box-sizing: border-box;
     font-family: "Source Code Pro", monospace;
     color: #f5f3f3;
+    --header-color: #ecc010;
+}
+
+h1,h2,h3,h4,h5,h6{
+    color: var(--header-color);
+    font-family: "Edmund";
+    font-weight: 300;
 }
 
 @font-face {
@@ -13,4 +20,9 @@
 
 body{
     background-color: #1e1e1e;
+}
+
+#root{
+    margin: 0 auto;
+    max-width: 1200px;
 }
