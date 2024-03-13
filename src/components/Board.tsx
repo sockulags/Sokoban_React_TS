@@ -4,6 +4,7 @@ import { level1, level1Layout } from "../data/levels";
 import "./board.css";
 import Moves from "./Moves";
 import Pushes from "./Pushes";
+import Time from "./Time";
 
 interface Position {
   x: number;
@@ -147,6 +148,7 @@ const Board = () => {
     <div>
       <Moves moves={moves}/>
       <Pushes pushes={pushes}/>
+      <Time />
     </div>
     <div className="board" tabIndex={0} onKeyDown={handleKeyDown} autoFocus>
       {board.map((row, rowIndex) => (
