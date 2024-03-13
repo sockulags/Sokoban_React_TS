@@ -114,6 +114,7 @@ const Board = () => {
     let newX: number = 0;
     let newBoxPositionX: number = 0;
     let newBoxPositionY: number = 0;
+    console.log(event.key)
     if (charPos)
       switch (event.key) {
         case "ArrowUp":
@@ -145,7 +146,7 @@ const Board = () => {
           newBoxPositionX = newX + 1;
           break;
       }
-
+      console.log(board[newY][newX]);
     switch (board[newY][newX]) {
       case 3:
       case 4:

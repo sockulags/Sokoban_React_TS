@@ -15,7 +15,7 @@ h1,h2,h3,h4,h5,h6{
 
 @font-face {
     font-family: "Edmund";
-    src: local("Edmund"), url("./fonts/edmund-free.ttf") format("truetype");
+    src: url("./fonts/edmund-free.ttf") format("truetype");
 }
 
 body{
