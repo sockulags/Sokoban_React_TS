@@ -1,17 +1,19 @@
 import "./Tile.css";
+
 type Props = {
-  image: string;
+  getTileImage: (rowIndex: number, colIndex: number) => string;
+  rowIndex: number;
+  colIndex: number;
 };
 
-const Tile = ({image}: Props) => {
+const Tile = ({ getTileImage, rowIndex, colIndex }: Props) => {
+  const image = getTileImage(rowIndex, colIndex);
 
-
-  return (   
+  return (
     <div className="tile">
-      <img src={image} /> 
-     
-     </div>
-  ) 
+      <img src={image} />
+    </div>
+  );
 };
 
 export default Tile;
