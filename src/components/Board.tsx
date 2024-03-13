@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import Tile from "./Tile";
 import { level1, level1Layout } from "../data/levels";
 import "./board.css";
+import Moves from "./Moves";
+import Pushes from "./Pushes";
 
 interface Position {
   x: number;
@@ -26,7 +28,8 @@ const Board = () => {
   const [board, setBoard] = useState<number[][]>(level1);
   const [charPos, setCharPos] = useState<Position | undefined>();
   const [boxLocations, setBoxLocations] = useState<Position[]>(getLocations(2));
-  const [move, setMove] = useState<number>()
+  const [moves, setMove] = useState<number>(0);
+  const [pushes, setPushes] = useState<number>(0);
 
   const getCharStartPosition = () => {
     const posY = board.findIndex((row) => row.includes(5));
@@ -46,6 +49,11 @@ const Board = () => {
     return array;
   }
 
+  function updateCounter (counter:number){
+    const updatedCounter = counter +1
+    return updatedCounter
+  }
+
   useEffect(() => {
     const startPosition = getCharStartPosition();
     setCharPos(startPosition);
@@ -59,6 +67,7 @@ const Board = () => {
     newBoard[charPos!.y][charPos!.x] = isStorageLocation ? 4 : 3;
     newBoard[y][x] = 5;
     setCharPos({ y: y, x: x });
+    setMove(updateCounter(moves))
     setBoard(newBoard);
     setBoxLocations(getLocations(2));
     checkCompletion();
@@ -79,6 +88,7 @@ const Board = () => {
   const boxMove = (y: number, x: number) => {
     const newBoard = [...board];
     newBoard[y][x] = 2;
+    setPushes(updateCounter(pushes))
     setBoard(newBoard);
   };
 
@@ -133,6 +143,11 @@ const Board = () => {
   };
 
   return (
+    <>
+    <div>
+      <Moves moves={moves}/>
+      <Pushes pushes={pushes}/>
+    </div>
     <div className="board" tabIndex={0} onKeyDown={handleKeyDown} autoFocus>
       {board.map((row, rowIndex) => (
         <div className="row" key={rowIndex}>
@@ -142,6 +157,8 @@ const Board = () => {
         </div>
       ))}
     </div>
+    </>
+
   );
 };
 
