@@ -1,21 +1,20 @@
 import "./Tile.css";
-import boxInStorageLocation from "../assets/Crate_Brown.png";
 
 type Props = {
-  image: string;
-  isOnStorage: boolean;
+  getTileImage: (rowIndex: number, colIndex: number) => string;
+  rowIndex: number;
+  colIndex: number;
 };
 
-const Tile = ({ image, isOnStorage }: Props) => {
-  const renderImage = () => {
-    if (isOnStorage) {
-      return <img src={boxInStorageLocation} />;
-    } else {
-      return <img src={image} />;
-    }
-  };
+const Tile = ({ getTileImage, rowIndex, colIndex }: Props) => {
+  const image = getTileImage(rowIndex, colIndex);
 
-  return <div className="tile">{renderImage()}</div>;
+  return (
+    <div className="tile">
+      <img src={image} />
+    </div>
+  );
 };
+
 
 export default Tile;

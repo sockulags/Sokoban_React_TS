@@ -13,6 +13,7 @@ import box from "../assets/CrateDark_Red.png";
 import emptySpace from "../assets/GroundGravel_Sand.png";
 import storageLocation from "../assets/EndPoint_Red.png";
 import character from "../assets/Character1.png";
+import boxInStorageLocation from "../assets/Crate_Brown.png";
 
 export const level1 = [
   [0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -35,6 +36,7 @@ export const level1Layout = [
   emptySpace,
   storageLocation,
   character,
+  boxInStorageLocation,
 ];
 
 

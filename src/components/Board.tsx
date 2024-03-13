@@ -81,6 +81,19 @@ const Board = () => {
     setBoard(newBoard);
   };
 
+  const getTileImage = (rowIndex: number, colIndex: number) => {
+    const tile = board[rowIndex][colIndex];
+    if (tile === 2) {
+      const isOnStorage = storageLocations.some(
+        (pos) => pos.y === rowIndex && pos.x === colIndex
+      );
+      if (isOnStorage) {
+        return level1Layout[6];
+      }
+    }
+    return level1Layout[tile];
+  };
+
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     let newY: number = 0;
     let newX: number = 0;
@@ -138,13 +151,9 @@ const Board = () => {
           {row.map((tile, colInd) => (
             <Tile
               key={`${rowIndex}-${colInd}`}
-              image={level1Layout[tile]}
-              isOnStorage={
-                tile === 2 &&
-                storageLocations.some(
-                  (pos) => pos.x === colInd && pos.y === rowIndex
-                )
-              }
+              getTileImage={getTileImage}
+              rowIndex={rowIndex}
+              colIndex={colInd}
             />
           ))}
         </div>
