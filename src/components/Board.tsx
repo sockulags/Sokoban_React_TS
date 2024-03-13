@@ -26,6 +26,7 @@ const Board = () => {
   const [board, setBoard] = useState<number[][]>(level1);
   const [charPos, setCharPos] = useState<Position | undefined>();
   const [boxLocations, setBoxLocations] = useState<Position[]>(getLocations(2));
+  const [characterDirection, setCharacterDirection] = useState<"up" | "down" | "left" | "right">("down");
 
   const getCharStartPosition = () => {
     const posY = board.findIndex((row) => row.includes(5));
@@ -83,6 +84,20 @@ const Board = () => {
 
   const getTileImage = (rowIndex: number, colIndex: number) => {
     const tile = board[rowIndex][colIndex];
+    if (charPos && rowIndex === charPos.y && colIndex === charPos.x) {
+      switch (characterDirection) {
+        case "up":
+          return level1Layout[7];
+        case "down":
+          return level1Layout[5];
+        case "left":
+          return level1Layout[8];
+        case "right":
+          return level1Layout[9];
+        default:
+          return level1Layout[tile];
+      }
+    }
     if (tile === 2) {
       const isOnStorage = storageLocations.some(
         (pos) => pos.y === rowIndex && pos.x === colIndex
@@ -102,24 +117,28 @@ const Board = () => {
     if (charPos)
       switch (event.key) {
         case "ArrowUp":
+          setCharacterDirection("up");
           newY = charPos.y - 1;
           newBoxPositionY = newY - 1;
           newX = charPos.x;
           newBoxPositionX = newX;
           break;
         case "ArrowDown":
+          setCharacterDirection("down");
           newY = charPos.y + 1;
           newBoxPositionY = newY + 1;
           newX = charPos.x;
           newBoxPositionX = newX;
           break;
         case "ArrowLeft":
+          setCharacterDirection("left");
           newY = charPos.y;
           newBoxPositionY = newY;
           newX = charPos.x - 1;
           newBoxPositionX = newX - 1;
           break;
         case "ArrowRight":
+          setCharacterDirection("right");
           newY = charPos.y;
           newBoxPositionY = newY;
           newX = charPos.x + 1;

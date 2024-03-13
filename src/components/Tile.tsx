@@ -16,5 +16,4 @@ const Tile = ({ getTileImage, rowIndex, colIndex }: Props) => {
   );
 };
 
-
 export default Tile;
