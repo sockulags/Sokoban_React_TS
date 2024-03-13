@@ -136,7 +136,16 @@ const Board = () => {
       {board.map((row, rowIndex) => (
         <div className="row" key={rowIndex}>
           {row.map((tile, colInd) => (
-            <Tile key={`${rowIndex}-${colInd}`} image={level1Layout[tile]} />
+            <Tile
+              key={`${rowIndex}-${colInd}`}
+              image={level1Layout[tile]}
+              isOnStorage={
+                tile === 2 &&
+                storageLocations.some(
+                  (pos) => pos.x === colInd && pos.y === rowIndex
+                )
+              }
+            />
           ))}
         </div>
       ))}
