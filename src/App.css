@@ -3,4 +3,14 @@
     padding:0;
     box-sizing: border-box;
     font-family: "Source Code Pro", monospace;
+    color: #f5f3f3;
+}
+
+@font-face {
+    font-family: "Edmund";
+    src: local("Edmund"), url("./fonts/edmund-free.ttf") format("truetype");
+}
+
+body{
+    background-color: #1e1e1e;
 }
