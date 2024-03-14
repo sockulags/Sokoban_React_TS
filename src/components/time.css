@@ -1,0 +1,10 @@
+.clock{
+    background-color: #ece3ce;
+    padding: 2rem;
+
+}
+
+.time {
+    font-family: "Source Code Pro", monospace;
+    font-size: 2rem;
+}
