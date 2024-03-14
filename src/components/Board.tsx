@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Tile from "./Tile";
-import {level1Layout, level2 } from "../data/levels";
+import { level1Layout, level2 } from "../data/levels";
 import "./board.css";
 import Highscore from "./Highscore";
 import Modal from "./Modal";
-
 
 interface Position {
   x: number;
@@ -33,11 +32,13 @@ const Board = () => {
   const [moves, setMove] = useState<number>(0);
   const [pushes, setPushes] = useState<number>(0);
   const [gameEnded, setGameEnded] = useState(false);
-  const [gameTime, setGameTime] = useState("");
-  const [highscore, setHighscore] = useState<number>()
+  const [gameTime, setGameTime] = useState<number>();
+  const [highscore, setHighscore] = useState<number>();
+  const [timeString, setTimeString]= useState<string>()
 
-  const [characterDirection, setCharacterDirection] = useState<"up" | "down" | "left" | "right">("down");
-
+  const [characterDirection, setCharacterDirection] = useState<
+    "up" | "down" | "left" | "right"
+  >("down");
 
   const getCharStartPosition = () => {
     const posY = board.findIndex((row) => row.includes(5));
@@ -57,9 +58,9 @@ const Board = () => {
     return array;
   }
 
-  function updateCounter (counter:number){
-    const updatedCounter = counter +1
-    return updatedCounter
+  function updateCounter(counter: number) {
+    const updatedCounter = counter + 1;
+    return updatedCounter;
   }
 
   useEffect(() => {
@@ -75,7 +76,7 @@ const Board = () => {
     newBoard[charPos!.y][charPos!.x] = isStorageLocation ? 4 : 3;
     newBoard[y][x] = 5;
     setCharPos({ y: y, x: x });
-    setMove(updateCounter(moves))
+    setMove(updateCounter(moves));
     setBoard(newBoard);
     setBoxLocations(getLocations(2));
     checkCompletion();
@@ -89,39 +90,40 @@ const Board = () => {
         console.log(
           "Boxes at store location: " + correct + "/" + storageLocations.length
         );
-        countHighscore(100000, moves)
+        countHighscore(100000, moves);
       }
-      if (correct === 0){
-        console.log("GAME OVER")
+      if (correct === 0) {
         setGameEnded(true);
-        console.log(gameEnded)
       }
     }
   };
 
- const handleGameEnd = (time) => {
-   console.log("Spelet är klart. Tid:", time);
-   setGameTime(time); 
-   setHighscore(countHighscore(gameTime, moves));
-   setGameEnded(false)
- };
+  const handleGameEnd = (time: string, count: number) => {
+    setGameTime(count);
+    setTimeString(time)
+    setHighscore(countHighscore(count, moves));
+    setGameEnded(false); // to not display modal
+  };
 
-   function countHighscore(time, moves) {
-    time = time/1000
-     const weightTime = 1;
-     const weightMoves = 1; // Can be changed if time or number of moves should have a higher weight on the highscore
+  function countHighscore(gameTime: number, moves: number) {
+    const time = gameTime / 1000;
+    const weightTime = 1;
+    const weightMoves = 1; // Can be changed if time or number of moves should have a higher weight on the highscore
 
-     let highscore = 100000 * 1 / (weightTime * time + moves * weightMoves);
-     highscore = Math.floor(highscore);
-     console.log("highscore: " + highscore);
-     return highscore
-    
-   }
+    let highscore = (100000 * 1) / (weightTime * time + moves * weightMoves);
+    highscore = Math.floor(highscore);
+    return highscore;
+  }
+
+  const handleEnd = () => {
+    console.log("This is the end!"); 
+    setHighscore(0); //to not display modal
+  };
 
   const boxMove = (y: number, x: number) => {
     const newBoard = [...board];
     newBoard[y][x] = 2;
-    setPushes(updateCounter(pushes))
+    setPushes(updateCounter(pushes));
     setBoard(newBoard);
   };
 
@@ -157,7 +159,7 @@ const Board = () => {
     let newX: number = 0;
     let newBoxPositionX: number = 0;
     let newBoxPositionY: number = 0;
-    console.log(event.key)
+    console.log(event.key);
     if (charPos)
       switch (event.key) {
         case "ArrowUp":
@@ -189,7 +191,7 @@ const Board = () => {
           newBoxPositionX = newX + 1;
           break;
       }
-      console.log(board[newY][newX]);
+    console.log(board[newY][newX]);
     switch (board[newY][newX]) {
       case 3:
       case 4:
@@ -218,7 +220,12 @@ const Board = () => {
         />
       </div>
       {highscore && (
-        <Modal message1={"Moves: " + moves + " Pushes: " + pushes + " Time: " + gameTime} message2={"highscore: " + highscore} onConfirm={handleGameEnd} />
+        <Modal
+          title="Congratulations, you finnished the level"
+          message1={"Moves: " + moves + " Pushes: " + pushes + " Time: " + timeString}
+          message2={"Points: " + highscore}
+          onConfirm={handleEnd}
+        />
       )}
 
       <div className="board" tabIndex={0} onKeyDown={handleKeyDown} autoFocus>

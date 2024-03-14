@@ -23,6 +23,15 @@
     z-index: 9998;
 }
 
+.modal-header {
+    width: 100%;
+    margin-bottom: 1.5rem;
+}
+
+.modal-logo {
+    height: 2.5rem;
+}
+
 .modal-buttons {
     padding-top: 1rem;
     display: flex;
