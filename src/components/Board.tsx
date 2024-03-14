@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Tile from "./Tile";
-import {level1Layout, level2 } from "../data/levels";
+import {level1Layout, level1 } from "../data/levels";
 import "./board.css";
 import Highscore from "./Highscore";
 
@@ -14,7 +14,7 @@ const storageLocations = getLocations(4);
 
 function getLocations(tileType: number) {
   const array: Position[] = [];
-  level2.forEach((row, rowIndex) => {
+  level1.forEach((row, rowIndex) => {
     row.forEach((tile, colIndex) => {
       if (tile === tileType) {
         array.push({ y: rowIndex, x: colIndex });
@@ -25,7 +25,7 @@ function getLocations(tileType: number) {
 }
 
 const Board = () => {
-  const [board, setBoard] = useState<number[][]>(level2);
+  const [board, setBoard] = useState<number[][]>(level1);
   const [charPos, setCharPos] = useState<Position | undefined>();
   const [boxLocations, setBoxLocations] = useState<Position[]>(getLocations(2));
 
@@ -204,15 +204,8 @@ const Board = () => {
 
   return (
 
-    <>
-      <div className="highscore-data">
-        <Highscore
-          moves={moves}
-          pushes={pushes}
-          gameEnded={gameEnded}
-          onGameEnd={handleGameEnd}
-        />
-      </div>
+    <div className="game-container">
+      
 
     <div className="board" tabIndex={0} onKeyDown={handleKeyDown} autoFocus>
       {board.map((row, rowIndex) => (
@@ -228,7 +221,15 @@ const Board = () => {
         </div>
       ))}
     </div>
-
+    <div className="highscore-data">
+        <Highscore
+          moves={moves}
+          pushes={pushes}
+          gameEnded={gameEnded}
+          onGameEnd={handleGameEnd}
+        />
+      </div>
+</div>
   );
 };
 
