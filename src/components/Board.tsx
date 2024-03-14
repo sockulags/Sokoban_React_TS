@@ -14,7 +14,7 @@ const storageLocations = getLocations(4);
 
 function getLocations(tileType: number) {
   const array: Position[] = [];
-  level2.forEach((row, rowIndex) => {
+  level0.forEach((row, rowIndex) => {
     row.forEach((tile, colIndex) => {
       if (tile === tileType) {
         array.push({ y: rowIndex, x: colIndex });
@@ -25,7 +25,7 @@ function getLocations(tileType: number) {
 }
 
 const Board = () => {
-  const [board, setBoard] = useState<number[][]>(level2);
+  const [board, setBoard] = useState<number[][]>(level0);
   const [charPos, setCharPos] = useState<Position | undefined>();
   const [boxLocations, setBoxLocations] = useState<Position[]>(getLocations(2));
 
@@ -326,6 +326,7 @@ const Board = () => {
         ))}
       </div>
     </>
+
   );
 };
 

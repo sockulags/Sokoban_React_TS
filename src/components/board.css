@@ -1,6 +1,19 @@
+.game-container{
+    background-color: #ece3ce;
+     box-shadow:
+     0 0 1px 4px #ece3ce,
+     0 0 5px 6px #1e1e1e;    
+    border-radius: 10px;  
+}
+
 .board{
     display:flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;   
+    padding: 30px;
+   
 }
 
 .row{
@@ -8,8 +21,14 @@
 }
 
 .highscore-data {
+   
     display: flex;
     justify-content: space-around;
-    width: 100%;
-    background-color: #ece3ce;
+    width: 100%; 
+    div{
+        color: #1e1e1e;
+        p{
+            color: #1e1e1e;
+        }
+    }
 }
