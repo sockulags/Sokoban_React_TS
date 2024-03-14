@@ -5,6 +5,8 @@
     font-family: "Source Code Pro", monospace;
     color: #f5f3f3;
     --header-color: #ecc010;
+    scrollbar-width: thin;
+    scrollbar-color: #838383 #000;
 }
 
 h1,h2,h3,h4,h5,h6{
@@ -26,3 +28,39 @@ body{
     margin: 0 auto;
     max-width: 1200px;
 }
+
+::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #838383;
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+
+  *::-moz-scrollbar-thumb {
+    position: relative;
+  }
+  
+  *::-moz-scrollbar-thumb::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: #838383; 
+    border-radius: 10px; 
+  }
+  
+  *::-moz-scrollbar-thumb:hover::after {
+    background-color: #555; 
+  }
