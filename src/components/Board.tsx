@@ -101,8 +101,14 @@ const Board = () => {
   const handleGameEnd = (time: string, count: number) => {
     setGameTime(count);
     setTimeString(time)
-    setHighscore(countHighscore(count, moves));
+    let score = countHighscore(count, moves);
+    console.log(score);
+    checkHighscore(1)
+    setHighscore(score);
+    console.log(highscore);
+    saveHighscore(1, "Therese", score)
     setGameEnded(false); // to not display modal
+    
   };
 
   function countHighscore(gameTime: number, moves: number) {
@@ -114,6 +120,50 @@ const Board = () => {
     highscore = Math.floor(highscore);
     return highscore;
   }
+
+  const checkHighscore = (level: number) => {
+    const highscoresString = localStorage.getItem(`sokoban-level${level}`);
+    if (highscoresString) {
+      const highscores: { name: string; points: number }[] =
+        JSON.parse(highscoresString);
+      console.log("Highscores for level", level, ":", highscores);
+
+      // Sort highscores
+      highscores.sort((a, b) => b.points - a.points);
+
+      // Take top five
+      const topHighscores = highscores.slice(0, 5);
+      console.log(topHighscores)
+
+      // Gör något med topHighscores, t.ex. visa dem i ett Highscore-komponent
+    } else {
+      console.log("No saved highscores for level ", level);
+    }
+  };
+
+  const saveHighscore = (level: number, name: string, highscore: number) => {
+    const existingHighscoresString = localStorage.getItem(
+      `sokoban-level${level}`
+    );
+    let existingHighscores: { name: string; points: number }[] = [];
+    if (existingHighscoresString) {
+      existingHighscores = JSON.parse(existingHighscoresString);
+    }
+
+    existingHighscores.push({ name, points: highscore });
+
+    // Sort highscores from high to low
+    existingHighscores.sort((a, b) => b.points - a.points);
+
+    // Take top five
+    const topHighscores = existingHighscores.slice(0, 5);
+
+    // Save to localstorage
+    localStorage.setItem(
+      `sokoban-level${level}`,
+      JSON.stringify(topHighscores)
+    );
+  };
 
   const handleEnd = () => {
     console.log("This is the end!"); 
