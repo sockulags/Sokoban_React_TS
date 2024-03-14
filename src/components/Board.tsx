@@ -104,8 +104,9 @@ const Board = () => {
      const weightTime = 1;
      const weightMoves = 1; // Can be changed if time or number of moves should have a higher weight on the highscore
 
-     const highscore = 100000 * 1 / (weightTime * time + moves * weightMoves);
-     console.log(highscore);
+     let highscore = 100000 * 1 / (weightTime * time + moves * weightMoves);
+     highscore = Math.floor(highscore);
+     console.log("highscore: " + highscore);
    }
 
   const boxMove = (y: number, x: number) => {

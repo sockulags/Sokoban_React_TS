@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
 import "./time.css";
 
+interface ITimeProps {
+  gameEnded: boolean;
+  onGameEnd: (time: number) => void;
+}
 
-const Time = ({ gameEnded, onGameEnd }) => {
+const Time = ({ gameEnded, onGameEnd }:ITimeProps) => {
   const [start, setStart] = useState(true); //If set to false the clock will stop
   const [count, setCount] = useState(0);
   const [time, setTime] = useState("00:00:00");
