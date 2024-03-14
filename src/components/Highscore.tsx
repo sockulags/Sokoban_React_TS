@@ -6,7 +6,7 @@ interface IHighscoreProps {
   moves: number;
   pushes: number;
   gameEnded: boolean;
-  onGameEnd: (time: number) => void;
+  onGameEnd: (time: string, count:number) => void;
 }
 
 const Highscore = (props: IHighscoreProps) => {

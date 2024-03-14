@@ -1,17 +1,18 @@
 import { useEffect, useState } from "react";
 import "./time.css";
+import Modal from "./Modal";
 
 interface ITimeProps {
   gameEnded: boolean;
-  onGameEnd: (time: number) => void;
+  onGameEnd: (time: string, count: number) => void;
 }
 
 const Time = ({ gameEnded, onGameEnd }:ITimeProps) => {
   const [start, setStart] = useState(true); //If set to false the clock will stop
   const [count, setCount] = useState(0);
-  const [time, setTime] = useState("00:00:00");
+  const [time, setTime] = useState<string>("00:00:00");
 
-  const initTime = new Date();
+  const initTime:Date = new Date();
 
   const showTimer = (ms: number) => {
     const milliseconds = Math.floor((ms % 1000) / 10)
@@ -42,9 +43,9 @@ const Time = ({ gameEnded, onGameEnd }:ITimeProps) => {
     }
     // Set up an interval function
     const id = setInterval(() => {
-      const time = count + (new Date() - initTime); // Calculate the current time by adding the elapsed time since initTime to count
-      setCount(time); // Update the count state
-      showTimer(time); // Update the UI
+      const currentTime: number = count + (new Date().getTime() - initTime.getTime()); // Calculate the current time by adding the elapsed time since initTime to count
+      setCount(currentTime); // Update the count state
+      showTimer(currentTime); // Update the UI
     }, 1); // Interval runs every 1 millisecond
     return () => clearInterval(id); // Return a cleanup function to clear the interval when the component unmounts or when 'start' changes
   }, [start, gameEnded]);
@@ -52,16 +53,18 @@ const Time = ({ gameEnded, onGameEnd }:ITimeProps) => {
   // Function to handle game end
   const handleGameEnd = () => {
     console.log(time)
-    onGameEnd(time);
+    setStart(false)  //stop the time
+    onGameEnd(time, count);
     
   };
 
   return (
     <div className="clock">
       <p className="time">TIME: {time}</p>
-      {gameEnded && <button onClick={handleGameEnd}>Finish Game</button>}
+      {gameEnded && <Modal title="Congratulations, you finnished the level" message1="Click to confirm" onConfirm={handleGameEnd}/>}
     </div>
   );
 }
 
 export default Time;
+
