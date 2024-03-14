@@ -6,3 +6,10 @@
 .row{
     display: flex;
 }
+
+.highscore-data {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    background-color: #ece3ce;
+}
