@@ -13,3 +13,13 @@
     width: 100%;
     background-color: #ece3ce;
 }
+
+.reset-btn {
+    background-color: #8b2b2b;
+    color: #ece3ce;
+    padding: .5rem 1rem;
+    font-size: 1.2rem;
+    outline: none;
+    border: none;
+    cursor: pointer;
+}

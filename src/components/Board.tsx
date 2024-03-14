@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
 import Tile from "./Tile";
-import {level1Layout, level2 } from "../data/levels";
+import { level1Layout, level2} from "../data/levels";
 import "./board.css";
 import Highscore from "./Highscore";
 
+const deepCopy = (arr: number[][]): number[][] => {
+  return arr.map((subArr) => [...subArr]);
+};
 
 interface Position {
   x: number;
@@ -24,8 +27,15 @@ function getLocations(tileType: number) {
   return array;
 }
 
+const getCharStartPosition = () => {
+  const posY = level2.findIndex((row) => row.includes(5));
+  const posX = level2[posY].findIndex((x) => x === 5);
+  return { x: posX, y: posY };
+};
+
 const Board = () => {
-  const [board, setBoard] = useState<number[][]>(level2);
+
+  const [board, setBoard] = useState<number[][]>(deepCopy(level2));
   const [charPos, setCharPos] = useState<Position | undefined>();
   const [boxLocations, setBoxLocations] = useState<Position[]>(getLocations(2));
 
@@ -34,14 +44,7 @@ const Board = () => {
   const [gameEnded, setGameEnded] = useState(false);
   const [gameTime, setGameTime] = useState("");
 
-  const [characterDirection, setCharacterDirection] = useState<"up" | "down" | "left" | "right">("down");
-
-
-  const getCharStartPosition = () => {
-    const posY = board.findIndex((row) => row.includes(5));
-    const posX = board[posY].findIndex((x) => x === 5);
-    return { x: posX, y: posY };
-  };
+  const [characterDirection, setCharacterDirection] = useState<string>("down");
 
   function getLocations(tileType: number) {
     const array: Position[] = [];
@@ -55,15 +58,46 @@ const Board = () => {
     return array;
   }
 
-  function updateCounter (counter:number){
-    const updatedCounter = counter +1
-    return updatedCounter
+  function updateCounter(counter: number) {
+    const updatedCounter = counter + 1;
+    return updatedCounter;
   }
+
+  const saveLevelProgress = (board: number[][], charPos: Position) => {
+    const levelData = {
+      board: board,
+      charPos: charPos,
+    };
+    localStorage.setItem("levelProgress", JSON.stringify(levelData));
+  };
+
+
+  const loadLevelProgress = () => {
+    const savedData = localStorage.getItem("levelProgress");
+    if (savedData) {
+      const { board, charPos } = JSON.parse(savedData);
+      setBoard(board);
+      setCharPos(charPos);
+    }
+  };
 
   useEffect(() => {
     const startPosition = getCharStartPosition();
     setCharPos(startPosition);
+    loadLevelProgress();
   }, []);
+
+  const resetLevel = () => {
+    localStorage.removeItem("levelProgress");
+    setBoard(deepCopy(level2));
+    setCharPos(getCharStartPosition());
+    setBoxLocations(getLocations(2));
+    setMove(0);
+    setPushes(0);
+    setGameEnded(false);
+    setGameTime("");
+  };
+
 
   const upDateCharPos = (y: number, x: number) => {
     const newBoard = [...board];
@@ -73,10 +107,11 @@ const Board = () => {
     newBoard[charPos!.y][charPos!.x] = isStorageLocation ? 4 : 3;
     newBoard[y][x] = 5;
     setCharPos({ y: y, x: x });
-    setMove(updateCounter(moves))
+    setMove(updateCounter(moves));
     setBoard(newBoard);
     setBoxLocations(getLocations(2));
     checkCompletion();
+    saveLevelProgress(newBoard, { y: y, x: x });
   };
 
   const checkCompletion = () => {
@@ -87,36 +122,36 @@ const Board = () => {
         console.log(
           "Boxes at store location: " + correct + "/" + storageLocations.length
         );
-        countHighscore(100000, moves)
+        countHighscore(100000, moves);
       }
-      if (correct === 1){
-        console.log("GAME OVER")
+      if (correct === 1) {
+        console.log("GAME OVER");
         setGameEnded(true);
-        console.log(gameEnded)
+        console.log(gameEnded);
       }
     }
   };
 
- const handleGameEnd = (time) => {
-   console.log("Spelet är klart. Tid:", time);
-   setGameTime(time); 
-   countHighscore(gameTime, moves)
- };
+  const handleGameEnd = (time) => {
+    console.log("Spelet är klart. Tid:", time);
+    setGameTime(time);
+    countHighscore(gameTime, moves);
+  };
 
-   function countHighscore(time, moves) {
-    time = time/1000
-     const weightTime = 1;
-     const weightMoves = 1; // Can be changed if time or number of moves should have a higher weight on the highscore
+  function countHighscore(time, moves) {
+    time = time / 1000;
+    const weightTime = 1;
+    const weightMoves = 1; // Can be changed if time or number of moves should have a higher weight on the highscore
 
-     let highscore = 100000 * 1 / (weightTime * time + moves * weightMoves);
-     highscore = Math.floor(highscore);
-     console.log("highscore: " + highscore);
-   }
+    let highscore = (100000 * 1) / (weightTime * time + moves * weightMoves);
+    highscore = Math.floor(highscore);
+    console.log("highscore: " + highscore);
+  }
 
   const boxMove = (y: number, x: number) => {
     const newBoard = [...board];
     newBoard[y][x] = 2;
-    setPushes(updateCounter(pushes))
+    setPushes(updateCounter(pushes));
     setBoard(newBoard);
   };
 
@@ -152,7 +187,6 @@ const Board = () => {
     let newX: number = 0;
     let newBoxPositionX: number = 0;
     let newBoxPositionY: number = 0;
-    console.log(event.key)
     if (charPos)
       switch (event.key) {
         case "ArrowUp":
@@ -184,7 +218,6 @@ const Board = () => {
           newBoxPositionX = newX + 1;
           break;
       }
-      console.log(board[newY][newX]);
     switch (board[newY][newX]) {
       case 3:
       case 4:
@@ -203,8 +236,10 @@ const Board = () => {
   };
 
   return (
-
     <>
+      <button className="reset-btn" onClick={resetLevel}>
+        Reset Puzzle 
+      </button>
       <div className="highscore-data">
         <Highscore
           moves={moves}
@@ -214,21 +249,21 @@ const Board = () => {
         />
       </div>
 
-    <div className="board" tabIndex={0} onKeyDown={handleKeyDown} autoFocus>
-      {board.map((row, rowIndex) => (
-        <div className="row" key={rowIndex}>
-          {row.map((tile, colInd) => (
-            <Tile
-              key={`${rowIndex}-${colInd}`}
-              getTileImage={getTileImage}
-              rowIndex={rowIndex}
-              colIndex={colInd}
-            />
-          ))}
-        </div>
-      ))}
-    </div>
-
+      <div className="board" tabIndex={0} onKeyDown={handleKeyDown} autoFocus>
+        {board.map((row, rowIndex) => (
+          <div className="row" key={rowIndex}>
+            {row.map((tile, colInd) => (
+              <Tile
+                key={`${rowIndex}-${colInd}`}
+                getTileImage={getTileImage}
+                rowIndex={rowIndex}
+                colIndex={colInd}
+              />
+            ))}
+          </div>
+        ))}
+      </div>
+    </>
   );
 };
 
