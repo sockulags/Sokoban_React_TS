@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "./time.css";
+import Modal from "./Modal";
 
 interface ITimeProps {
   gameEnded: boolean;
@@ -59,9 +60,10 @@ const Time = ({ gameEnded, onGameEnd }:ITimeProps) => {
   return (
     <div className="clock">
       <p className="time">TIME: {time}</p>
-      {gameEnded && <button onClick={handleGameEnd}>Finish Game</button>}
+      {gameEnded && <Modal message1="Click to confirm" onConfirm={handleGameEnd}/>}
     </div>
   );
 }
 
 export default Time;
+

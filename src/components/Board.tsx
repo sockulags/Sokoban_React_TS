@@ -3,6 +3,7 @@ import Tile from "./Tile";
 import {level1Layout, level2 } from "../data/levels";
 import "./board.css";
 import Highscore from "./Highscore";
+import Modal from "./Modal";
 
 
 interface Position {
@@ -33,6 +34,7 @@ const Board = () => {
   const [pushes, setPushes] = useState<number>(0);
   const [gameEnded, setGameEnded] = useState(false);
   const [gameTime, setGameTime] = useState("");
+  const [highscore, setHighscore] = useState<number>()
 
   const [characterDirection, setCharacterDirection] = useState<"up" | "down" | "left" | "right">("down");
 
@@ -89,7 +91,7 @@ const Board = () => {
         );
         countHighscore(100000, moves)
       }
-      if (correct === 1){
+      if (correct === 0){
         console.log("GAME OVER")
         setGameEnded(true);
         console.log(gameEnded)
@@ -100,7 +102,8 @@ const Board = () => {
  const handleGameEnd = (time) => {
    console.log("Spelet är klart. Tid:", time);
    setGameTime(time); 
-   countHighscore(gameTime, moves)
+   setHighscore(countHighscore(gameTime, moves));
+   setGameEnded(false)
  };
 
    function countHighscore(time, moves) {
@@ -111,6 +114,8 @@ const Board = () => {
      let highscore = 100000 * 1 / (weightTime * time + moves * weightMoves);
      highscore = Math.floor(highscore);
      console.log("highscore: " + highscore);
+     return highscore
+    
    }
 
   const boxMove = (y: number, x: number) => {
@@ -203,7 +208,6 @@ const Board = () => {
   };
 
   return (
-
     <>
       <div className="highscore-data">
         <Highscore
@@ -213,22 +217,25 @@ const Board = () => {
           onGameEnd={handleGameEnd}
         />
       </div>
+      {highscore && (
+        <Modal message1={"Moves: " + moves + " Pushes: " + pushes + " Time: " + gameTime} message2={"highscore: " + highscore} onConfirm={handleGameEnd} />
+      )}
 
-    <div className="board" tabIndex={0} onKeyDown={handleKeyDown} autoFocus>
-      {board.map((row, rowIndex) => (
-        <div className="row" key={rowIndex}>
-          {row.map((tile, colInd) => (
-            <Tile
-              key={`${rowIndex}-${colInd}`}
-              getTileImage={getTileImage}
-              rowIndex={rowIndex}
-              colIndex={colInd}
-            />
-          ))}
-        </div>
-      ))}
-    </div>
-
+      <div className="board" tabIndex={0} onKeyDown={handleKeyDown} autoFocus>
+        {board.map((row, rowIndex) => (
+          <div className="row" key={rowIndex}>
+            {row.map((tile, colInd) => (
+              <Tile
+                key={`${rowIndex}-${colInd}`}
+                getTileImage={getTileImage}
+                rowIndex={rowIndex}
+                colIndex={colInd}
+              />
+            ))}
+          </div>
+        ))}
+      </div>
+    </>
   );
 };
 
