@@ -18,6 +18,10 @@ import characterUp from "../assets/Character7.png";
 import characterLeft from "../assets/Character1.png";
 import characterRight from "../assets/Character2.png";
 
+
+
+
+
 export const level0 = [
   [0, 1, 1, 1, 1, 1, 0, 0, 0],
   [0, 1, 3, 3, 3, 1, 1, 1, 1],
@@ -69,5 +73,4 @@ export const level1Layout = [
   characterUp,
   characterLeft,
   characterRight,
-
 ];

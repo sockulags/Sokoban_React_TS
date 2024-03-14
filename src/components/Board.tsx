@@ -95,7 +95,6 @@ const Board = () => {
     setMove(0);
     setPushes(0);
     setGameEnded(false);
-    setGameTime("");
   };
 
 
@@ -238,7 +237,7 @@ const Board = () => {
   return (
     <>
       <button className="reset-btn" onClick={resetLevel}>
-        Reset Puzzle 
+        Reset Puzzle{" "}
       </button>
       <div className="highscore-data">
         <Highscore
