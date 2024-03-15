@@ -7,6 +7,7 @@ interface IHighscoreProps {
   pushes: number;
   gameEnded: boolean;
   onGameEnd: (time: number) => void;
+  isThemeLight: boolean;
 }
 
 const Highscore = (props: IHighscoreProps) => {
@@ -14,7 +15,11 @@ const Highscore = (props: IHighscoreProps) => {
 
   return (
     <>
-      <div className="highscore-data">
+      <div
+        className={
+          props.isThemeLight ? "highscore-data light" : "highscore-data dark"
+        }
+      >
         <Moves moves={props.moves} />
         <Pushes pushes={props.pushes} />
         <Time gameEnded={props.gameEnded} onGameEnd={props.onGameEnd} />

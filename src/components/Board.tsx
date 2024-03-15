@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Tile from "./Tile";
-import {level1Layout, level2 } from "../data/levels";
+import { level1Layout, level1LayoutDark, level2 } from "../data/levels";
 import "./board.css";
 import Highscore from "./Highscore";
 
@@ -25,16 +25,32 @@ function getLocations(tileType: number) {
 }
 
 const Board = () => {
+
+  const [isThemeLight, setIsThemeLight] = useState<boolean>(true);
+  const [theme, setTheme] = useState(level1Layout);
+  const [themeBtnTitle, setThemmBtnTitle] = useState('Change to Dark');
+
   const [board, setBoard] = useState<number[][]>(level2);
   const [charPos, setCharPos] = useState<Position | undefined>();
   const [boxLocations, setBoxLocations] = useState<Position[]>(getLocations(2));
 
   const [moves, setMove] = useState<number>(0);
   const [pushes, setPushes] = useState<number>(0);
-  const [gameEnded, setGameEnded] = useState(false);
+  const [gameEnded, setGameEnded] = useState(true);
   const [gameTime, setGameTime] = useState("");
 
   const [characterDirection, setCharacterDirection] = useState<"up" | "down" | "left" | "right">("down");
+
+  const changeTheme = () => {
+    if (isThemeLight){
+      setTheme(level1LayoutDark);
+      setThemmBtnTitle("Change to Light");
+    } else {
+      setTheme(level1Layout);
+      setThemmBtnTitle("Change to Dark");
+    }
+    setIsThemeLight((prev) => !prev);
+  }
 
 
   const getCharStartPosition = () => {
@@ -125,15 +141,15 @@ const Board = () => {
     if (charPos && rowIndex === charPos.y && colIndex === charPos.x) {
       switch (characterDirection) {
         case "up":
-          return level1Layout[7];
+          return theme[7];
         case "down":
-          return level1Layout[5];
+          return theme[5];
         case "left":
-          return level1Layout[8];
+          return theme[8];
         case "right":
-          return level1Layout[9];
+          return theme[9];
         default:
-          return level1Layout[tile];
+          return theme[tile];
       }
     }
     if (tile === 2) {
@@ -141,10 +157,10 @@ const Board = () => {
         (pos) => pos.y === rowIndex && pos.x === colIndex
       );
       if (isOnStorage) {
-        return level1Layout[6];
+        return theme[6];
       }
     }
-    return level1Layout[tile];
+    return theme[tile];
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -203,32 +219,39 @@ const Board = () => {
   };
 
   return (
-
     <>
+      <button
+        className={`theme-btn ${isThemeLight ? "light" : " dark"}`}
+        onClick={changeTheme}
+      >
+        {themeBtnTitle}
+      </button>
       <div className="highscore-data">
         <Highscore
           moves={moves}
           pushes={pushes}
           gameEnded={gameEnded}
           onGameEnd={handleGameEnd}
+          isThemeLight={isThemeLight}
         />
       </div>
 
-    <div className="board" tabIndex={0} onKeyDown={handleKeyDown} autoFocus>
-      {board.map((row, rowIndex) => (
-        <div className="row" key={rowIndex}>
-          {row.map((tile, colInd) => (
-            <Tile
-              key={`${rowIndex}-${colInd}`}
-              getTileImage={getTileImage}
-              rowIndex={rowIndex}
-              colIndex={colInd}
-            />
-          ))}
-        </div>
-      ))}
-    </div>
-
+      <div className="board" tabIndex={0} onKeyDown={handleKeyDown} autoFocus>
+        {board.map((row, rowIndex) => (
+          <div className="row" key={rowIndex}>
+            {row.map((tile, colInd) => (
+              <Tile
+                key={`${rowIndex}-${colInd}`}
+                getTileImage={getTileImage}
+                rowIndex={rowIndex}
+                colIndex={colInd}
+                isThemeLight={isThemeLight}
+              />
+            ))}
+          </div>
+        ))}
+      </div>
+    </>
   );
 };
 

@@ -18,6 +18,13 @@ import characterUp from "../assets/Character7.png";
 import characterLeft from "../assets/Character1.png";
 import characterRight from "../assets/Character2.png";
 
+import outOfBoundsDT from "../assets/Ground_Concrete.png";
+import wallDT from "../assets/Wall_Black.png";
+import boxDT from "../assets/CrateDark_Gray.png";
+import emptySpaceDT from "../assets/GroundGravel_Concrete.png";
+import storageLocationDT from "../assets/EndPoint_Black.png";
+import boxInStorageLocationDT from "../assets/Crate_Black.png";
+
 export const level0 = [
   [0, 1, 1, 1, 1, 1, 0, 0, 0],
   [0, 1, 3, 3, 3, 1, 1, 1, 1],
@@ -71,3 +78,19 @@ export const level1Layout = [
   characterRight,
 
 ];
+
+export const level1LayoutDark = [
+  outOfBoundsDT,
+  wallDT,
+  boxDT,
+  emptySpaceDT,
+  storageLocationDT,
+  character,
+  boxInStorageLocationDT,
+  characterUp,
+  characterLeft,
+  characterRight,
+
+];
+
+

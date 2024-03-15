@@ -8,8 +8,30 @@
 }
 
 .highscore-data {
+    background-color: #ece3ce;
     display: flex;
     justify-content: space-around;
     width: 100%;
+}
+
+.theme-btn {
     background-color: #ece3ce;
+    color: #97714a;
+    width: 250px;
+    border: none;
+    outline: none;
+    padding: .5rem 1rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.light {
+    background-color: #ece3ce;
+    color: #97714a;
+}
+
+.dark {
+    background-color: #989aa7;
+    color: #494949;
 }

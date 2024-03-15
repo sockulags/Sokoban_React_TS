@@ -8,3 +8,11 @@
         background-color: transparent ;
     }
 }
+
+.light {
+    background-color: #ece3ce;
+}
+
+.dark {
+    background-color: #989aa7;
+}

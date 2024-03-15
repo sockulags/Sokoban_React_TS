@@ -3,7 +3,7 @@
     padding:0;
     box-sizing: border-box;
     font-family: "Source Code Pro", monospace;
-    color: #f5f3f3;
+    /* color: #f5f3f3; */
     --header-color: #ecc010;
 }
 
