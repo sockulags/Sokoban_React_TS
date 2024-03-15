@@ -1,12 +1,13 @@
 import "./modal.css"
 import Logo from "../assets/sokoban-header.png";
+import { IHighscore } from "../interface";
 
 interface IModalProps {
   title:string;
   message1: string;
   message2?: string;
   onConfirm: () => void;
-  data?:[]
+  data?:IHighscore[]
 }
 
 const Modal = ({ title, message1, message2, onConfirm, data }: IModalProps) => {
@@ -26,7 +27,7 @@ const Modal = ({ title, message1, message2, onConfirm, data }: IModalProps) => {
               <ol>
                 {data.map((score, index) => (
                   <li key={index}>
-                    <span className="highscore-name">{score.name}</span>
+                    <span className="highscore-name">{score.name}: </span>
                     <span className="highscore-points">{score.points}</span>
                   </li>
                 ))}

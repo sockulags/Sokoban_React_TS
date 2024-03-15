@@ -4,11 +4,14 @@ import { level1Layout, level2 } from "../data/levels";
 import "./board.css";
 import Highscore from "./Highscore";
 import Modal from "./Modal";
+import { IHighscore } from "../interface";
 
 interface Position {
   x: number;
   y: number;
 }
+
+
 
 const storageLocations = getLocations(4);
 
@@ -35,7 +38,7 @@ const Board = () => {
   //const [gameTime, setGameTime] = useState<number>();
   const [showModal, setShowModal] = useState<boolean>(false);
   const [timeString, setTimeString]= useState<string>()
-  const [highscores, setHighscores] = useState()
+  const [highscores, setHighscores] = useState<IHighscore[]>()
   const [score, setScore] = useState<number>()
 
   const [characterDirection, setCharacterDirection] = useState<
@@ -101,7 +104,6 @@ const Board = () => {
   };
 
   const handleGameEnd = (time: string, count: number) => {
-    //setGameTime(count);
     setTimeString(time)
     const score = countHighscore(count, moves);
     console.log(score);
@@ -113,11 +115,10 @@ const Board = () => {
   };
 
   function countHighscore(gameTime: number, moves: number) {
-    const time = gameTime / 1000;
+    const time = gameTime / 1000; //get seconds (from milliseconds)
     const weightTime = 1;
     const weightMoves = 1; // Can be changed if time or number of moves should have a higher weight on the highscore
-
-    let highscore = (100000 * 1) / (weightTime * time + moves * weightMoves);
+    let highscore = 100000 * (1 / (weightTime * time + moves * weightMoves));
     highscore = Math.floor(highscore);
     return highscore;
   }
@@ -130,12 +131,10 @@ const Board = () => {
       console.log("Highscores for level", level, ":", highscores);
 
       if (Array.isArray(highscores)) {
-        // Add the current score to the highscores array
-        highscores.push({ name: "", points: currentScore });
-        // Sort highscores in descending order
-        highscores.sort((a, b) => b.points - a.points);
-        // Take the top five highscores
-        const topHighscores = highscores.slice(0, 5);
+        highscores.push({ name: "", points: currentScore }); // Add the current score to the highscores array
+        highscores.sort((a, b) => b.points - a.points); // Sort highscores in descending order
+        const topHighscores = highscores.slice(0, 5); // Take the top five highscores
+
         // Check if the current score is one of the top five
         const scoreIndex = topHighscores.findIndex(
           (score) => score.points === currentScore
@@ -145,21 +144,15 @@ const Board = () => {
           const playerName = prompt(
             "Congratulations! You made it to the highscore list! Enter your name:"
           );
-
           if (playerName) {
-            // Update the name for the current score
-            topHighscores[scoreIndex].name = playerName;
+            topHighscores[scoreIndex].name = playerName; // Update the name for the current score
           }
         }
-
-        // Save the top five highscores to localStorage
         localStorage.setItem(
           `sokoban-level${level}`,
           JSON.stringify(topHighscores)
         );
         setHighscores(topHighscores);
-
-        // Do something with topHighscores, e.g., display them in a Highscore component
       } else {
         console.error(
           "Data in localStorage is not in the correct format for highscores."
@@ -167,38 +160,28 @@ const Board = () => {
       }
     } else {
       console.log("No saved highscores for level", level);
+      const playerName = prompt(
+        "Congratulations! You made it to the highscore list! Enter your name:"
+      );
+      saveHighscore(1, playerName!, currentScore);
+      
     }
   };
 
- /*
   const saveHighscore = (level: number, name: string, highscore: number) => {
-    const existingHighscoresString = localStorage.getItem(
-      `sokoban-level${level}`
-    );
-    let existingHighscores: { name: string; points: number }[] = [];
-    if (existingHighscoresString) {
-      existingHighscores = JSON.parse(existingHighscoresString);
-    }
-
-    existingHighscores.push({ name, points: highscore });
-
-    // Sort highscores in descending order
-    existingHighscores.sort((a, b) => b.points - a.points);
-
-    // Take top five
-    const topHighscores = existingHighscores.slice(0, 5);
-
-    // Save to localstorage
+    const newHighscore: { name: string; points: number }[] = [];
+    newHighscore.push({ name, points: highscore });
     localStorage.setItem(
       `sokoban-level${level}`,
-      JSON.stringify(topHighscores)
+      JSON.stringify(newHighscore)
     );
+    setHighscores(newHighscore)
   };
-  */
+  
 
   const handleEnd = () => {
-    console.log("This is the end!"); 
-    setShowModal(false); //to not display modal
+    setShowModal(false); 
+    // Here we handle what happens when a level is finnished (next level, main menu?)
   };
 
   const boxMove = (y: number, x: number) => {
@@ -306,7 +289,6 @@ const Board = () => {
           message1={"Moves: " + moves + " Pushes: " + pushes + " Time: " + timeString}
           message2={"Points: " + score}
           data={highscores}
-          
           onConfirm={handleEnd}
         />
       )}
