@@ -19,6 +19,7 @@ import characterLeft from "../assets/Character1.png";
 import characterRight from "../assets/Character2.png";
 
 
+
 // level images
 import level0Image from "../assets/level_images/level_0.png";
 import level1Image from "../assets/level_images/level_1.png";

@@ -1,5 +1,13 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import "./time.css";
+
+import { ScoreDataContext } from "../context/ScoreDataContext";
+
+
+
+const Time = () => {
+
+  /*
 import Modal from "./Modal";
 
 interface ITimeProps {
@@ -13,31 +21,18 @@ const Time = ({ gameEnded, onGameEnd }:ITimeProps) => {
   const [time, setTime] = useState<string>("00:00:00");
 
   const initTime:Date = new Date();
+  */
 
-  const showTimer = (ms: number) => {
-    const milliseconds = Math.floor((ms % 1000) / 10)
-      .toString()
-      .padStart(2, "0"); // put a 0 at the start if less then two digits
-    const second = Math.floor((ms / 1000) % 60)
-      .toString()
-      .padStart(2, "0");
-    const minute = Math.floor((ms / 1000 / 60) % 60)
-      .toString()
-      .padStart(2, "0");
-    // const hour = Math.floor(ms / 1000 / 60 / 60).toString();
-    setTime(
-      // hour.padStart(2, "0") +
-      // ":" +
-      minute + ":" + second + ":" + milliseconds
-    );
-  };
 
-  const clearTime = () => {
-    setTime("00:00:00");
-    setCount(0);
-  };
+  const {time, setUpInterval, gameEnded, start, handleGameEnd} = useContext(ScoreDataContext)
+
 
   useEffect(() => {
+    setUpInterval()
+  }, [start, gameEnded, setUpInterval]);
+
+
+        /*
     if (!start||gameEnded) {
       return;
     }
@@ -57,6 +52,8 @@ const Time = ({ gameEnded, onGameEnd }:ITimeProps) => {
     onGameEnd(time, count);
     
   };
+        */
+
 
   return (
     <div className="clock">
