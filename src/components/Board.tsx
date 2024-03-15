@@ -197,11 +197,6 @@ const Board = () => {
   };
 
 
-  const inputModalSubmit = (name:string) => {
-    setShowInputModal(false);
-    saveHighscoreToLocalstorage(1, name, score!);
-  }
-
     function saveFirstHighscore (level: number, name: string, highscore: number) {
       const newHighscore: { name: string; points: number }[] = [];
       newHighscore.push({ name, points: highscore });
@@ -237,7 +232,10 @@ const Board = () => {
 
   };
   
-
+    const inputModalSubmit = (name: string) => {
+      setShowInputModal(false);
+      saveHighscoreToLocalstorage(1, name, score!);
+    };
 
 
   const handleEnd = () => {
