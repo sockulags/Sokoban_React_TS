@@ -16,7 +16,7 @@ const storageLocations = getLocations(4);
 
 function getLocations(tileType: number) {
   const array: Position[] = [];
-  level0.forEach((row, rowIndex) => {
+  level2.forEach((row, rowIndex) => {
     row.forEach((tile, colIndex) => {
       if (tile === tileType) {
         array.push({ y: rowIndex, x: colIndex });
@@ -27,7 +27,7 @@ function getLocations(tileType: number) {
 }
 
 const Board = () => {
-  const [board, setBoard] = useState<number[][]>(level0);
+  const [board, setBoard] = useState<number[][]>(level2);
   const [charPos, setCharPos] = useState<Position | undefined>();
   const [boxLocations, setBoxLocations] = useState<Position[]>(getLocations(2));
 
@@ -151,11 +151,13 @@ const Board = () => {
         );
       }
     } else {
+      saveHighscore(1, "namn", currentScore);
       console.log("No saved highscores for level", level);
       saveFirstHighscore(1, "", currentScore);
       setShowInputModal(true);
     }
   };
+
 
   const inputModalSubmit = (name:string) => {
     setShowInputModal(false);
@@ -170,7 +172,7 @@ const Board = () => {
         JSON.stringify(newHighscore)
       );
       setHighscores(newHighscore);
-    }
+
 
 
   const saveHighscore = (level:number, name:string, highscore: number ) => {
@@ -195,6 +197,8 @@ const Board = () => {
         );
       }
     }
+
+  };
   
 
   const handleEnd = () => {
@@ -292,7 +296,7 @@ const Board = () => {
   };
 
   return (
-    <>
+    <div className="game-container">
       <div className="highscore-data">
         <Highscore
           moves={moves}
@@ -329,7 +333,7 @@ const Board = () => {
           </div>
         ))}
       </div>
-    </>
+    </div>
 
   );
 };

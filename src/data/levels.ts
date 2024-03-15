@@ -18,6 +18,12 @@ import characterUp from "../assets/Character7.png";
 import characterLeft from "../assets/Character1.png";
 import characterRight from "../assets/Character2.png";
 
+
+// level images
+import level0Image from "../assets/level_images/level_0.png";
+import level1Image from "../assets/level_images/level_1.png";
+import level2Image from "../assets/level_images/level_2.png";
+
 export const level0 = [
   [0, 1, 1, 1, 1, 1, 0, 0, 0],
   [0, 1, 3, 3, 3, 1, 1, 1, 1],
@@ -70,3 +76,22 @@ export const level1Layout = [
   characterLeft,
   characterRight,
 ];
+
+
+export const levels = [
+  {
+    level: 0,
+    board: level0,
+    image: level0Image
+  },
+  {
+    level: 1,
+    board: level1,
+    image:level1Image
+  },
+  {
+    level: 2,
+    board: level2,
+    image:level2Image
+ }
+] 
