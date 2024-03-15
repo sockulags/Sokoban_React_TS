@@ -1,6 +1,6 @@
 .tile{
-    height: 64px;
-    width: 64px;
+    max-height: 50px;
+    max-width: 50px;
     background-color: #ece3ce ;
     img{
         height: 100%;

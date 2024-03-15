@@ -69,5 +69,4 @@ export const level1Layout = [
   characterUp,
   characterLeft,
   characterRight,
-
 ];

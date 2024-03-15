@@ -1,0 +1,11 @@
+.about-container{
+   
+    width: 95%;
+    margin: 0 auto;
+    h1, h2{
+        margin-top: 20px;
+    }
+    p{
+        margin-bottom:10px;
+    }
+}
