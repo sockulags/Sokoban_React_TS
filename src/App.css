@@ -64,3 +64,7 @@ body{
   *::-moz-scrollbar-thumb:hover::after {
     background-color: #555; 
   }
+
+  input {
+      color: black;
+  }

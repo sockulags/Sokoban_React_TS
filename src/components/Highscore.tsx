@@ -1,6 +1,7 @@
 import Moves from "./Moves";
 import Pushes from "./Pushes";
 import Time from "./Time";
+import "./highscore.css"
 
 interface IHighscoreProps {
   moves: number;

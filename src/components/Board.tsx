@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from "react";
 import Tile from "./Tile";
-import { level1Layout, level2 } from "../data/levels";
+import { level1Layout, level0 } from "../data/levels";
 import "./board.css";
 import Highscore from "./Highscore";
 import Modal from "./Modal";
 import { IHighscore } from "../interface";
+import InputModal from "./InputModal";
 
 interface Position {
   x: number;
   y: number;
 }
-
-
 
 const storageLocations = getLocations(4);
 
@@ -35,8 +34,8 @@ const Board = () => {
   const [moves, setMove] = useState<number>(0);
   const [pushes, setPushes] = useState<number>(0);
   const [gameEnded, setGameEnded] = useState(false);
-  //const [gameTime, setGameTime] = useState<number>();
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [showInputModal, setShowInputModal] = useState<boolean>(false);
   const [timeString, setTimeString]= useState<string>()
   const [highscores, setHighscores] = useState<IHighscore[]>()
   const [score, setScore] = useState<number>()
@@ -160,13 +159,17 @@ const Board = () => {
       }
     } else {
       console.log("No saved highscores for level", level);
-      const playerName = prompt(
-        "Congratulations! You made it to the highscore list! Enter your name:"
-      );
-      saveHighscore(1, playerName!, currentScore);
+      setShowInputModal(true);
       
     }
   };
+
+  const inputModalSubmit = (name) => {
+    console.log("inputModalSubmit");
+    setShowInputModal(false);
+    console.log(name)
+    saveHighscore(1, name, score!);
+  }
 
   const saveHighscore = (level: number, name: string, highscore: number) => {
     const newHighscore: { name: string; points: number }[] = [];
@@ -292,6 +295,10 @@ const Board = () => {
           onConfirm={handleEnd}
         />
       )}
+
+      {showInputModal &&
+        <InputModal onSubmit={inputModalSubmit} />
+      }
 
       <div className="board" tabIndex={0} onKeyDown={handleKeyDown} autoFocus>
         {board.map((row, rowIndex) => (
