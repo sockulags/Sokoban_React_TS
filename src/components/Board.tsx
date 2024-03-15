@@ -152,10 +152,10 @@ const Board = () => {
   const handleGameEnd = (time: string, count: number) => {
     setTimeString(time)
     const score = countHighscore(count, moves);
-    setScore(score)
-    checkHighscore(1, score);
+    setScore(score!)
+    checkHighscore(1, score!);
     setShowModal(true);
-    setGameEnded(false); // to close modal
+    updateGameEnded(); // to close modal
   };
 
 
@@ -190,7 +190,6 @@ const Board = () => {
         );
       }
     } else {
-      saveHighscore(1, "namn", currentScore);
       console.log("No saved highscores for level", level);
       saveFirstHighscore(1, "", currentScore);
       setShowInputModal(true);
@@ -200,7 +199,7 @@ const Board = () => {
 
   const inputModalSubmit = (name:string) => {
     setShowInputModal(false);
-    saveHighscore(1, name, score!)
+    saveHighscoreToLocalstorage(1, name, score!);
   }
 
     function saveFirstHighscore (level: number, name: string, highscore: number) {
@@ -214,7 +213,7 @@ const Board = () => {
 
 
 
-  const saveHighscore = (level:number, name:string, highscore: number ) => {
+  const saveHighscoreToLocalstorage = (level:number, name:string, highscore: number ) => {
    const highscoresString = localStorage.getItem(`sokoban-level${level}`);
     if (highscoresString) {
       const storedHighscores: { name: string; points: number }[] =
@@ -382,3 +381,4 @@ const Board = () => {
 }
 }
 export default Board;
+
