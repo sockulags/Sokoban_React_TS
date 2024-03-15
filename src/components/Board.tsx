@@ -1,13 +1,19 @@
 import React, { useState, useEffect, useContext } from "react";
 import Tile from "./Tile";
-import { level1Layout, level2} from "../data/levels";
-import "./board.css";
-import Highscore from "./Highscore";
+
 import { ScoreDataContext } from "../context/ScoreDataContext";
 
 const deepCopy = (arr: number[][]): number[][] => {
   return arr.map((subArr) => [...subArr]);
 };
+
+import { level1Layout, level0 } from "../data/levels";
+import "./board.css";
+import Highscore from "./Highscore";
+import Modal from "./Modal";
+import { IHighscore } from "../interface";
+import InputModal from "./InputModal";
+
 
 interface Position {
   x: number;
@@ -40,9 +46,24 @@ const Board = () => {
   const [charPos, setCharPos] = useState<Position | undefined>();
   const [boxLocations, setBoxLocations] = useState<Position[]>(getLocations(2));
 
+
   const { moves, updateMovesCounter, updatePushesCounter, resetData, updateGameEnded, countHighscore} = useContext(ScoreDataContext);
 
-  // const [gameTime, setGameTime] = useState("");
+   const [gameTime, setGameTime] = useState("");
+
+  const [moves, setMove] = useState<number>(0);
+  const [pushes, setPushes] = useState<number>(0);
+  const [gameEnded, setGameEnded] = useState(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [showInputModal, setShowInputModal] = useState<boolean>(false);
+  const [timeString, setTimeString]= useState<string>()
+  const [highscores, setHighscores] = useState<IHighscore[]>()
+  const [score, setScore] = useState<number>()
+
+  const [characterDirection, setCharacterDirection] = useState<
+    "up" | "down" | "left" | "right"
+  >("down");
+
 
   const [characterDirection, setCharacterDirection] = useState<string>("down");
 
@@ -57,6 +78,7 @@ const Board = () => {
     });
     return array;
   }
+
 
 
   const saveLevelProgress = (board: number[][], charPos: Position) => {
@@ -76,6 +98,7 @@ const Board = () => {
       setCharPos(charPos);
     }
   };
+
 
   useEffect(() => {
     const startPosition = getCharStartPosition();
@@ -100,7 +123,9 @@ const Board = () => {
     newBoard[charPos!.y][charPos!.x] = isStorageLocation ? 4 : 3;
     newBoard[y][x] = 5;
     setCharPos({ y: y, x: x });
+
     updateMovesCounter();
+
     setBoard(newBoard);
     setBoxLocations(getLocations(2));
     checkCompletion();
@@ -117,6 +142,7 @@ const Board = () => {
         );
         countHighscore(100000, moves);
       }
+
       if (correct === 1) {
         console.log("GAME OVER");
         updateGameEnded();
@@ -140,11 +166,125 @@ const Board = () => {
   //   console.log("highscore: " + highscore);
   // }
 
+        /*
+      if (correct === storageLocations.length) {
+        setGameEnded(true);
+      }
+    }
+  };
+
+  const handleGameEnd = (time: string, count: number) => {
+    setTimeString(time)
+    const score = countHighscore(count, moves);
+    setScore(score)
+    checkHighscore(1, score);
+    setShowModal(true);
+    setGameEnded(false); // to close modal
+  };
+
+  function countHighscore(gameTime: number, moves: number) {
+    const time = gameTime / 1000; //get seconds (from milliseconds)
+    const weightTime = 1;
+    const weightMoves = 1; // Can be changed if time or number of moves should have a higher weight on the highscore
+    let highscore = 100000 * (1 / (weightTime * time + moves * weightMoves));
+    highscore = Math.floor(highscore);
+    return highscore;
+  }
+
+  const checkHighscore = (level: number, currentScore: number) => {
+    const highscoresString = localStorage.getItem(`sokoban-level${level}`);
+    if (highscoresString) {
+      const highscores: { name: string; points: number }[] =
+        JSON.parse(highscoresString);
+
+      if (Array.isArray(highscores)) {
+        highscores.push({ name: "", points: currentScore }); // Add the current score to the highscores array
+        highscores.sort((a, b) => b.points - a.points); // Sort highscores in descending order
+        const topHighscores = highscores.slice(0, 5); // Take the top five highscores
+
+        setHighscores(topHighscores);
+
+        // Check if the current score is one of the top five
+        const scoreIndex = topHighscores.findIndex(
+          (score) => score.points === currentScore
+        );
+        // If the current score is one of the top five, ask the user for their name
+        if (scoreIndex !== -1) {
+            localStorage.setItem(
+              `sokoban-level${level}`,
+              JSON.stringify(topHighscores)
+            );
+          setShowInputModal(true);
+        }
+      } else {
+        console.error(
+          "Data in localStorage is not in the correct format for highscores."
+        );
+      }
+    } else {
+      saveHighscore(1, "namn", currentScore);
+      console.log("No saved highscores for level", level);
+      saveFirstHighscore(1, "", currentScore);
+      setShowInputModal(true);
+    }
+  };
+
+
+  const inputModalSubmit = (name:string) => {
+    setShowInputModal(false);
+    saveHighscore(1, name, score!)
+  }
+
+    function saveFirstHighscore (level: number, name: string, highscore: number) {
+      const newHighscore: { name: string; points: number }[] = [];
+      newHighscore.push({ name, points: highscore });
+      localStorage.setItem(
+        `sokoban-level${level}`,
+        JSON.stringify(newHighscore)
+      );
+      setHighscores(newHighscore);
+
+
+
+  const saveHighscore = (level:number, name:string, highscore: number ) => {
+   const highscoresString = localStorage.getItem(`sokoban-level${level}`);
+    if (highscoresString) {
+      const storedHighscores: { name: string; points: number }[] =
+        JSON.parse(highscoresString);
+
+      const scoreIndex = storedHighscores.findIndex(
+          (score) => score.points === highscore
+        );
+        storedHighscores[scoreIndex].name = name; // Update the name for the score
+
+    localStorage.setItem(
+      `sokoban-level${level}`,
+      JSON.stringify(storedHighscores)
+    );
+    setHighscores(storedHighscores)
+  } else {
+        console.error(
+          "Data in localStorage is not in the correct format for highscores."
+        );
+      }
+    }
+
+  };
+  
+
+  const handleEnd = () => {
+    setShowModal(false); 
+    // Here we handle what happens when a level is finnished (next level, main menu?)
+  };
+         */
+
+
   const boxMove = (y: number, x: number) => {
     const newBoard = [...board];
     newBoard[y][x] = 2;
-    // setPushes(updateCounter(pushes));
+
     updatePushesCounter();
+
     setBoard(newBoard);
   };
 
@@ -180,6 +320,9 @@ const Board = () => {
     let newX: number = 0;
     let newBoxPositionX: number = 0;
     let newBoxPositionY: number = 0;
+
+    console.log(event.key);
+
     if (charPos)
       switch (event.key) {
         case "ArrowUp":
@@ -211,6 +354,7 @@ const Board = () => {
           newBoxPositionX = newX + 1;
           break;
       }
+
     switch (board[newY][newX]) {
       case 3:
       case 4:
@@ -229,13 +373,29 @@ const Board = () => {
   };
 
   return (
+
     <>
       <button className="reset-btn" onClick={resetLevel}>
         Reset Puzzle{" "}
       </button>
+    <div className="game-container">
+
       <div className="highscore-data">
         <Highscore/>
       </div>
+      {showModal && (
+        <Modal
+          title="Congratulations, you finnished the level"
+          message1={"Moves: " + moves + " Pushes: " + pushes + " Time: " + timeString}
+          message2={"Points: " + score}
+          data={highscores}
+          onConfirm={handleEnd}
+        />
+      )}
+
+      {showInputModal &&
+        <InputModal onSubmit={inputModalSubmit} />
+      }
 
       <div className="board" tabIndex={0} onKeyDown={handleKeyDown} autoFocus>
         {board.map((row, rowIndex) => (
@@ -251,7 +411,9 @@ const Board = () => {
           </div>
         ))}
       </div>
+</div>
     </>
+
   );
 };
 

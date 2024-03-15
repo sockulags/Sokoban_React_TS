@@ -1,9 +1,17 @@
+import { Level } from '../components/Level';
+import {levels} from "../data/levels";
 import './Home.css';
+
 
 export const Home = () => {
   return (
     <div className="homepage">
-      <section className="header">      
+       <section className="welcome">      
+      <h1>Welcome!</h1>  
+        <p>Ready to solve your next puzzle? Let's play!</p>        
+       <Level level={levels[0].level} image={levels[0].image}/>
+      </section> 
+      <section className="what-is">      
       <h2>What is Sokoban?</h2>  
         <p>Sokoban is a timeless puzzle game where you push crates onto target squares within a maze.</p>
         <p>It's a challenging test of your spatial reasoning and problem-solving skills.</p>
