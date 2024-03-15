@@ -3,11 +3,11 @@ import { ReactElement, createContext, useState } from "react";
 
 interface IScoreData {
   moves: number;
-  updateMovesCounter: () => void;
+  updateMovesCount: () => void;
   pushes: number;
-  updatePushesCounter: () => void;
+  updatePushesCount: () => void;
   start: boolean;
-  count: number;
+  timeInNumber: number;
   time: string;
   showTimer: (ms: number) => void;
   gameEnded: boolean;
@@ -16,7 +16,7 @@ interface IScoreData {
   updateGameTime: (time: string) => void;
   setUpInterval: () => void;
   countHighscore: (time: number, moves: number) => void;
-  handleGameEnd: (time: number) => void;
+  handleGameEnd: () => void;
   resetData: () => void;
 }
 
@@ -30,23 +30,23 @@ export function ScoreDataContextProvider ({children}: IScoreDataContextProps) {
   const [moves, setMoves] = useState<number>(0);
   const [pushes, setPushes] = useState<number>(0);
   const [start, setStart] = useState(true); //If set to false the clock will stop
-  const [count, setCount] = useState(0);
+  const [timeInNumber, setTimeInNumber] = useState(0);
   const [time, setTime] = useState("00:00:00");
   const [gameEnded, setGameEnded] = useState(false);
   const [gameTime, setGameTime] = useState("");
   const initTime = new Date();
 
-  function updateCounter(counter: number) {
+  function updateConter(counter: number) {
     const updatedCounter = counter + 1;
     return updatedCounter;
   }
 
-  function updateMovesCounter() {
-    setMoves(updateCounter(moves));
+  function updateMovesCount() {
+    setMoves(updateConter(moves));
   }
 
-  function updatePushesCounter() {
-    setPushes(updateCounter(pushes));
+  function updatePushesCount() {
+    setPushes(updateConter(pushes));
   }
 
   function updateGameEnded() {
@@ -81,9 +81,9 @@ export function ScoreDataContextProvider ({children}: IScoreDataContextProps) {
     }
     // Set up an interval function
     const id = setInterval(() => {
-      const time = count + (new Date().getTime() - initTime.getTime()); // Calculate the current time by adding the elapsed time since initTime to count
-      setCount(time); // Update the count state
-      showTimer(time); // Update the UI
+      const currentTime = timeInNumber + (new Date().getTime() - initTime.getTime()); // Calculate the current time by adding the elapsed time since initTime to timeInNumber
+      setTimeInNumber(currentTime); // Update the timeInNumber state
+      showTimer(currentTime); // Update the UI
     }, 1); // Interval runs every 1 millisecond
     return () => clearInterval(id);
   };
@@ -98,16 +98,24 @@ export function ScoreDataContextProvider ({children}: IScoreDataContextProps) {
     console.log("highscore: " + highscore);
   }
 
-  const handleGameEnd = (time: string) => {
+  const handleGameEnd = () => {
     console.log("Spelet är klart. Tid:", time);
     updateGameTime(time);
-    countHighscore(gameTime, moves);
+    countHighscore(timeInNumber, moves);
   };
+
+// const handleGameEnd = (time: string, count: number) => {
+//     setTimeString(time);
+//     const score = countHighscore(count, moves);
+//     setScore(score);
+//     checkHighscore(1, score);
+//     setShowModal(true);
+//     setGameEnded(false); // to close modal
+// };
 
   const clearTime = () => {
     setTime("00:00:00");
-    setCount(0);
-    showTimer("00:00:00");
+    setTimeInNumber(0);
   };
 
   const resetData = () => {
@@ -118,11 +126,11 @@ export function ScoreDataContextProvider ({children}: IScoreDataContextProps) {
 
   const values: IScoreData = {
     moves,
-    updateMovesCounter,
+    updateMovesCount,
     pushes,
-    updatePushesCounter,
+    updatePushesCount,
     start,
-    count,
+    timeInNumber,
     time,
     showTimer,
     gameEnded,

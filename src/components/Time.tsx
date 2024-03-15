@@ -2,6 +2,7 @@ import { useContext, useEffect } from "react";
 import "./time.css";
 
 import { ScoreDataContext } from "../context/ScoreDataContext";
+import Modal from "./Modal";
 
 
 

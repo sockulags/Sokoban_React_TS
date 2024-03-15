@@ -7,7 +7,7 @@ const deepCopy = (arr: number[][]): number[][] => {
   return arr.map((subArr) => [...subArr]);
 };
 
-import { level1Layout, level0 } from "../data/levels";
+import { level1Layout, level2 } from "../data/levels";
 import "./board.css";
 import Highscore from "./Highscore";
 import Modal from "./Modal";
@@ -41,29 +41,30 @@ const getCharStartPosition = () => {
 };
 
 const Board = () => {
-
   const [board, setBoard] = useState<number[][]>(deepCopy(level2));
   const [charPos, setCharPos] = useState<Position | undefined>();
   const [boxLocations, setBoxLocations] = useState<Position[]>(getLocations(2));
 
+  const {
+    moves,
+    pushes,
+    updateMovesCount,
+    updatePushesCount,
+    resetData,
+    updateGameEnded,
+    countHighscore,
+  } = useContext(ScoreDataContext);
 
-  const { moves, updateMovesCounter, updatePushesCounter, resetData, updateGameEnded, countHighscore} = useContext(ScoreDataContext);
+  //  const [gameTime, setGameTime] = useState("");
 
-   const [gameTime, setGameTime] = useState("");
-
-  const [moves, setMove] = useState<number>(0);
-  const [pushes, setPushes] = useState<number>(0);
-  const [gameEnded, setGameEnded] = useState(false);
+  // const [moves, setMove] = useState<number>(0);
+  // const [pushes, setPushes] = useState<number>(0);
+  // const [gameEnded, setGameEnded] = useState(false);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [showInputModal, setShowInputModal] = useState<boolean>(false);
-  const [timeString, setTimeString]= useState<string>()
-  const [highscores, setHighscores] = useState<IHighscore[]>()
-  const [score, setScore] = useState<number>()
-
-  const [characterDirection, setCharacterDirection] = useState<
-    "up" | "down" | "left" | "right"
-  >("down");
-
+  const [timeString, setTimeString] = useState<string>();
+  const [highscores, setHighscores] = useState<IHighscore[]>();
+  const [score, setScore] = useState<number>();
 
   const [characterDirection, setCharacterDirection] = useState<string>("down");
 
@@ -79,8 +80,6 @@ const Board = () => {
     return array;
   }
 
-
-
   const saveLevelProgress = (board: number[][], charPos: Position) => {
     const levelData = {
       board: board,
@@ -88,7 +87,6 @@ const Board = () => {
     };
     localStorage.setItem("levelProgress", JSON.stringify(levelData));
   };
-
 
   const loadLevelProgress = () => {
     const savedData = localStorage.getItem("levelProgress");
@@ -98,7 +96,6 @@ const Board = () => {
       setCharPos(charPos);
     }
   };
-
 
   useEffect(() => {
     const startPosition = getCharStartPosition();
@@ -114,7 +111,6 @@ const Board = () => {
     resetData();
   };
 
-
   const upDateCharPos = (y: number, x: number) => {
     const newBoard = [...board];
     const isStorageLocation = storageLocations.some(
@@ -124,7 +120,7 @@ const Board = () => {
     newBoard[y][x] = 5;
     setCharPos({ y: y, x: x });
 
-    updateMovesCounter();
+    updateMovesCount();
 
     setBoard(newBoard);
     setBoxLocations(getLocations(2));
@@ -150,28 +146,8 @@ const Board = () => {
     }
   };
 
-  // const handleGameEnd = (time) => {
-  //   console.log("Spelet är klart. Tid:", time);
-  //   updateGameTime(time);
-  //   countHighscore(gameTime, moves);
-  // };
 
-  // function countHighscore(time, moves) {
-  //   time = time / 1000;
-  //   const weightTime = 1;
-  //   const weightMoves = 1; // Can be changed if time or number of moves should have a higher weight on the highscore
 
-  //   let highscore = (100000 * 1) / (weightTime * time + moves * weightMoves);
-  //   highscore = Math.floor(highscore);
-  //   console.log("highscore: " + highscore);
-  // }
-
-        /*
-      if (correct === storageLocations.length) {
-        setGameEnded(true);
-      }
-    }
-  };
 
   const handleGameEnd = (time: string, count: number) => {
     setTimeString(time)
@@ -182,14 +158,6 @@ const Board = () => {
     setGameEnded(false); // to close modal
   };
 
-  function countHighscore(gameTime: number, moves: number) {
-    const time = gameTime / 1000; //get seconds (from milliseconds)
-    const weightTime = 1;
-    const weightMoves = 1; // Can be changed if time or number of moves should have a higher weight on the highscore
-    let highscore = 100000 * (1 / (weightTime * time + moves * weightMoves));
-    highscore = Math.floor(highscore);
-    return highscore;
-  }
 
   const checkHighscore = (level: number, currentScore: number) => {
     const highscoresString = localStorage.getItem(`sokoban-level${level}`);
@@ -267,23 +235,22 @@ const Board = () => {
           "Data in localStorage is not in the correct format for highscores."
         );
       }
-    }
 
   };
   
 
+
+
   const handleEnd = () => {
-    setShowModal(false); 
+    setShowModal(false);
     // Here we handle what happens when a level is finnished (next level, main menu?)
   };
-         */
-
 
   const boxMove = (y: number, x: number) => {
     const newBoard = [...board];
     newBoard[y][x] = 2;
 
-    updatePushesCounter();
+    updatePushesCount();
 
     setBoard(newBoard);
   };
@@ -373,48 +340,45 @@ const Board = () => {
   };
 
   return (
-
     <>
       <button className="reset-btn" onClick={resetLevel}>
         Reset Puzzle{" "}
       </button>
-    <div className="game-container">
+      <div className="game-container">
+        <div className="highscore-data">
+          <Highscore />
+        </div>
+        {showModal && (
+          <Modal
+            title="Congratulations, you finnished the level"
+            message1={
+              "Moves: " + moves + " Pushes: " + pushes + " Time: " + timeString
+            }
+            message2={"Points: " + score}
+            data={highscores}
+            onConfirm={handleEnd}
+          />
+        )}
 
-      <div className="highscore-data">
-        <Highscore/>
+        {showInputModal && <InputModal onSubmit={inputModalSubmit} />}
+
+        <div className="board" tabIndex={0} onKeyDown={handleKeyDown} autoFocus>
+          {board.map((row, rowIndex) => (
+            <div className="row" key={rowIndex}>
+              {row.map((tile, colInd) => (
+                <Tile
+                  key={`${rowIndex}-${colInd}`}
+                  getTileImage={getTileImage}
+                  rowIndex={rowIndex}
+                  colIndex={colInd}
+                />
+              ))}
+            </div>
+          ))}
+        </div>
       </div>
-      {showModal && (
-        <Modal
-          title="Congratulations, you finnished the level"
-          message1={"Moves: " + moves + " Pushes: " + pushes + " Time: " + timeString}
-          message2={"Points: " + score}
-          data={highscores}
-          onConfirm={handleEnd}
-        />
-      )}
-
-      {showInputModal &&
-        <InputModal onSubmit={inputModalSubmit} />
-      }
-
-      <div className="board" tabIndex={0} onKeyDown={handleKeyDown} autoFocus>
-        {board.map((row, rowIndex) => (
-          <div className="row" key={rowIndex}>
-            {row.map((tile, colInd) => (
-              <Tile
-                key={`${rowIndex}-${colInd}`}
-                getTileImage={getTileImage}
-                rowIndex={rowIndex}
-                colIndex={colInd}
-              />
-            ))}
-          </div>
-        ))}
-      </div>
-</div>
     </>
-
   );
-};
-
+}
+}
 export default Board;
