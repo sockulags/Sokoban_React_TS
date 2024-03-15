@@ -1,4 +1,5 @@
 import { Level } from '../components/Level';
+import {levels} from "../data/levels";
 import './Home.css';
 
 
@@ -8,7 +9,7 @@ export const Home = () => {
        <section className="welcome">      
       <h1>Welcome!</h1>  
         <p>Ready to solve your next puzzle? Let's play!</p>        
-       <Level/>
+       <Level level={levels[0].level} image={levels[0].image}/>
       </section> 
       <section className="what-is">      
       <h2>What is Sokoban?</h2>  

@@ -14,7 +14,7 @@ const storageLocations = getLocations(4);
 
 function getLocations(tileType: number) {
   const array: Position[] = [];
-  level0.forEach((row, rowIndex) => {
+  level2.forEach((row, rowIndex) => {
     row.forEach((tile, colIndex) => {
       if (tile === tileType) {
         array.push({ y: rowIndex, x: colIndex });
@@ -25,7 +25,7 @@ function getLocations(tileType: number) {
 }
 
 const Board = () => {
-  const [board, setBoard] = useState<number[][]>(level0);
+  const [board, setBoard] = useState<number[][]>(level2);
   const [charPos, setCharPos] = useState<Position | undefined>();
   const [boxLocations, setBoxLocations] = useState<Position[]>(getLocations(2));
 
@@ -94,7 +94,7 @@ const Board = () => {
         );
         countHighscore(100000, moves);
       }
-      if (correct === 0) {
+      if (correct === storageLocations.length) {
         setGameEnded(true);
       }
     }
@@ -166,11 +166,12 @@ const Board = () => {
         );
       }
     } else {
+      saveHighscore(1, "namn", currentScore);
       console.log("No saved highscores for level", level);
     }
   };
 
- /*
+ 
   const saveHighscore = (level: number, name: string, highscore: number) => {
     const existingHighscoresString = localStorage.getItem(
       `sokoban-level${level}`
@@ -194,7 +195,7 @@ const Board = () => {
       JSON.stringify(topHighscores)
     );
   };
-  */
+  
 
   const handleEnd = () => {
     console.log("This is the end!"); 
@@ -291,7 +292,7 @@ const Board = () => {
   };
 
   return (
-    <>
+    <div className="game-container">
       <div className="highscore-data">
         <Highscore
           moves={moves}
@@ -325,7 +326,7 @@ const Board = () => {
           </div>
         ))}
       </div>
-    </>
+    </div>
 
   );
 };

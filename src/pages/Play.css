@@ -1,0 +1,16 @@
+.play-container{
+    margin: 0 30px;
+    display:flex;   
+    flex-wrap: wrap;
+   gap: 20px;
+   flex: 1;
+    .level-container{
+        height: 100px;
+        width:200px;
+        flex: auto;
+        margin:0;
+        h3{
+            font-size: 32px;
+        }
+    }
+}
