@@ -96,7 +96,7 @@ const Board = () => {
         );
         countHighscore(100000, moves);
       }
-      if (correct === 0) {
+      if (correct === storageLocations.length) {
         setGameEnded(true);
       }
     }
@@ -105,12 +105,10 @@ const Board = () => {
   const handleGameEnd = (time: string, count: number) => {
     setTimeString(time)
     const score = countHighscore(count, moves);
-    console.log(score);
     setScore(score)
     checkHighscore(1, score);
     setShowModal(true);
-    setGameEnded(false); // to not display modal
-    
+    setGameEnded(false); // to close modal
   };
 
   function countHighscore(gameTime: number, moves: number) {
@@ -127,24 +125,24 @@ const Board = () => {
     if (highscoresString) {
       const highscores: { name: string; points: number }[] =
         JSON.parse(highscoresString);
-      console.log("Highscores for level", level, ":", highscores);
 
       if (Array.isArray(highscores)) {
         highscores.push({ name: "", points: currentScore }); // Add the current score to the highscores array
         highscores.sort((a, b) => b.points - a.points); // Sort highscores in descending order
         const topHighscores = highscores.slice(0, 5); // Take the top five highscores
 
-        localStorage.setItem(
-          `sokoban-level${level}`,
-          JSON.stringify(topHighscores)
-        );
+        setHighscores(topHighscores);
 
         // Check if the current score is one of the top five
         const scoreIndex = topHighscores.findIndex(
           (score) => score.points === currentScore
         );
-        // If the current score is one of the top five, prompt the user for their name
+        // If the current score is one of the top five, ask the user for their name
         if (scoreIndex !== -1) {
+            localStorage.setItem(
+              `sokoban-level${level}`,
+              JSON.stringify(topHighscores)
+            );
           setShowInputModal(true);
         }
       } else {
@@ -161,7 +159,6 @@ const Board = () => {
 
   const inputModalSubmit = (name:string) => {
     setShowInputModal(false);
-    console.log(name)
     saveHighscore(1, name, score!)
   }
 
@@ -181,12 +178,11 @@ const Board = () => {
     if (highscoresString) {
       const storedHighscores: { name: string; points: number }[] =
         JSON.parse(highscoresString);
-      console.log("Highscores for level", level, ":", storedHighscores);
 
       const scoreIndex = storedHighscores.findIndex(
           (score) => score.points === highscore
         );
-        storedHighscores[scoreIndex].name = name; // Update the name for the current score
+        storedHighscores[scoreIndex].name = name; // Update the name for the score
 
     localStorage.setItem(
       `sokoban-level${level}`,
@@ -198,9 +194,7 @@ const Board = () => {
           "Data in localStorage is not in the correct format for highscores."
         );
       }
-  
     }
-  
   
 
   const handleEnd = () => {
