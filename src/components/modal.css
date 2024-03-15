@@ -45,3 +45,9 @@
     border: 1px solid #1e1e1e;
     border-radius: 4px;
 }
+
+.highscore-list {
+    padding-left: 2rem;
+    padding-top: 0.5rem;
+}
+
