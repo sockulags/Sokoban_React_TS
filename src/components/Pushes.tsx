@@ -1,13 +1,12 @@
+import { useContext } from "react";
+import { ScoreDataContext } from "../context/ScoreDataContext";
 import "./pushes.css"
 
-interface IPushesProps {
-    pushes:number
-}
-
-const Pushes = (props:IPushesProps) => {
+const Pushes = () => {
+  const { pushes } = useContext(ScoreDataContext);
     return (
       <>
-        <div className="pushes">PUSH: {props.pushes}</div>
+        <div className="pushes">PUSH: {pushes}</div>
       </>
     );
 }

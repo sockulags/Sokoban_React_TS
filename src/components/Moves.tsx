@@ -1,14 +1,15 @@
+import { useContext } from "react";
 import "./moves.css"
+import { ScoreDataContext } from "../context/ScoreDataContext";
 
-interface IMovesProps {
-    moves:number
-}
+const Moves = () => {
 
-const Moves = (props:IMovesProps) => {
+  const {moves} = useContext(ScoreDataContext);
+
     return ( 
         <>
          <div className="moves">
-           MOVE: {props.moves}
+           MOVE: {moves}
          </div>
         </>
      );

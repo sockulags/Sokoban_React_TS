@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Tile from "./Tile";
 import { level1Layout, level2} from "../data/levels";
 import "./board.css";
 import Highscore from "./Highscore";
+import { ScoreDataContext } from "../context/ScoreDataContext";
 
 const deepCopy = (arr: number[][]): number[][] => {
   return arr.map((subArr) => [...subArr]);
@@ -39,10 +40,9 @@ const Board = () => {
   const [charPos, setCharPos] = useState<Position | undefined>();
   const [boxLocations, setBoxLocations] = useState<Position[]>(getLocations(2));
 
-  const [moves, setMove] = useState<number>(0);
-  const [pushes, setPushes] = useState<number>(0);
-  const [gameEnded, setGameEnded] = useState(false);
-  const [gameTime, setGameTime] = useState("");
+  const { moves, updateMovesCounter, updatePushesCounter, resetData, updateGameEnded, countHighscore} = useContext(ScoreDataContext);
+
+  // const [gameTime, setGameTime] = useState("");
 
   const [characterDirection, setCharacterDirection] = useState<string>("down");
 
@@ -58,10 +58,6 @@ const Board = () => {
     return array;
   }
 
-  function updateCounter(counter: number) {
-    const updatedCounter = counter + 1;
-    return updatedCounter;
-  }
 
   const saveLevelProgress = (board: number[][], charPos: Position) => {
     const levelData = {
@@ -92,9 +88,7 @@ const Board = () => {
     setBoard(deepCopy(level2));
     setCharPos(getCharStartPosition());
     setBoxLocations(getLocations(2));
-    setMove(0);
-    setPushes(0);
-    setGameEnded(false);
+    resetData();
   };
 
 
@@ -106,7 +100,7 @@ const Board = () => {
     newBoard[charPos!.y][charPos!.x] = isStorageLocation ? 4 : 3;
     newBoard[y][x] = 5;
     setCharPos({ y: y, x: x });
-    setMove(updateCounter(moves));
+    updateMovesCounter();
     setBoard(newBoard);
     setBoxLocations(getLocations(2));
     checkCompletion();
@@ -125,32 +119,32 @@ const Board = () => {
       }
       if (correct === 1) {
         console.log("GAME OVER");
-        setGameEnded(true);
-        console.log(gameEnded);
+        updateGameEnded();
       }
     }
   };
 
-  const handleGameEnd = (time) => {
-    console.log("Spelet är klart. Tid:", time);
-    setGameTime(time);
-    countHighscore(gameTime, moves);
-  };
+  // const handleGameEnd = (time) => {
+  //   console.log("Spelet är klart. Tid:", time);
+  //   updateGameTime(time);
+  //   countHighscore(gameTime, moves);
+  // };
 
-  function countHighscore(time, moves) {
-    time = time / 1000;
-    const weightTime = 1;
-    const weightMoves = 1; // Can be changed if time or number of moves should have a higher weight on the highscore
+  // function countHighscore(time, moves) {
+  //   time = time / 1000;
+  //   const weightTime = 1;
+  //   const weightMoves = 1; // Can be changed if time or number of moves should have a higher weight on the highscore
 
-    let highscore = (100000 * 1) / (weightTime * time + moves * weightMoves);
-    highscore = Math.floor(highscore);
-    console.log("highscore: " + highscore);
-  }
+  //   let highscore = (100000 * 1) / (weightTime * time + moves * weightMoves);
+  //   highscore = Math.floor(highscore);
+  //   console.log("highscore: " + highscore);
+  // }
 
   const boxMove = (y: number, x: number) => {
     const newBoard = [...board];
     newBoard[y][x] = 2;
-    setPushes(updateCounter(pushes));
+    // setPushes(updateCounter(pushes));
+    updatePushesCounter();
     setBoard(newBoard);
   };
 
@@ -240,12 +234,7 @@ const Board = () => {
         Reset Puzzle{" "}
       </button>
       <div className="highscore-data">
-        <Highscore
-          moves={moves}
-          pushes={pushes}
-          gameEnded={gameEnded}
-          onGameEnd={handleGameEnd}
-        />
+        <Highscore/>
       </div>
 
       <div className="board" tabIndex={0} onKeyDown={handleKeyDown} autoFocus>
