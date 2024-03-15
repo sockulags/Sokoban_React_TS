@@ -134,24 +134,19 @@ const Board = () => {
         highscores.sort((a, b) => b.points - a.points); // Sort highscores in descending order
         const topHighscores = highscores.slice(0, 5); // Take the top five highscores
 
+        localStorage.setItem(
+          `sokoban-level${level}`,
+          JSON.stringify(topHighscores)
+        );
+
         // Check if the current score is one of the top five
         const scoreIndex = topHighscores.findIndex(
           (score) => score.points === currentScore
         );
         // If the current score is one of the top five, prompt the user for their name
         if (scoreIndex !== -1) {
-          const playerName = prompt(
-            "Congratulations! You made it to the highscore list! Enter your name:"
-          );
-          if (playerName) {
-            topHighscores[scoreIndex].name = playerName; // Update the name for the current score
-          }
+          setShowInputModal(true);
         }
-        localStorage.setItem(
-          `sokoban-level${level}`,
-          JSON.stringify(topHighscores)
-        );
-        setHighscores(topHighscores);
       } else {
         console.error(
           "Data in localStorage is not in the correct format for highscores."
@@ -159,27 +154,53 @@ const Board = () => {
       }
     } else {
       console.log("No saved highscores for level", level);
+      saveFirstHighscore(1, "", currentScore);
       setShowInputModal(true);
-      
     }
   };
 
-  const inputModalSubmit = (name) => {
-    console.log("inputModalSubmit");
+  const inputModalSubmit = (name:string) => {
     setShowInputModal(false);
     console.log(name)
-    saveHighscore(1, name, score!);
+    saveHighscore(1, name, score!)
   }
 
-  const saveHighscore = (level: number, name: string, highscore: number) => {
-    const newHighscore: { name: string; points: number }[] = [];
-    newHighscore.push({ name, points: highscore });
+    function saveFirstHighscore (level: number, name: string, highscore: number) {
+      const newHighscore: { name: string; points: number }[] = [];
+      newHighscore.push({ name, points: highscore });
+      localStorage.setItem(
+        `sokoban-level${level}`,
+        JSON.stringify(newHighscore)
+      );
+      setHighscores(newHighscore);
+    }
+
+
+  const saveHighscore = (level:number, name:string, highscore: number ) => {
+   const highscoresString = localStorage.getItem(`sokoban-level${level}`);
+    if (highscoresString) {
+      const storedHighscores: { name: string; points: number }[] =
+        JSON.parse(highscoresString);
+      console.log("Highscores for level", level, ":", storedHighscores);
+
+      const scoreIndex = storedHighscores.findIndex(
+          (score) => score.points === highscore
+        );
+        storedHighscores[scoreIndex].name = name; // Update the name for the current score
+
     localStorage.setItem(
       `sokoban-level${level}`,
-      JSON.stringify(newHighscore)
+      JSON.stringify(storedHighscores)
     );
-    setHighscores(newHighscore)
-  };
+    setHighscores(storedHighscores)
+  } else {
+        console.error(
+          "Data in localStorage is not in the correct format for highscores."
+        );
+      }
+  
+    }
+  
   
 
   const handleEnd = () => {
