@@ -9,21 +9,25 @@ import Highscore from "./Highscore";
 import Modal from "./Modal";
 import InputModal from "./InputModal";
 
+const deepCopy = (arr: number[][]): number[][] => {
+  return arr.map((subArr) => [...subArr]);
+};
+
 const storageLocations = getStorageLocations(0);
 
 const Board = () => {
   const [level, setLevel] = useState<number>(0);
-  const [board, setBoard] = useState<number[][]>(level0);
+  const [board, setBoard] = useState<number[][]>(deepCopy(level0));
   const [charPos, setCharPos] = useState<IPosition>({ x: -1, y: -1 });
   const [boxLocations, setBoxLocations] = useState<IPosition[]>(getBoxLocations(level));
   const [characterDirection, setCharacterDirection] = useState<Direction>("down");
 
-const { pushes, updatePushesCount, moves, updateMovesCount, time, start, startGame, resetData, updateGameEnded, gameEnded, handleGameEnd, gameEndMessages, isNewHighscore } = useContext(ScoreDataContext);
+const { pushes, updatePushesCount, moves, updateMovesCount, time, startGame, updateGameEnded, gameEnded, handleGameEnd, gameEndMessages, isNewHighscore, resetLevel } = useContext(ScoreDataContext);
 
   useEffect(() => {
     setCharPos(getCharStartPosition());
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [board]);
 
   const getCharStartPosition = () => {
     const posY = board.findIndex((row) => row.includes(5));
@@ -55,7 +59,6 @@ const { pushes, updatePushesCount, moves, updateMovesCount, time, start, startGa
       console.log(storageLocations.length)
       console.log("Done");
       updateGameEnded(0);
-      // resetData();
     }
   };
 
@@ -111,9 +114,15 @@ const { pushes, updatePushesCount, moves, updateMovesCount, time, start, startGa
     }
   };
 
+  const restartLevel = () => {
+    setBoard(deepCopy(level0));
+    setCharacterDirection('down');
+    resetLevel();
+  }
+
   return (
     <div className="game-container">
-      <Highscore pushes={pushes} moves={moves} time={time}/>
+      <Highscore pushes={pushes} moves={moves} time={time} restartLevel={restartLevel}/>
       {gameEnded && (
           <Modal
             title={gameEndMessages.title}
