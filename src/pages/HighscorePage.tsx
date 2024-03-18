@@ -131,7 +131,7 @@ export const HighscorePage = () => {
   const [leaderboard, setLeaderboard] = useState<HighscoreProps[]>([]);
 
   const level = useParams();
-  console.log(level);
+
   useEffect(() => {
     if (level.id) setLeaderboard(scores[parseInt(level.id)]);
     else {
@@ -163,7 +163,7 @@ export const HighscorePage = () => {
 
   return (
     <div className="highscorepage-container">
-      <h1>Highscore level x</h1>
+      <h1>Highscore level {level.id}</h1>
       <div className="highscore-header">{renderHeader()}</div>
       <div className="highscore-body">{renderRows()}</div>
     </div>

@@ -15,9 +15,9 @@ export function App() {
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/board" element={<GamePlay/>} />
           <Route path="/about" element={<About />} />
           <Route path="/play" element={<Play />} />
+          <Route path="/play/:level?" element={<GamePlay/>} />
           <Route path="/highscore/:id?" element={<HighscorePage />} />
           {/* Define other routes here */}
         </Routes>

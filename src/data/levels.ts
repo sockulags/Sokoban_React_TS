@@ -18,51 +18,29 @@ import characterUp from "../assets/Character7.png";
 import characterLeft from "../assets/Character1.png";
 import characterRight from "../assets/Character2.png";
 
+//levels
+import {l0} from "./levels/0";
+import {l1} from "./levels/1";
+import {l2} from "./levels/2";
+import {l3} from "./levels/3";
+import {l4} from "./levels/4";
+import {l5} from "./levels/5";
+import {l6} from "./levels/6";
+import {l7} from "./levels/7";
+import {l8} from "./levels/8";
+import {l9} from "./levels/9";
+import {l10} from "./levels/10";
+import {l11} from "./levels/11";
+import {l12} from "./levels/12";
+import {l13} from "./levels/13";
+import {l14} from "./levels/14";
+import {l15} from "./levels/15";
+import {l16} from "./levels/16";
+import {l17} from "./levels/17";
+import {l18} from "./levels/18";
+import {l19} from "./levels/19";
+import {l20} from "./levels/20";
 
-
-// level images
-import level0Image from "../assets/level_images/level_0.png";
-import level1Image from "../assets/level_images/level_1.png";
-import level2Image from "../assets/level_images/level_2.png";
-
-export const level0 = [
-  [0, 1, 1, 1, 1, 1, 0, 0, 0],
-  [0, 1, 3, 3, 3, 1, 1, 1, 1],
-  [0, 1, 3, 3, 3, 1, 3, 3, 1],
-  [0, 1, 1, 3, 3, 3, 3, 4, 1],
-  [1, 1, 1, 3, 1, 1, 1, 4, 1],
-  [1, 3, 2, 3, 1, 0, 1, 4, 1],
-  [1, 3, 2, 2, 1, 0, 1, 1, 1],
-  [1, 5, 3, 3, 1, 0, 0, 0, 0],
-  [1, 1, 1, 1, 1, 0, 0, 0, 0],
-];
-
-export const level1 = [
-  [0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 1, 3, 3, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 1, 2, 3, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 1, 1, 1, 3, 3, 2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 1, 3, 3, 2, 3, 2, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [1, 1, 1, 3, 1, 3, 1, 1, 3, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1],
-  [1, 3, 3, 3, 1, 3, 1, 1, 3, 1, 1, 1, 1, 1, 1, 3, 3, 4, 4, 1],
-  [1, 3, 2, 3, 3, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 1],
-  [1, 1, 1, 1, 1, 3, 1, 1, 1, 3, 1, 5, 1, 1, 3, 3, 3, 4, 4, 1],
-  [0, 0, 0, 0, 1, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-  [0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-];
-
-export const level2 = [
-  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0],
-  [1, 4, 4, 3, 3, 1, 3, 3, 3, 3, 3, 1, 1, 1],
-  [1, 4, 4, 3, 3, 1, 3, 2, 3, 3, 2, 3, 3, 1],
-  [1, 4, 4, 3, 3, 1, 2, 1, 1, 1, 1, 3, 3, 1],
-  [1, 4, 4, 3, 3, 3, 3, 5, 3, 1, 1, 3, 3, 1],
-  [1, 4, 4, 3, 3, 1, 3, 1, 3, 3, 2, 3, 1, 1],
-  [1, 1, 1, 1, 1, 1, 3, 1, 1, 2, 3, 2, 3, 1],
-  [0, 0, 1, 3, 2, 3, 3, 2, 3, 2, 3, 2, 3, 1],
-  [0, 0, 1, 3, 3, 3, 3, 1, 3, 3, 3, 3, 3, 1],
-  [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-];
 
 export const sandLayout = [
   outOfBounds,
@@ -76,26 +54,8 @@ export const sandLayout = [
 export const characterImages = {
   up: characterUp,
   down: characterDown,
-  left:  characterLeft,
-  right:  characterRight,
-}
+  left: characterLeft,
+  right: characterRight,
+};
 
-
-export const levels = [
-  {
-    level: 0,
-    board: level0,
-    image: level0Image
-  },
-  {
-    level: 1,
-    board: level1,
-    image:level1Image
-  },
-  {
-    level: 2,
-    board: level2,
-    image:level2Image
- }
-] 
-
+export const levels = [l0, l1, l2, l3, l4, l5, l6, l7, l8 , l9, l10, l11, l12, l13, l14, l15, l16, l17, l18, l19, l20];
