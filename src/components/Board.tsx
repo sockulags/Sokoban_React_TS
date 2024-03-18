@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import Tile from "./Tile";
-import { sandLayout, level0, characterImages } from "../data/levels";
+import { sandLayout, levels, characterImages } from "../data/levels";
 import "./board.css";
 import { ScoreDataContext } from "../context/ScoreDataContext";
 import { IPosition, ICharDirection, Direction } from "../interface";
@@ -9,11 +9,11 @@ import Highscore from "./Highscore";
 import Modal from "./Modal";
 import InputModal from "./InputModal";
 
-const storageLocations = getStorageLocations(0);
+const storageLocations = getStorageLocations(12);
 
 const Board = () => {
-  const [level, setLevel] = useState<number>(0);
-  const [board, setBoard] = useState<number[][]>(level0);
+  const [level, setLevel] = useState<number>(12);
+  const [board, setBoard] = useState<number[][]>(levels[level].board);
   const [charPos, setCharPos] = useState<IPosition>({ x: -1, y: -1 });
   const [boxLocations, setBoxLocations] = useState<IPosition[]>(getBoxLocations(level));
   const [characterDirection, setCharacterDirection] = useState<Direction>("down");

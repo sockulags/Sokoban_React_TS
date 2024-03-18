@@ -1,4 +1,4 @@
-import lvl14image from "../../assets/level_images/level_2.png";
+import lvl14image from "../../assets/level_images/level_14.png";
 
 export const level14 = [
   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3],
