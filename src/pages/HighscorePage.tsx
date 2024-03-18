@@ -130,16 +130,15 @@ const scores: ScoreProps = [level0Score, level1Score, level2Score];
 export const HighscorePage = () => {
   const [leaderboard, setLeaderboard] = useState<HighscoreProps[]>([]);
 
-  const level = useParams();
-  console.log(level);
+  const { id } = useParams();
+
   useEffect(() => {
-    if (level.id) setLeaderboard(scores[parseInt(level.id)]);
+    if (id) setLeaderboard(scores[parseInt(id)]);
     else {
       setLeaderboard(scores[0]);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  console.log(scores[0]);
   function renderHeader() {
     const keys = Object.keys(scores[0][0]);
     return keys.map((key) => (
@@ -163,7 +162,7 @@ export const HighscorePage = () => {
 
   return (
     <div className="highscorepage-container">
-      <h1>Highscore level x</h1>
+      <h1>Highscore level {id}</h1>
       <div className="highscore-header">{renderHeader()}</div>
       <div className="highscore-body">{renderRows()}</div>
     </div>
