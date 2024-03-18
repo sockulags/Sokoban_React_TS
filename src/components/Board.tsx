@@ -147,3 +147,4 @@ const { pushes, updatePushesCount, moves, updateMovesCount, time, start, startGa
 };
 
 export default Board;
+
