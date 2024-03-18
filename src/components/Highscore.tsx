@@ -3,17 +3,21 @@ import Pushes from "./Pushes";
 import Time from "./Time";
 import "./highscore.css"
 
+interface IHighscoreProps {
+  moves: number;
+  pushes: number;
+  time: string;
+}
 
-
-const Highscore = () => {
+const Highscore = (props: IHighscoreProps) => {
    
 
   return (
     <>
       <div className="highscore-data">
-        <Moves />
-        <Pushes />
-        <Time/>
+        <Moves moves={props.moves} />
+        <Pushes pushes={props.pushes} />
+        <Time time={props.time}/>
       </div>
     </>
   );

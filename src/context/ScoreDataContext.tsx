@@ -1,4 +1,6 @@
-import { ReactElement, createContext, useState } from "react";
+import { ReactElement, createContext, useState, useEffect } from "react";
+import { IHighscore } from "../interface";
+import { checkHighscore, saveHighscoreToLocalstorage } from "../data/functions";
 
 
 interface IScoreData {
@@ -11,17 +13,28 @@ interface IScoreData {
   time: string;
   showTimer: (ms: number) => void;
   gameEnded: boolean;
-  updateGameEnded: () => void;
+  updateGameEnded: (level: number) => void;
   gameTime: string;
   updateGameTime: (time: string) => void;
   setUpInterval: () => void;
   countHighscore: (time: number, moves: number) => void;
   handleGameEnd: () => void;
-  resetData: () => void;
+  resetData: () => void; 
+  startGame: () => void; 
+  gameEndMessages: IGameEndProps;
+  isNewHighscore: boolean;
 }
 
 interface IScoreDataContextProps {
     children: ReactElement;
+}
+
+interface IGameEndProps{
+title: string;
+message1: string;
+message2: string;
+data?: IHighscore[];
+onConfirm: IScoreData["handleGameEnd"];
 }
 
 export const ScoreDataContext = createContext({} as IScoreData);
@@ -29,12 +42,22 @@ export const ScoreDataContext = createContext({} as IScoreData);
 export function ScoreDataContextProvider ({children}: IScoreDataContextProps) {
   const [moves, setMoves] = useState<number>(0);
   const [pushes, setPushes] = useState<number>(0);
-  const [start, setStart] = useState(true); //If set to false the clock will stop
+  const [start, setStart] = useState(false); 
   const [timeInNumber, setTimeInNumber] = useState(0);
   const [time, setTime] = useState("00:00:00");
   const [gameEnded, setGameEnded] = useState(false);
   const [gameTime, setGameTime] = useState("");
   const initTime = new Date();
+  const [intervalId, setIntervalId] = useState<number | null>(null);
+  const [gameEndMessages, setGameEndMessages] = useState({
+    title: "",
+    message1:  "",
+    message2: "",
+    data: [{name: "", points: 0}],
+    onConfirm: () => handleGameEnd(),      
+  });
+  const [score, setScore] = useState(0);
+  const [isNewHighscore, setIsNewHighscore] = useState<boolean>(false);
 
   function updateConter(counter: number) {
     const updatedCounter = counter + 1;
@@ -43,18 +66,41 @@ export function ScoreDataContextProvider ({children}: IScoreDataContextProps) {
 
   function updateMovesCount() {
     setMoves(updateConter(moves));
+    setScore(countHighscore(timeInNumber, moves))
   }
 
   function updatePushesCount() {
     setPushes(updateConter(pushes));
   }
 
-  function updateGameEnded() {
+  function updateGameEnded(level: number) {  
     setGameEnded(true);
+    if (intervalId) {
+      clearInterval(intervalId);
+      setIntervalId(null);
+    }
+    const highscoreList = checkHighscore(level, score);
+
+    setGameEndMessages({
+      title: `Congratulations, you finished level ${level}`,
+      message1:   "Moves: " + moves + " Pushes: " + pushes + " Time: " + time,
+      message2: "Points: " + score, // Update the message with the correct score
+      data: highscoreList.highscoreList,
+      onConfirm: () => handleGameEnd(),      
+    })
+      
+    console.log(highscoreList)
+    if (highscoreList.showInputModal)
+    setIsNewHighscore(true)
   }
+  
 
   function updateGameTime(time: string) {
     setGameTime(time)
+  }
+
+  function startGame(){
+    setStart(true);
   }
 
   const showTimer = (ms: number) => {
@@ -79,13 +125,12 @@ export function ScoreDataContextProvider ({children}: IScoreDataContextProps) {
     if (!start || gameEnded) {
       return;
     }
-    // Set up an interval function
     const id = setInterval(() => {
-      const currentTime = timeInNumber + (new Date().getTime() - initTime.getTime()); // Calculate the current time by adding the elapsed time since initTime to timeInNumber
-      setTimeInNumber(currentTime); // Update the timeInNumber state
-      showTimer(currentTime); // Update the UI
-    }, 1); // Interval runs every 1 millisecond
-    return () => clearInterval(id);
+      const currentTime = timeInNumber + (new Date().getTime() - initTime.getTime());
+      setTimeInNumber(currentTime);
+      showTimer(currentTime);
+    }, 1); 
+    setIntervalId(id);
   };
 
   function countHighscore(time: number, moves: number) {
@@ -94,24 +139,18 @@ export function ScoreDataContextProvider ({children}: IScoreDataContextProps) {
     const weightMoves = 1; // Can be changed if time or number of moves should have a higher weight on the highscore
 
     let highscore = (100000 * 1) / (weightTime * time + moves * weightMoves);
-    highscore = Math.floor(highscore);
-    console.log("highscore: " + highscore);
+    highscore = Math.floor(highscore);  
+    return highscore;
   }
 
   const handleGameEnd = () => {
-    console.log("Spelet är klart. Tid:", time);
+    console.log("Spelet är klart. Tid:", time, "Poäng: ", score);
+    setIsNewHighscore(false);
+    saveHighscoreToLocalstorage(0, "Test2", score)
     updateGameTime(time);
-    countHighscore(timeInNumber, moves);
+    setScore(countHighscore(timeInNumber, moves))
+    resetData();
   };
-
-// const handleGameEnd = (time: string, count: number) => {
-//     setTimeString(time);
-//     const score = countHighscore(count, moves);
-//     setScore(score);
-//     checkHighscore(1, score);
-//     setShowModal(true);
-//     setGameEnded(false); // to close modal
-// };
 
   const clearTime = () => {
     setTime("00:00:00");
@@ -120,9 +159,26 @@ export function ScoreDataContextProvider ({children}: IScoreDataContextProps) {
 
   const resetData = () => {
     clearTime();
+    setStart(false);
     setMoves(0);
     setPushes(0);
+    if (intervalId) {
+      clearInterval(intervalId);
+      setIntervalId(null);
+    }
   };
+
+  useEffect(() => {
+    if (start) {
+      setUpInterval();
+      return () => {
+        if (intervalId) {
+          clearInterval(intervalId);
+        }
+      };
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [start, gameEnded]); 
 
   const values: IScoreData = {
     moves,
@@ -140,7 +196,10 @@ export function ScoreDataContextProvider ({children}: IScoreDataContextProps) {
     countHighscore,
     updateGameTime,
     handleGameEnd,
-    resetData,
+    resetData, 
+    startGame ,
+    gameEndMessages,
+    isNewHighscore  
   };
 
   return (

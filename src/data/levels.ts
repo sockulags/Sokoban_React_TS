@@ -12,7 +12,7 @@ import wall from "../assets/Wall_Brown.png";
 import box from "../assets/CrateDark_Red.png";
 import emptySpace from "../assets/GroundGravel_Sand.png";
 import storageLocation from "../assets/EndPoint_Red.png";
-import character from "../assets/Character4.png";
+import characterDown from "../assets/Character4.png";
 import boxInStorageLocation from "../assets/Crate_Brown.png";
 import characterUp from "../assets/Character7.png";
 import characterLeft from "../assets/Character1.png";
@@ -36,7 +36,6 @@ export const level0 = [
   [1, 5, 3, 3, 1, 0, 0, 0, 0],
   [1, 1, 1, 1, 1, 0, 0, 0, 0],
 ];
-
 
 export const level1 = [
   [0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -65,18 +64,21 @@ export const level2 = [
   [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 ];
 
-export const level1Layout = [
+export const sandLayout = [
   outOfBounds,
   wall,
   box,
   emptySpace,
   storageLocation,
-  character,
   boxInStorageLocation,
-  characterUp,
-  characterLeft,
-  characterRight,
 ];
+
+export const characterImages = {
+  up: characterUp,
+  down: characterDown,
+  left:  characterLeft,
+  right:  characterRight,
+}
 
 
 export const levels = [
@@ -96,3 +98,4 @@ export const levels = [
     image:level2Image
  }
 ] 
+
