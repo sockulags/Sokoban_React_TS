@@ -2,9 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import Tile from "./Tile";
 import {
   sandLayout,
-  level0,
-  level1,
-  level2,
+  levels,
   characterImages,
 } from "../data/levels";
 import "./board.css";
@@ -18,7 +16,12 @@ import {
 import Highscore from "./Highscore";
 import Modal from "./Modal";
 import InputModal from "./InputModal";
-const levelsArray = [level0, level1, level2];
+
+
+const deepCopy = (arr: number[][]): number[][] => {
+  return arr.map((subArr) => [...subArr]);
+}; 
+
 
 const Board = () => {
    const {
@@ -40,14 +43,11 @@ const Board = () => {
    } = useContext(ScoreDataContext);
 
   const [storageLocations, setStorageLocation] = useState<IPosition[]>([]);
- const [board, setBoard] = useState<number[][]>(deepCopy(levelsArray[level]));
+ const [board, setBoard] = useState<number[][]>(deepCopy(levels[level].board));
   const [charPos, setCharPos] = useState<IPosition>({ x: -1, y: -1 });
   const [boxLocations, setBoxLocations] = useState<IPosition[]>([]);
   const [characterDirection, setCharacterDirection] =
     useState<Direction>("down");
-const deepCopy = (arr: number[][]): number[][] => {
-  return arr.map((subArr) => [...subArr]);
-}; 
 
   useEffect(() => {
   setCharPos(getCharStartPosition());
@@ -58,10 +58,11 @@ const deepCopy = (arr: number[][]): number[][] => {
   
   }, []);
 
-   const getCharStartPosition = () => {
+   const getCharStartPosition = (resetBoard?: number[][]) => {
     console.log("char start " + board)
-    const posY = board.findIndex((row) => row.includes(5));
-    const posX = board[posY].findIndex((x) => x === 5);
+    const newBoard = resetBoard ?? board;
+    const posY = newBoard.findIndex((row) => row.includes(5));
+    const posX = newBoard[posY].findIndex((x) => x === 5);
     return { x: posX, y: posY };
   };
 
@@ -152,7 +153,8 @@ const deepCopy = (arr: number[][]): number[][] => {
   };
 
   const restartLevel = () => {
-    setBoard(deepCopy(levelsArray[level]));
+    setBoard(deepCopy(levels[level].board));
+    setCharPos(getCharStartPosition(deepCopy(levels[level].board)))
     setCharacterDirection('down');
     resetLevel();
   }
