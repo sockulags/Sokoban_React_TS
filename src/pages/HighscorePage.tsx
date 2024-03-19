@@ -130,7 +130,9 @@ const scores: ScoreProps = [level0Score, level1Score, level2Score];
 export const HighscorePage = () => {
   const [leaderboard, setLeaderboard] = useState<HighscoreProps[]>([]);
 
+
   const { id } = useParams();
+
 
   useEffect(() => {
     if (id) setLeaderboard(scores[parseInt(id)]);

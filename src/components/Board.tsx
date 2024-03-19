@@ -18,8 +18,6 @@ import {
 import Highscore from "./Highscore";
 import Modal from "./Modal";
 import InputModal from "./InputModal";
-
-
 const levelsArray = [level0, level1, level2];
 
 const Board = () => {
