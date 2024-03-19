@@ -39,7 +39,8 @@ const Board = () => {
      handleGameEnd,
      gameEndMessages,
      isNewHighscore,
-     resetLevel
+     resetLevel,
+     saveHighscore,
    } = useContext(ScoreDataContext);
 
   const [storageLocations, setStorageLocation] = useState<IPosition[]>([]);
@@ -57,6 +58,13 @@ const Board = () => {
     console.log(storageLocations);
   
   }, []);
+
+  useEffect (() => {
+    setBoard(deepCopy(levels[level].board));
+      setCharPos(getCharStartPosition(deepCopy(levels[level].board)));   
+      setStorageLocation(getStorageLocations(level));
+  
+  },[level])
 
    const getCharStartPosition = (resetBoard?: number[][]) => {
     console.log("char start " + board)
@@ -156,13 +164,18 @@ const Board = () => {
     setBoard(deepCopy(levels[level].board));
     setCharPos(getCharStartPosition(deepCopy(levels[level].board)))
     setCharacterDirection('down');
+    setBoxLocations(getBoxLocations(level))
     resetLevel();
   }
 
   return (
     <div className="game-container">
-
-      <Highscore pushes={pushes} moves={moves} time={time} restartLevel={restartLevel}/>
+      <Highscore
+        pushes={pushes}
+        moves={moves}
+        time={time}
+        restartLevel={restartLevel}
+      />
 
       {gameEnded && (
         <Modal
@@ -171,9 +184,10 @@ const Board = () => {
           message2={gameEndMessages.message2}
           data={gameEndMessages.data}
           onConfirm={gameEndMessages.onConfirm}
+          restart={restartLevel}
         />
       )}
-      {isNewHighscore && <InputModal onSubmit={handleGameEnd} />}
+      {isNewHighscore && <InputModal onSubmit={saveHighscore} />}
       <div className="board" tabIndex={0} onKeyDown={handleKeyDown} autoFocus>
         {board.map((row, rowIndex) => (
           <div className="row" key={rowIndex}>

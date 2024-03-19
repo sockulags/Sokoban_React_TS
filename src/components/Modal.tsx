@@ -1,6 +1,9 @@
 import "./modal.css"
 import Logo from "../assets/sokoban-header.png";
 import { IHighscore } from "../interface";
+import { useNavigate } from "react-router-dom";
+import { ScoreDataContext } from "../context/ScoreDataContext";
+import { useContext } from "react";
 
 interface IModalProps {
   title:string;
@@ -8,9 +11,24 @@ interface IModalProps {
   message2?: string;
   onConfirm: () => void;
   data?:IHighscore[]
+  restart: () => void;
 }
 
-const Modal = ({ title, message1, message2, onConfirm, data }: IModalProps) => {
+
+const Modal = ({ title, message1, message2, onConfirm, data, restart }: IModalProps) => {
+  const {level, setLevel} = useContext(ScoreDataContext)
+   const nav =useNavigate()
+
+    const levels = () => {
+     onConfirm()
+    nav("/play")
+  }
+    const nextLevel = () => {
+     onConfirm()
+     nav(`/play/${level+1}`);
+     const newLevel = level+1
+     setLevel(newLevel)
+  }
   return (
     <>
       <div>
@@ -35,8 +53,14 @@ const Modal = ({ title, message1, message2, onConfirm, data }: IModalProps) => {
             </div>
           )}
           <div className="modal-buttons">
-            <button className="modal-confirm" onClick={() => onConfirm()}>
-              Confirm
+            <button className="modal-confirm" onClick={restart}>
+              Try again
+            </button>
+            <button className="modal-confirm" onClick={levels}>
+              Levels
+            </button>
+            <button className="modal-confirm" onClick={nextLevel}>
+              Next level
             </button>
           </div>
         </div>

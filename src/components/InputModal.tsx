@@ -1,22 +1,21 @@
 import "./modal.css";
 import Logo from "../assets/sokoban-header.png";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { ScoreDataContext } from "../context/ScoreDataContext";
 
 
-interface IInputModalProps {
-  onSubmit: (name:string) => void;
-}
 
-const InputModal = ({ onSubmit }: IInputModalProps) => {
+const InputModal = () => {
   const [name, setName] = useState("");
-
+  const { saveHighscore } = useContext(ScoreDataContext);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    
     setName(event.target.value);
   };
 
   const handleSubmit = () => {
     console.log(name)
-    onSubmit(name);
+    saveHighscore(name);
     setName(""); // Reset the input field after submission
   };
 

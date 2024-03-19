@@ -6,7 +6,6 @@ import { useParams } from "react-router-dom";
 
 type IntervalId = ReturnType<typeof setInterval>;
 
-
 interface IScoreData {
   moves: number;
   updateMovesCount: () => void;
@@ -28,6 +27,8 @@ interface IScoreData {
   gameEndMessages: IGameEndProps;
   isNewHighscore: boolean;
   level: number;
+  saveHighscore: (name: string) => void;
+  setLevel: (level: number) => void;
 }
 
 interface IScoreDataContextProps {
@@ -45,9 +46,8 @@ interface IGameEndProps {
 export const ScoreDataContext = createContext({} as IScoreData);
 
 export function ScoreDataContextProvider({ children }: IScoreDataContextProps) {
-
-   const params = useParams();
-   const lvl = params.id ? parseInt(params.id) : 0;
+  const params = useParams();
+  const lvl = params.id ? parseInt(params.id) : 0;
   const [level, setLevel] = useState<number>(lvl);
 
   const [moves, setMoves] = useState<number>(0);
@@ -69,8 +69,6 @@ export function ScoreDataContextProvider({ children }: IScoreDataContextProps) {
   const [score, setScore] = useState(0);
   const [isNewHighscore, setIsNewHighscore] = useState<boolean>(false);
 
-
-
   function updateConter(counter: number) {
     const updatedCounter = counter + 1;
     return updatedCounter;
@@ -89,7 +87,7 @@ export function ScoreDataContextProvider({ children }: IScoreDataContextProps) {
     setGameEnded(true);
     if (intervalId) {
       clearInterval(intervalId);
-      setIntervalId(null);
+      //setIntervalId(null);
     }
     const highscoreList = checkHighscore(level, score);
 
@@ -151,26 +149,29 @@ export function ScoreDataContextProvider({ children }: IScoreDataContextProps) {
   }
 
   const handleGameEnd = () => {
+    resetLevel();
+    setGameEnded(false);
+  };
+
+  const saveHighscore = (name: string) => {
     console.log("Spelet är klart. Tid:", time, "Poäng: ", score);
     setIsNewHighscore(false);
-    saveHighscoreToLocalstorage(0, "Test2", score);
+    saveHighscoreToLocalstorage(0, name, score);
     updateGameTime(time);
     setScore(countHighscore(timeInNumber, moves));
-    resetLevel();
-
   };
 
   const resetLevel = () => {
     setStart(false);
     setMoves(0);
     setPushes(0);
+    setTime("00:00:00");
+    setTimeInNumber(0);
     if (intervalId) {
       clearInterval(intervalId);
       setIntervalId(null);
-      setTime("00:00:00");
-      setTimeInNumber(0);
     }
-    
+    setGameEnded(false);
   };
 
   useEffect(() => {
@@ -182,9 +183,8 @@ export function ScoreDataContextProvider({ children }: IScoreDataContextProps) {
         }
       };
     }
-   // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [start, gameEnded]);
-
 
   const values: IScoreData = {
     moves,
@@ -207,7 +207,8 @@ export function ScoreDataContextProvider({ children }: IScoreDataContextProps) {
     gameEndMessages,
     isNewHighscore,
     level,
-
+    saveHighscore,
+    setLevel,
   };
 
   return (
