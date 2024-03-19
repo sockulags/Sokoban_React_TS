@@ -19,6 +19,7 @@ import Highscore from "./Highscore";
 import Modal from "./Modal";
 import InputModal from "./InputModal";
 
+
 const levelsArray = [level0, level1, level2];
 
 const Board = () => {
@@ -37,22 +38,18 @@ const Board = () => {
      handleGameEnd,
      gameEndMessages,
      isNewHighscore,
+     resetLevel
    } = useContext(ScoreDataContext);
 
   const [storageLocations, setStorageLocation] = useState<IPosition[]>([]);
-  const [board, setBoard] = useState<number[][]>(levelsArray[level]);
+ const [board, setBoard] = useState<number[][]>(deepCopy(levelsArray[level]));
   const [charPos, setCharPos] = useState<IPosition>({ x: -1, y: -1 });
   const [boxLocations, setBoxLocations] = useState<IPosition[]>([]);
   const [characterDirection, setCharacterDirection] =
     useState<Direction>("down");
-
- 
-  useEffect(() => {
-    setCharPos(getCharStartPosition());
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  
+const deepCopy = (arr: number[][]): number[][] => {
+  return arr.map((subArr) => [...subArr]);
+}; 
 
   useEffect(() => {
   setCharPos(getCharStartPosition());
@@ -63,9 +60,7 @@ const Board = () => {
   
   }, []);
 
-
-
-  const getCharStartPosition = () => {
+   const getCharStartPosition = () => {
     console.log("char start " + board)
     const posY = board.findIndex((row) => row.includes(5));
     const posX = board[posY].findIndex((x) => x === 5);
@@ -98,7 +93,6 @@ const Board = () => {
       console.log(storageLocations.length);
       console.log("Done");
       updateGameEnded(0);
-      // resetData();
     }
   };
 
@@ -159,9 +153,17 @@ const Board = () => {
     }
   };
 
+  const restartLevel = () => {
+    setBoard(deepCopy(levelsArray[level]));
+    setCharacterDirection('down');
+    resetLevel();
+  }
+
   return (
     <div className="game-container">
-      <Highscore pushes={pushes} moves={moves} time={time} />
+
+      <Highscore pushes={pushes} moves={moves} time={time} restartLevel={restartLevel}/>
+
       {gameEnded && (
         <Modal
           title={gameEndMessages.title}
