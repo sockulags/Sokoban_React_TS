@@ -1,7 +1,11 @@
 import { ReactElement, createContext, useState, useEffect } from "react";
 import { IHighscore } from "../interface";
 import { checkHighscore, saveHighscoreToLocalstorage } from "../data/functions";
+
+import { useParams } from "react-router-dom";
+
 type IntervalId = ReturnType<typeof setInterval>;
+
 
 interface IScoreData {
   moves: number;
@@ -23,6 +27,7 @@ interface IScoreData {
   startGame: () => void;
   gameEndMessages: IGameEndProps;
   isNewHighscore: boolean;
+  level: number;
 }
 
 interface IScoreDataContextProps {
@@ -40,6 +45,11 @@ interface IGameEndProps {
 export const ScoreDataContext = createContext({} as IScoreData);
 
 export function ScoreDataContextProvider({ children }: IScoreDataContextProps) {
+
+   const params = useParams();
+   const lvl = params.id ? parseInt(params.id) : 0;
+  const [level, setLevel] = useState<number>(lvl);
+
   const [moves, setMoves] = useState<number>(0);
   const [pushes, setPushes] = useState<number>(0);
   const [start, setStart] = useState(false);
@@ -58,6 +68,8 @@ export function ScoreDataContextProvider({ children }: IScoreDataContextProps) {
   });
   const [score, setScore] = useState(0);
   const [isNewHighscore, setIsNewHighscore] = useState<boolean>(false);
+
+
 
   function updateConter(counter: number) {
     const updatedCounter = counter + 1;
@@ -120,7 +132,8 @@ export function ScoreDataContextProvider({ children }: IScoreDataContextProps) {
       return;
     }
     const id = setInterval(() => {
-      const currentTime = timeInNumber + (new Date().getTime() - initTime.getTime());
+      const currentTime =
+        timeInNumber + (new Date().getTime() - initTime.getTime());
       setTimeInNumber(currentTime);
       showTimer(currentTime);
     }, 1);
@@ -144,6 +157,7 @@ export function ScoreDataContextProvider({ children }: IScoreDataContextProps) {
     updateGameTime(time);
     setScore(countHighscore(timeInNumber, moves));
     resetLevel();
+
   };
 
   const resetLevel = () => {
@@ -168,8 +182,9 @@ export function ScoreDataContextProvider({ children }: IScoreDataContextProps) {
         }
       };
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [start, gameEnded]);
+
 
   const values: IScoreData = {
     moves,
@@ -191,6 +206,8 @@ export function ScoreDataContextProvider({ children }: IScoreDataContextProps) {
     startGame,
     gameEndMessages,
     isNewHighscore,
+    level,
+
   };
 
   return (
