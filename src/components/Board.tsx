@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useContext } from "react";
 import Tile from "./Tile";
 import {
@@ -30,17 +31,13 @@ const Board = () => {
      updatePushesCount,
      moves,
      updateMovesCount,
-     time,
-     start,
-     startGame,
-     resetData,
+     time,   
+     startGame, 
      updateGameEnded,
-     gameEnded,
-     handleGameEnd,
+     gameEnded,   
      gameEndMessages,
      isNewHighscore,
-     resetLevel,
-     saveHighscore,
+     resetLevel,    
    } = useContext(ScoreDataContext);
 
   const [storageLocations, setStorageLocation] = useState<IPosition[]>([]);
@@ -51,12 +48,10 @@ const Board = () => {
     useState<Direction>("down");
 
   useEffect(() => {
-  setCharPos(getCharStartPosition());
-    // getCharStartPosition();
-    console.log(getCharStartPosition);
+  setCharPos(getCharStartPosition()); 
+   
     setStorageLocation(getStorageLocations(level));
-    console.log(storageLocations);
-  
+   
   }, []);
 
   useEffect (() => {
@@ -67,7 +62,7 @@ const Board = () => {
   },[level])
 
    const getCharStartPosition = (resetBoard?: number[][]) => {
-    console.log("char start " + board)
+
     const newBoard = resetBoard ?? board;
     const posY = newBoard.findIndex((row) => row.includes(5));
     const posX = newBoard[posY].findIndex((x) => x === 5);
@@ -94,11 +89,8 @@ const Board = () => {
   };
 
   const checkCompletion = () => {
-    const correct = getCorrectBoxCount(storageLocations, boxLocations);
-    console.log(correct);
+    const correct = getCorrectBoxCount(storageLocations, boxLocations);  
     if (correct === 1) {
-      console.log(storageLocations.length);
-      console.log("Done");
       updateGameEnded(0);
     }
   };
@@ -187,7 +179,7 @@ const Board = () => {
           restart={restartLevel}
         />
       )}
-      {isNewHighscore && <InputModal onSubmit={saveHighscore} />}
+      {isNewHighscore && <InputModal/>}
       <div className="board" tabIndex={0} onKeyDown={handleKeyDown} autoFocus>
         {board.map((row, rowIndex) => (
           <div className="row" key={rowIndex}>

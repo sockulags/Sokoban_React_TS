@@ -1,6 +1,6 @@
 import { ReactElement, createContext, useState, useEffect } from "react";
 import { IHighscore } from "../interface";
-import { checkHighscore, saveHighscoreToLocalstorage } from "../data/functions";
+import { getHighscores, saveNewHighscore } from "../data/functions";
 
 import { useParams } from "react-router-dom";
 
@@ -76,31 +76,32 @@ export function ScoreDataContextProvider({ children }: IScoreDataContextProps) {
 
   function updateMovesCount() {
     setMoves(updateConter(moves));
-    setScore(countHighscore(timeInNumber, moves));
+    // setScore(countHighscore(timeInNumber, moves));
   }
 
   function updatePushesCount() {
     setPushes(updateConter(pushes));
   }
 
-  function updateGameEnded(level: number) {
+  function updateGameEnded(lvl: number) {
+    const newScore =  countHighscore(lvl, moves);
+    setScore(newScore);
     setGameEnded(true);
     if (intervalId) {
       clearInterval(intervalId);
       //setIntervalId(null);
     }
-    const highscoreList = checkHighscore(level, score);
+    const highscoreList = getHighscores(level);
 
     setGameEndMessages({
       title: `Congratulations, you finished level ${level}`,
       message1: "Moves: " + moves + " Pushes: " + pushes + " Time: " + time,
-      message2: "Points: " + score,
-      data: highscoreList.highscoreList,
+      message2: "Points: " + newScore,
+      data: highscoreList,
       onConfirm: () => handleGameEnd(),
     });
-
-    console.log(highscoreList);
-    if (highscoreList.showInputModal) setIsNewHighscore(true);
+   
+    if (!highscoreList || highscoreList.length < 5 || highscoreList?.some(s => s.points < newScore)) setIsNewHighscore(true);
   }
 
   function updateGameTime(time: string) {
@@ -142,8 +143,9 @@ export function ScoreDataContextProvider({ children }: IScoreDataContextProps) {
     time = time / 1000;
     const weightTime = 1;
     const weightMoves = 1;
+    const weightPushes = 1;
 
-    let highscore = (100000 * 1) / (weightTime * time + moves * weightMoves);
+    let highscore = (100000 * 1) / (weightTime * time + moves * weightMoves + pushes * weightPushes);
     highscore = Math.floor(highscore);
     return highscore;
   }
@@ -154,11 +156,13 @@ export function ScoreDataContextProvider({ children }: IScoreDataContextProps) {
   };
 
   const saveHighscore = (name: string) => {
-    console.log("Spelet är klart. Tid:", time, "Poäng: ", score);
     setIsNewHighscore(false);
-    saveHighscoreToLocalstorage(0, name, score);
+    setGameEndMessages(prev=> ({
+      ...prev,
+      data: getHighscores(level)}))
+    saveNewHighscore(level, name, score);
     updateGameTime(time);
-    setScore(countHighscore(timeInNumber, moves));
+   
   };
 
   const resetLevel = () => {
