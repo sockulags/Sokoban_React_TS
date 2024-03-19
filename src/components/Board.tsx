@@ -18,50 +18,55 @@ import {
 import Highscore from "./Highscore";
 import Modal from "./Modal";
 import InputModal from "./InputModal";
-import { useParams } from "react-router-dom";
 
-const storageLocations = getStorageLocations(0);
+const levelsArray = [level0, level1, level2];
 
 const Board = () => {
-  const [level, setLevel] = useState<number>(0);
-  const [board, setBoard] = useState<number[][]>(level0);
+   const {
+     level,
+     pushes,
+     updatePushesCount,
+     moves,
+     updateMovesCount,
+     time,
+     start,
+     startGame,
+     resetData,
+     updateGameEnded,
+     gameEnded,
+     handleGameEnd,
+     gameEndMessages,
+     isNewHighscore,
+   } = useContext(ScoreDataContext);
+
+  const [storageLocations, setStorageLocation] = useState<IPosition[]>([]);
+  const [board, setBoard] = useState<number[][]>(levelsArray[level]);
   const [charPos, setCharPos] = useState<IPosition>({ x: -1, y: -1 });
-  const [boxLocations, setBoxLocations] = useState<IPosition[]>(
-    getBoxLocations(level)
-  );
+  const [boxLocations, setBoxLocations] = useState<IPosition[]>([]);
   const [characterDirection, setCharacterDirection] =
     useState<Direction>("down");
 
-  const {
-    pushes,
-    updatePushesCount,
-    moves,
-    updateMovesCount,
-    time,
-    start,
-    startGame,
-    resetData,
-    updateGameEnded,
-    gameEnded,
-    handleGameEnd,
-    gameEndMessages,
-    isNewHighscore,
-  } = useContext(ScoreDataContext);
-
-  const { id } = useParams();
-  console.log(id);
-  const lev = [level0, level1, level2];
-  const i:number = parseInt(id);
-
+ 
   useEffect(() => {
     setCharPos(getCharStartPosition());
-    setLevel(id);
-    setBoard(lev[i]);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  
+
+  useEffect(() => {
+  setCharPos(getCharStartPosition());
+    // getCharStartPosition();
+    console.log(getCharStartPosition);
+    setStorageLocation(getStorageLocations(level));
+    console.log(storageLocations);
+  
+  }, []);
+
+
 
   const getCharStartPosition = () => {
+    console.log("char start " + board)
     const posY = board.findIndex((row) => row.includes(5));
     const posX = board[posY].findIndex((x) => x === 5);
     return { x: posX, y: posY };
