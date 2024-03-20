@@ -91,7 +91,7 @@ const Board = () => {
   const checkCompletion = () => {
     const correct = getCorrectBoxCount(storageLocations, boxLocations);  
     if (correct === 1) {
-      updateGameEnded(0);
+      updateGameEnded(level);
       setCharacterDirection("down");
     }
   };

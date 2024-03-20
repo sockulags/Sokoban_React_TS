@@ -50,6 +50,7 @@ export function ScoreDataContextProvider({ children }: IScoreDataContextProps) {
   const lvl = params.id ? parseInt(params.id) : 0;
   const [level, setLevel] = useState<number>(lvl);
 
+
   const [moves, setMoves] = useState<number>(0);
   const [pushes, setPushes] = useState<number>(0);
   const [start, setStart] = useState(false);
@@ -92,6 +93,7 @@ export function ScoreDataContextProvider({ children }: IScoreDataContextProps) {
       //setIntervalId(null);
     }
     const highscoreList = getHighscores(level);
+    localStorage.setItem("completedLevel", lvl.toString());
 
     setGameEndMessages({
       title: `Congratulations, you finished level ${level}`,
