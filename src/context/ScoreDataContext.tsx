@@ -142,12 +142,13 @@ export function ScoreDataContextProvider({ children }: IScoreDataContextProps) {
   function countHighscore(time: number, moves: number) {
     time = time / 1000;
     const weightTime = 1;
-    const weightMoves = 1;
-    const weightPushes = 1;
+    const weightMoves = 2;
 
-    let highscore = (100000 * 1) / (weightTime * time + moves * weightMoves + pushes * weightPushes);
+    let highscore = (1000000 * 1) / (weightTime * time + moves * weightMoves);
     highscore = Math.floor(highscore);
+     console.log(highscore);
     return highscore;
+   
   }
 
   const handleGameEnd = () => {
@@ -160,7 +161,7 @@ export function ScoreDataContextProvider({ children }: IScoreDataContextProps) {
     setGameEndMessages(prev=> ({
       ...prev,
       data: getHighscores(level)}))
-    saveNewHighscore(level, name, score);
+    saveNewHighscore(level, name, score, moves, time);
     updateGameTime(time);
    
   };
