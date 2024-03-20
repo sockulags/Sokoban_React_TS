@@ -42,7 +42,6 @@ function getLocations(level: number, tileType: number, board?: number[][]) {
 }
 
 export const getHighscores = (level: number) => {
-  console.log(`sokoban-level${level}`)
   const highscoresString = localStorage.getItem(`sokoban-level${level}`); 
   if(highscoresString) {
     const highscores: { name: string; points: number; moves:number, time:string }[] = JSON.parse(highscoresString);

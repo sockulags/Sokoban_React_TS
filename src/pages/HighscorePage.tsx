@@ -1,6 +1,7 @@
 import "./HighscorePage.css";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { getHighscores } from "../data/functions";
 interface HighscoreProps {
   id: number;
   name: string;
@@ -129,35 +130,49 @@ const scores: ScoreProps = [level0Score, level1Score, level2Score];
 
 export const HighscorePage = () => {
   const [leaderboard, setLeaderboard] = useState<HighscoreProps[]>([]);
-
-
   const { id } = useParams();
 
-
   useEffect(() => {
-    if (id) setLeaderboard(scores[parseInt(id)]);
-    else {
+    if (id) {
+      const highscore: HighscoreProps[] = getHighscores(parseInt(id));
+      if (highscore) setLeaderboard(highscore);
+    } else {
       setLeaderboard(scores[0]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   function renderHeader() {
-    const keys = Object.keys(scores[0][0]);
-    return keys.map((key) => (
-      <div key={key}>
-        {key === "id" ? "Nr" : key[0].toUpperCase() + key.slice(1)}
+    if (leaderboard.length === 0) {
+      return <></>;
+    }
+    console.log(leaderboard);
+    const keys = Object.keys(leaderboard[0]);
+    console.log(keys[1]);
+    return (
+      <div>
+        {/* Skapa den första kolumnen för nummer */}
+        <span>Nr</span>
+
+        {/* Skapa kolumner för varje nyckel i objektet */}
+        {keys.map((key, index) => (
+          <span key={key}>{key}</span>
+        ))}
       </div>
-    ));
+    );
   }
 
   function renderRows() {
     const sortedArr = leaderboard.sort((a, b) => b.score - a.score);
-    let place: number = 1;
-    return sortedArr.map((score, index) => (
-      <div key={index} className="highscore-row">
-        {Object.values(score).map((value, index) => (
-          <div key={index}>{index === 0 ? place++ + "." : value}</div>
-        ))}
+    console.log(sortedArr);
+    return sortedArr.map((rowData, index) => (
+      <div className="highscore-row">
+        <tr key={index + 1}>
+          <td>{index + 1}</td>
+          {Object.values(rowData).map((value, colIndex) => (
+            <td key={colIndex}>{value}</td>
+          ))}
+        </tr>
       </div>
     ));
   }
