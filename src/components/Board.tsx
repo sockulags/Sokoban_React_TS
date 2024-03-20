@@ -92,6 +92,7 @@ const Board = () => {
     const correct = getCorrectBoxCount(storageLocations, boxLocations);  
     if (correct === 1) {
       updateGameEnded(0);
+      setCharacterDirection("down");
     }
   };
 
@@ -155,8 +156,8 @@ const Board = () => {
   const restartLevel = () => {
     setBoard(deepCopy(levels[level].board));
     setCharPos(getCharStartPosition(deepCopy(levels[level].board)))
-    setCharacterDirection('down');
-    setBoxLocations(getBoxLocations(level))
+    setBoxLocations(getBoxLocations(level));
+    setCharacterDirection("down");
     resetLevel();
   }
 
@@ -179,7 +180,7 @@ const Board = () => {
           restart={restartLevel}
         />
       )}
-      {isNewHighscore && <InputModal/>}
+      {isNewHighscore && <InputModal />}
       <div className="board" tabIndex={0} onKeyDown={handleKeyDown} autoFocus>
         {board.map((row, rowIndex) => (
           <div className="row" key={rowIndex}>
