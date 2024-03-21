@@ -31,3 +31,17 @@
         font-weight: 600;
     }
 }
+
+.level-container.disabled {
+    opacity: 0.5; 
+    pointer-events: none; 
+    cursor: not-allowed; 
+}
+
+.level-container.disabled img {
+    filter: blur(100%); 
+}
+
+.level-container.disabled h3 {
+    color: #999; 
+}

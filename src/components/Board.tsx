@@ -93,8 +93,9 @@ const Board = () => {
 
   const checkCompletion = () => {
     const correct = getCorrectBoxCount(storageLocations, boxLocations);  
-    if (correct === storageLocations.length) {
-      updateGameEnded(0);
+    if (correct === 1) {
+      updateGameEnded(level);
+      setCharacterDirection("down");
     }
   };
 
@@ -158,8 +159,8 @@ const Board = () => {
   const restartLevel = () => {
     setBoard(deepCopy(levels[level].board));
     setCharPos(getCharStartPosition(deepCopy(levels[level].board)))
-    setCharacterDirection('down');
-    setBoxLocations(getBoxLocations(level))
+    setBoxLocations(getBoxLocations(level));
+    setCharacterDirection("down");
     resetLevel();
   }
 

@@ -50,6 +50,7 @@ export function ScoreDataContextProvider({ children }: IScoreDataContextProps) {
   const lvl = params.id ? parseInt(params.id) : 0;
   const [level, setLevel] = useState<number>(lvl);
 
+
   const [moves, setMoves] = useState<number>(0);
   const [pushes, setPushes] = useState<number>(0);
   const [start, setStart] = useState(false);
@@ -92,6 +93,7 @@ export function ScoreDataContextProvider({ children }: IScoreDataContextProps) {
       //setIntervalId(null);
     }
     const highscoreList = getHighscores(level);
+    localStorage.setItem("completedLevel", lvl.toString());
 
     setGameEndMessages({
       title: `Congratulations, you finished level ${level}`,
@@ -142,12 +144,13 @@ export function ScoreDataContextProvider({ children }: IScoreDataContextProps) {
   function countHighscore(time: number, moves: number) {
     time = time / 1000;
     const weightTime = 1;
-    const weightMoves = 1;
-    const weightPushes = 1;
+    const weightMoves = 2;
 
-    let highscore = (100000 * 1) / (weightTime * time + moves * weightMoves + pushes * weightPushes);
+    let highscore = (1000000 * 1) / (weightTime * time + moves * weightMoves);
     highscore = Math.floor(highscore);
+     console.log(highscore);
     return highscore;
+   
   }
 
   const handleGameEnd = () => {
@@ -160,7 +163,7 @@ export function ScoreDataContextProvider({ children }: IScoreDataContextProps) {
     setGameEndMessages(prev=> ({
       ...prev,
       data: getHighscores(level)}))
-    saveNewHighscore(level, name, score);
+    saveNewHighscore(level, name, score, moves, time);
     updateGameTime(time);
    
   };

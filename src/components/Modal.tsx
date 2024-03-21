@@ -6,29 +6,36 @@ import { ScoreDataContext } from "../context/ScoreDataContext";
 import { useContext } from "react";
 
 interface IModalProps {
-  title:string;
+  title: string;
   message1: string;
   message2?: string;
   onConfirm: () => void;
-  data?:IHighscore[]
+  data?: IHighscore[];
   restart: () => void;
 }
 
 
-const Modal = ({ title, message1, message2, onConfirm, data, restart }: IModalProps) => {
-  const {level, setLevel} = useContext(ScoreDataContext)
-   const nav =useNavigate()
+const Modal = ({
+  title,
+  message1,
+  message2,
+  onConfirm,
+  data,
+  restart,
+}: IModalProps) => {
+  const { level, setLevel } = useContext(ScoreDataContext);
+  const nav = useNavigate();
 
-    const levels = () => {
-     onConfirm()
-    nav("/play")
-  }
-    const nextLevel = () => {
-     onConfirm()
-     nav(`/play/${level+1}`);
-     const newLevel = level+1
-     setLevel(newLevel)
-  }
+  const levels = () => {
+    onConfirm();
+    nav("/play");
+  };
+  const nextLevel = () => {
+    onConfirm();
+    nav(`/play/${level + 1}`);
+    const newLevel = level + 1;
+    setLevel(newLevel);
+  };
   return (
     <>
       <div>

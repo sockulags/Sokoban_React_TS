@@ -1,56 +1,72 @@
-.highscorepage-container{
+.highscorepage-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 70%;
+  margin: 0 auto;  
+}
+
+.highscore-header {
+margin: 16px 0px 8px 0px;
+  display: grid;
+  justify-items: center;
+  height: 2.3rem;
+  font-size: 1.5rem;
+  font-weight: 500;
+  grid-template-columns: 60px 4fr 2fr 2fr 2fr;
+  border-bottom: 2px solid #eee;
+  width: 100%;
+  column-gap: 3rem;
+  .header-text{
+    text-transform: capitalize;
+  }
+}
+
+.highscore-row {
+  width: 100%;
+  height: 2rem;
+  font-size: 1.3rem;  
+  justify-items: center;
+  display: grid;
+  column-gap: 3rem;
+  grid-template-columns: 60px 4fr 2fr 2fr 2fr;
+}
+
+.highscore-body{
+    width: 100%;
+    height: 200px;
+}
+
+.no-highscore-to-show {
+  padding-top: 16px; 
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+
+.other-levels-container{
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 70%;
-    margin: 0 auto;
-    .highscore-header{
-        display: grid;
-        justify-items:center;
-        height: 2rem;
-        font-size: 1.4rem;
-        font-weight: 500;
-        grid-template-columns: 40px 4fr 2fr 2fr 2fr;
-        border-bottom: 2px solid #eee;
-     
-        width: 100%;
-        div{
-            justify-self: flex-start;
-        }
-        div:nth-child(3),div:nth-child(4){
-            justify-self: center;
-        }
-         div:nth-child(5){
-            justify-self: flex-end;
+    gap: 50px;
+    margin-top: 30px;
+    height: 40px;
+    button{
+        background-color: transparent;
+        outline: none;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;     
+        font-size: 1.5rem;
+        font-family: "Edmund";
+        cursor: pointer;
+        color: #ecc010;
+        transition: all 0.2s;
+        span{   
+            font-size: 2.5rem;  
+            color: #ecc010;
         }
     }
-    .highscore-body{
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        column-gap: 20px;
-        .highscore-row{
-            width: 100%;
-            height: 2rem;
-            font-size: 1.2rem;
-            place-items: space-between;
-            justify-items:center;
-            display: grid;
-            grid-template-columns: 40px 4fr 2fr 2fr 2fr;
-            div{
-                justify-self: flex-start;
-            }
-            div:nth-child(3){
-                justify-self: center;
-            }
-            div:nth-child(4), div:nth-child(5){
-                justify-self: flex-end;
-            }
-            div:nth-child(5){
-               width: 50px;
-               text-align: center;
-            }
-        }
+    button:hover{
+      transform: scale(1.15);
     }
 }

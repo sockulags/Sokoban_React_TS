@@ -42,27 +42,50 @@ function getLocations(level: number, tileType: number, board?: number[][]) {
 }
 
 export const getHighscores = (level: number) => {
-  console.log(`sokoban-level${level}`)
   const highscoresString = localStorage.getItem(`sokoban-level${level}`); 
   if(highscoresString) {
-    const highscores: { name: string; points: number }[] = JSON.parse(highscoresString);
+    const highscores: { name: string; points: number; moves:number, time:string }[] = JSON.parse(highscoresString);
     return highscores;
   }
 }
 
-export const saveNewHighscore = (level: number, newName: string, currentScore: number)=> {
+export const saveNewHighscore = (level: number, newName: string, currentScore: number, moves:number, time:string)=> {
   const highscoresString = localStorage.getItem(`sokoban-level${level}`);
+  updateCompletedLevels(level);
   if (highscoresString) {
-    const storedHighscores: { name: string; points: number }[] = JSON.parse(highscoresString);
-      storedHighscores.push({ name: newName, points: currentScore }); 
+    const storedHighscores: { name: string; points: number; moves: number; time:string }[] = JSON.parse(highscoresString);
+      storedHighscores.push({ name: newName, points: currentScore, moves:moves, time:time }); 
       const five = storedHighscores.sort((a, b) => b.points - a.points).slice(0,5);
       localStorage.setItem(`sokoban-level${level}`, JSON.stringify(five));
   }
   else{
-    const newHighscore: { name: string; points: number }[] = [];
-    newHighscore.push({ name: newName, points: currentScore });
+    const newHighscore: { name: string; points: number, moves:number, time:string }[] = [];
+    newHighscore.push({ name: newName, points: currentScore, moves:moves, time:time });
     localStorage.setItem(`sokoban-level${level}`, JSON.stringify(newHighscore));
   }
 }
 
+const updateCompletedLevels = (level:number)=> {
+  const completedLevels = localStorage.getItem("completedLevels");
+  if(completedLevels){
+    const levelArr = JSON.parse(completedLevels)
+    if(levelArr.includes(level)) return;    
+    levelArr.push(level);
+    localStorage.setItem("completedLevels", JSON.stringify(levelArr))
+  } else{
+    const newLevelsArr:string[] = [level.toString()]
+    localStorage.setItem("completedLevels", JSON.stringify(newLevelsArr))
+  }
+}
+
+export const getCurrentLevel = () => {
+   const savedLevels = localStorage.getItem("completedLevels");
+  if (savedLevels) {
+    const parsedLevels:number[] = JSON.parse(savedLevels).map((lvl: string) => parseInt(lvl));
+    const maxLevel = Math.max(...parsedLevels);
+    console.log(levels)
+    return maxLevel + 1 < levels.length ? maxLevel+1 : levels.length;    
+  } else
+  return 0;
+}
 
