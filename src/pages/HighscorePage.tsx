@@ -17,16 +17,16 @@ export const HighscorePage = () => {
   useEffect(() => {
     if (id) {
       const highscore: HighscoreProps[] = getHighscores(parseInt(id ?? 0));
-      if (highscore){
-       setLeaderboard(highscore);
-      } else{
+      if (highscore) {
+        setLeaderboard(highscore);
+      } else {
         setLeaderboard([]);
-      } 
+      }
     } else {
-      
-      nav("/highscore/"+lastCompletedLevel)
+      const newParam = lastCompletedLevel < 0 ? 0 : lastCompletedLevel;
+      nav("/highscore/" + newParam);
     }
-  }, [id, setLeaderboard]);
+  }, [id, setLeaderboard, lastCompletedLevel, nav]);
 
   function renderHeader() {
     if (leaderboard.length === 0) {
@@ -77,7 +77,7 @@ export const HighscorePage = () => {
       {renderRows()}</div>
       <div className="other-levels-container">
       {id !== "0" && <button onClick={() => handleClick(-1)}><span className="material-symbols-outlined">arrow_left</span>Previous</button>}
-      {id !== `${lastCompletedLevel}` &&  <button onClick={() => handleClick(1)}>Next<span className="material-symbols-outlined">arrow_right</span></button>}
+      {id !== `${lastCompletedLevel}` && lastCompletedLevel >=0 &&  <button onClick={() => handleClick(1)}>Next<span className="material-symbols-outlined">arrow_right</span></button>}
       </div>
     </div>
   );

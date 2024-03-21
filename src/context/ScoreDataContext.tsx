@@ -70,6 +70,7 @@ export function ScoreDataContextProvider({ children }: IScoreDataContextProps) {
   const [score, setScore] = useState(0);
   const [isNewHighscore, setIsNewHighscore] = useState<boolean>(false);
 
+
   function updateConter(counter: number) {
     const updatedCounter = counter + 1;
     return updatedCounter;
@@ -93,7 +94,6 @@ export function ScoreDataContextProvider({ children }: IScoreDataContextProps) {
       //setIntervalId(null);
     }
     const highscoreList = getHighscores(level);
-    localStorage.setItem("completedLevel", lvl.toString());
 
     setGameEndMessages({
       title: `Congratulations, you finished level ${level}`,
@@ -192,6 +192,7 @@ export function ScoreDataContextProvider({ children }: IScoreDataContextProps) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [start, gameEnded]);
+
 
   const values: IScoreData = {
     moves,

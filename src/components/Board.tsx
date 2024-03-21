@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import Tile from "./Tile";
 import {
   sandLayout,
@@ -48,6 +48,8 @@ const Board = () => {
   const [characterDirection, setCharacterDirection] =
     useState<Direction>("down");
 
+    const gameContainerRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
   setCharPos(getCharStartPosition()); 
    
@@ -63,6 +65,12 @@ const Board = () => {
       setBoardSize({ numRows: newBoard.length, numCols: newBoard[0].length });
   
   },[level])
+
+  useEffect(() => {
+    if (gameContainerRef.current) {
+      gameContainerRef.current.focus();
+    }
+  }, []);
 
    const getCharStartPosition = (resetBoard?: number[][]) => {
 
@@ -166,8 +174,9 @@ const Board = () => {
 
   return (
     <div className="game-container">
-      <Arrows onKeyDown={handleKeyDown}/>
+      <Arrows onKeyDown={handleKeyDown} />
       <Highscore
+        level={level}
         pushes={pushes}
         moves={moves}
         time={time}
@@ -184,8 +193,21 @@ const Board = () => {
           restart={restartLevel}
         />
       )}
-      {isNewHighscore && <InputModal/>}
-      <div className="board" style={{ '--numRows': boardSize.numRows > boardSize.numCols ? boardSize.numRows : boardSize.numCols} as React.CSSProperties}tabIndex={0} onKeyDown={(e) => handleKeyDown(e.key)} autoFocus>
+      {isNewHighscore && <InputModal />}
+      <div
+        className="board"
+        ref={gameContainerRef}
+        style={
+          {
+            "--numRows":
+              boardSize.numRows > boardSize.numCols
+                ? boardSize.numRows
+                : boardSize.numCols,
+          } as React.CSSProperties
+        }
+        tabIndex={0}
+        onKeyDown={(e) => handleKeyDown(e.key)}
+      >
         {board.map((row, rowIndex) => (
           <div className="row" key={rowIndex}>
             {row.map((_tile, colInd) => (
