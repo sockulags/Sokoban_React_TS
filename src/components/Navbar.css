@@ -31,4 +31,16 @@
   }
 }
 
+@media screen and (max-width: 768px) {
+  .navbar-container{
+    display: none;
+  }
+}
+
+@media screen and (max-height:480px) and (orientation: landscape){    
+  .navbar-container{
+    display: none;
+  }
+}
+
 

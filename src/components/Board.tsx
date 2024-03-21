@@ -17,6 +17,7 @@ import {
 import Highscore from "./Highscore";
 import Modal from "./Modal";
 import InputModal from "./InputModal";
+import { Arrows } from "./Arrows";
 
 
 const deepCopy = (arr: number[][]): number[][] => {
@@ -39,7 +40,7 @@ const Board = () => {
      isNewHighscore,
      resetLevel,    
    } = useContext(ScoreDataContext);
-
+   const [boardSize, setBoardSize] = useState({ numRows: 0, numCols: 0 });
   const [storageLocations, setStorageLocation] = useState<IPosition[]>([]);
  const [board, setBoard] = useState<number[][]>(deepCopy(levels[level].board));
   const [charPos, setCharPos] = useState<IPosition>({ x: -1, y: -1 });
@@ -55,9 +56,11 @@ const Board = () => {
   }, []);
 
   useEffect (() => {
-    setBoard(deepCopy(levels[level].board));
-      setCharPos(getCharStartPosition(deepCopy(levels[level].board)));   
+    const newBoard = deepCopy(levels[level].board);
+    setBoard(newBoard);
+      setCharPos(getCharStartPosition(newBoard));   
       setStorageLocation(getStorageLocations(level));
+      setBoardSize({ numRows: newBoard.length, numCols: newBoard[0].length });
   
   },[level])
 
@@ -90,7 +93,7 @@ const Board = () => {
 
   const checkCompletion = () => {
     const correct = getCorrectBoxCount(storageLocations, boxLocations);  
-    if (correct === 1) {
+    if (correct === storageLocations.length) {
       updateGameEnded(0);
     }
   };
@@ -127,12 +130,12 @@ const Board = () => {
     ArrowRight: { direction: "right", deltaY: 0, deltaX: 1 },
   };
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    event.preventDefault();
+  const handleKeyDown = (key: string) => {
+    // event.preventDefault();
     if (gameEnded) return;
-    if (!keyToDirection[event.key]) return;
+    if (!keyToDirection[key]) return;
     const { y: posY, x: posX } = charPos;
-    const { direction, deltaY, deltaX } = keyToDirection[event.key];
+    const { direction, deltaY, deltaX } = keyToDirection[key];
 
     const newPos: IPosition = { x: posX + deltaX, y: posY + deltaY };
     const newBoxPos: IPosition = { x: newPos.x + deltaX, y: newPos.y + deltaY };
@@ -162,6 +165,7 @@ const Board = () => {
 
   return (
     <div className="game-container">
+      <Arrows onKeyDown={handleKeyDown}/>
       <Highscore
         pushes={pushes}
         moves={moves}
@@ -180,7 +184,7 @@ const Board = () => {
         />
       )}
       {isNewHighscore && <InputModal/>}
-      <div className="board" tabIndex={0} onKeyDown={handleKeyDown} autoFocus>
+      <div className="board" style={{ '--numRows': boardSize.numRows > boardSize.numCols ? boardSize.numRows : boardSize.numCols} as React.CSSProperties}tabIndex={0} onKeyDown={(e) => handleKeyDown(e.key)} autoFocus>
         {board.map((row, rowIndex) => (
           <div className="row" key={rowIndex}>
             {row.map((_tile, colInd) => (
