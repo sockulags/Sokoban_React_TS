@@ -18,8 +18,9 @@
     outline: none;
     border: none;
     cursor: pointer;
-    border-left: 3px solid #ece3ce;
-    border-right: 3px solid #ece3ce;
+    border-left: 5px solid #ece3ce;
+    border-right: 5px solid #ece3ce;
+    border-radius: 30%;
     div{
         color: #1e1e1e;
         p{
