@@ -52,7 +52,9 @@
     .game-container{      
         height: 100dvh;  
         width: auto; 
-        .board{           
+        .board{
+            height: 100dvh;
+            padding-top: 12dvh;
             .tile{
                 
             }
