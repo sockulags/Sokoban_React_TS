@@ -106,6 +106,7 @@ const Board = () => {
     if (correct === 2) {
       updateGameEnded(level);
       setCharacterDirection("down");
+      playSound(audioRef, "complete");
     }
   };
 
@@ -163,11 +164,17 @@ const Board = () => {
       updateBoard(newPos.y, newPos.x);
       playSound(audioRef, "success");
     } 
-    else if (board[newPos.y][newPos.x] === 2 && board[newBoxPos.y][newBoxPos.x] === 3) 
-    {
+    else if (
+      board[newPos.y][newPos.x] === 2 && board[newBoxPos.y][newBoxPos.x] === 3) 
+      {
       updateBoxPosition(newBoxPos.y, newBoxPos.x);
       updateBoard(newPos.y, newPos.x);
       playSound(audioRef, "push");
+    } 
+    else if (
+      board[newPos.y][newPos.x] === 1) 
+      {
+      playSound(audioRef, "wallHit")
     } 
   };
 

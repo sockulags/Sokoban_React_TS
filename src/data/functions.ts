@@ -2,6 +2,8 @@ import { levels } from "./levels";
 import { IPosition } from "../interface";
 import pushSound from "../sounds/push.mp3";
 import successSound from "../sounds/success.mp3";
+import wallHit from "../sounds/wallHit.mp3";
+import complete from "../sounds/complete.mp3";
 
 
 export const getCorrectBoxCount = (
@@ -105,6 +107,12 @@ export const playSound = (
       break;
     case "success":
       soundFile = successSound; 
+      break;
+    case "wallHit":
+      soundFile = wallHit; 
+      break;
+    case "complete":
+      soundFile = complete; 
       break;
     default:
       return;
