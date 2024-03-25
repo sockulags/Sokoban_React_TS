@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
 import { Navbar } from "./components/Navbar";
 import { Home } from "./pages/Home";
 import "./App.css";
@@ -9,19 +14,22 @@ import { HighscorePage } from "./pages/HighscorePage";
 import GamePlay from "./pages/GamePlay";
 
 export function App() {
+  const location = useLocation();
+  const hideNavbar = location.pathname.includes("/play");
+ 
   return (
-    <Router>
+   
       <div>
-        <Navbar />
+        {!hideNavbar && <Navbar />}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/play" element={<Play />} />
           <Route path="/play/:id" element={<GamePlay />} />
           <Route path="/highscore/:id?" element={<HighscorePage />} />
-          {/* Define other routes here */}
+          {/* Definiera andra routes här */}
         </Routes>
       </div>
-    </Router>
+   
   );
 }

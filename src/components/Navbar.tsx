@@ -44,7 +44,7 @@ export const Navbar = () => {
   return (
     <div className="navbar-container">
       <div className="logo-container" onClick={() => handleClick("/")}>
-        <img src={Logo} alt="logo"/>
+        <img src={Logo} alt="logo" />
       </div>
       <div className={`navbar-links ${isMenuOpen ? "active" : ""}`}>
         <button
@@ -67,13 +67,3 @@ export const Navbar = () => {
     </div>
   );
 };
-
-/*
-      
-    
-        
-      </div>
-    </div>
-  );
-
-*/
