@@ -2,8 +2,9 @@ import { levels } from "./levels";
 import { IPosition } from "../interface";
 import pushSound from "../sounds/push.mp3";
 import successSound from "../sounds/success.mp3";
-import wallHit from "../sounds/wallHit.mp3";
-import complete from "../sounds/complete.mp3";
+import wallHitSound from "../sounds/wallHit.mp3";
+import completeSound from "../sounds/complete.mp3";
+import highscoreSound from "../sounds/highscore.mp3";
 
 
 export const getCorrectBoxCount = (
@@ -55,21 +56,54 @@ export const getHighscores = (level: number) => {
   }
 }
 
-export const saveNewHighscore = (level: number, newName: string, currentScore: number, moves:number, time:string)=> {
+export const saveNewHighscore = (
+  level: number,
+  newName: string,
+  currentScore: number,
+  moves: number,
+  time: string,
+  audioRef: React.RefObject<HTMLAudioElement>,
+  isAudioPlaying: boolean
+) => {
   const highscoresString = localStorage.getItem(`sokoban-level${level}`);
   updateCompletedLevels(level);
   if (highscoresString) {
-    const storedHighscores: { name: string; points: number; moves: number; time:string }[] = JSON.parse(highscoresString);
-      storedHighscores.push({ name: newName, points: currentScore, moves:moves, time:time }); 
-      const five = storedHighscores.sort((a, b) => b.points - a.points).slice(0,5);
-      localStorage.setItem(`sokoban-level${level}`, JSON.stringify(five));
-  }
-  else{
-    const newHighscore: { name: string; points: number, moves:number, time:string }[] = [];
-    newHighscore.push({ name: newName, points: currentScore, moves:moves, time:time });
+    const storedHighscores: {
+      name: string;
+      points: number;
+      moves: number;
+      time: string;
+    }[] = JSON.parse(highscoresString);
+    const newHighScore = {
+      name: newName,
+      points: currentScore,
+      moves: moves,
+      time: time,
+    };
+    storedHighscores.push(newHighScore);
+    const five = storedHighscores
+      .sort((a, b) => b.points - a.points)
+      .slice(0, 5);
+    localStorage.setItem(`sokoban-level${level}`, JSON.stringify(five));
+    if (five.some((item) => item === newHighScore)) {
+      playSound(audioRef, "highscore", isAudioPlaying);
+    }
+  } else {
+    const newHighscore: {
+      name: string;
+      points: number;
+      moves: number;
+      time: string;
+    }[] = [];
+    newHighscore.push({
+      name: newName,
+      points: currentScore,
+      moves: moves,
+      time: time,
+    });
     localStorage.setItem(`sokoban-level${level}`, JSON.stringify(newHighscore));
   }
-}
+};
 
 const updateCompletedLevels = (level:number)=> {
   const completedLevels = localStorage.getItem("completedLevels");
@@ -97,7 +131,8 @@ export const getCurrentLevel = () => {
 
 export const playSound = (
   AudioRef: React.RefObject<HTMLAudioElement>,
-  soundType: string
+  soundType: string,
+  isAudioPlaying: boolean
 ) => {
   let soundFile;
 
@@ -106,20 +141,24 @@ export const playSound = (
       soundFile = pushSound;
       break;
     case "success":
-      soundFile = successSound; 
+      soundFile = successSound;
       break;
     case "wallHit":
-      soundFile = wallHit; 
+      soundFile = wallHitSound;
       break;
     case "complete":
-      soundFile = complete; 
+      soundFile = completeSound;
+      break;
+    case "highscore":
+      soundFile = highscoreSound;
       break;
     default:
       return;
   }
 
-  if (AudioRef.current) {
+  if (AudioRef.current && isAudioPlaying) {
     AudioRef.current.src = soundFile;
-    AudioRef.current.play(); 
+    AudioRef.current.volume = 0.5;
+    AudioRef.current.play();
   }
 };

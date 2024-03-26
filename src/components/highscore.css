@@ -29,6 +29,14 @@
     }
 }
 
+.audio-btn {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: .5rem;
+}
+
 @media screen and (max-height:480px) and (orientation: landscape){    
     .highscore-data{
         position: fixed;
