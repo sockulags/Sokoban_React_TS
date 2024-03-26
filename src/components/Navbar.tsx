@@ -44,9 +44,16 @@ export const Navbar = () => {
   return (
     <div className="navbar-container">
       <div className="logo-container" onClick={() => handleClick("/")}>
-        <img src={Logo} alt="logo" />
+        <img src={Logo} alt="logo" id="logo-img" />
       </div>
       <div className={`navbar-links ${isMenuOpen ? "active" : ""}`}>
+        <ul>
+          {routes.map((route) => (
+            <li key={route.id} onClick={() => handleClick(route.path)}>
+              {route.name}
+            </li>
+          ))}
+        </ul>
         <button
           className="hamburger-menu"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -55,14 +62,6 @@ export const Navbar = () => {
           <span></span>
           <span></span>
         </button>
-
-        <ul>
-          {routes.map((route) => (
-            <li key={route.id} onClick={() => handleClick(route.path)}>
-              {route.name}
-            </li>
-          ))}
-        </ul>
       </div>
     </div>
   );
