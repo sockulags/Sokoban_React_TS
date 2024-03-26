@@ -18,6 +18,7 @@ import Highscore from "./Highscore";
 import Modal from "./Modal";
 import InputModal from "./InputModal";
 import { Arrows } from "./Arrows";
+import superStrength from "../assets/superStrength.";
 
 
 const deepCopy = (arr: number[][]): number[][] => {
