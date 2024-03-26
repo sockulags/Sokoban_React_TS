@@ -13,11 +13,13 @@ import {
   getBoxLocations,
   getStorageLocations,
   getCorrectBoxCount,
+  playSound,
 } from "../data/functions";
 import Highscore from "./Highscore";
 import Modal from "./Modal";
 import InputModal from "./InputModal";
 import { Arrows } from "./Arrows";
+
 
 
 const deepCopy = (arr: number[][]): number[][] => {
@@ -40,15 +42,15 @@ const Board = () => {
      isNewHighscore,
      resetLevel,    
    } = useContext(ScoreDataContext);
-   const [boardSize, setBoardSize] = useState({ numRows: 0, numCols: 0 });
+  const [boardSize, setBoardSize] = useState({ numRows: 0, numCols: 0 });
   const [storageLocations, setStorageLocation] = useState<IPosition[]>([]);
- const [board, setBoard] = useState<number[][]>(deepCopy(levels[level].board));
+  const [board, setBoard] = useState<number[][]>(deepCopy(levels[level].board));
   const [charPos, setCharPos] = useState<IPosition>({ x: -1, y: -1 });
   const [boxLocations, setBoxLocations] = useState<IPosition[]>([]);
-  const [characterDirection, setCharacterDirection] =
-    useState<Direction>("down");
+  const [characterDirection, setCharacterDirection] = useState<Direction>("down");
 
-    const gameContainerRef = useRef<HTMLDivElement>(null);
+  const gameContainerRef = useRef<HTMLDivElement>(null);
+  const audioRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
   setCharPos(getCharStartPosition()); 
@@ -101,9 +103,10 @@ const Board = () => {
 
   const checkCompletion = () => {
     const correct = getCorrectBoxCount(storageLocations, boxLocations);  
-    if (correct === 1) {
+    if (correct === 2) {
       updateGameEnded(level);
       setCharacterDirection("down");
+      playSound(audioRef, "complete");
     }
   };
 
@@ -126,7 +129,7 @@ const Board = () => {
     if (tile === 2) {
       const isOnStorage = storageLocations.some(
         (pos) => pos.y === rowIndex && pos.x === colIndex
-      );
+        );
       return isOnStorage ? sandLayout[5] : sandLayout[tile];
     }
     return sandLayout[tile];
@@ -155,13 +158,24 @@ const Board = () => {
       updateBoard(newPos.y, newPos.x);
     }
     // Check if pushing a box to the new position is a valid move
-    else if (
-      board[newPos.y][newPos.x] === 2 &&
-      [3, 4].includes(board[newBoxPos.y][newBoxPos.x])
-    ) {
+    else if (board[newPos.y][newPos.x] === 2 && board[newBoxPos.y][newBoxPos.x] === 4 )
+   {
       updateBoxPosition(newBoxPos.y, newBoxPos.x);
       updateBoard(newPos.y, newPos.x);
-    }
+      playSound(audioRef, "success");
+    } 
+    else if (
+      board[newPos.y][newPos.x] === 2 && board[newBoxPos.y][newBoxPos.x] === 3) 
+      {
+      updateBoxPosition(newBoxPos.y, newBoxPos.x);
+      updateBoard(newPos.y, newPos.x);
+      playSound(audioRef, "push");
+    } 
+    else if (
+      board[newPos.y][newPos.x] === 1) 
+      {
+      playSound(audioRef, "wallHit")
+    } 
   };
 
   const restartLevel = () => {
@@ -172,8 +186,10 @@ const Board = () => {
     resetLevel();
   }
 
+
   return (
     <div className="game-container">
+      <audio ref={audioRef} />
       <Arrows onKeyDown={handleKeyDown} />
       <Highscore
         level={level}

@@ -1,9 +1,14 @@
 import { levels } from "./levels";
 import { IPosition } from "../interface";
+import pushSound from "../sounds/push.mp3";
+import successSound from "../sounds/success.mp3";
+import wallHit from "../sounds/wallHit.mp3";
+import complete from "../sounds/complete.mp3";
+
 
 export const getCorrectBoxCount = (
   positions: IPosition[],
-  targets: IPosition[]
+  targets: IPosition[],
 ): number => {
   let count = 0;
   targets.forEach((target) => {
@@ -13,6 +18,7 @@ export const getCorrectBoxCount = (
   });
   return count;
 };
+
 
 export function getStorageLocations(level: number, tileType: number = 4) {
   return getLocations(level, tileType);
@@ -89,3 +95,31 @@ export const getCurrentLevel = () => {
   return 0;
 }
 
+export const playSound = (
+  AudioRef: React.RefObject<HTMLAudioElement>,
+  soundType: string
+) => {
+  let soundFile;
+
+  switch (soundType) {
+    case "push":
+      soundFile = pushSound;
+      break;
+    case "success":
+      soundFile = successSound; 
+      break;
+    case "wallHit":
+      soundFile = wallHit; 
+      break;
+    case "complete":
+      soundFile = complete; 
+      break;
+    default:
+      return;
+  }
+
+  if (AudioRef.current) {
+    AudioRef.current.src = soundFile;
+    AudioRef.current.play(); 
+  }
+};
