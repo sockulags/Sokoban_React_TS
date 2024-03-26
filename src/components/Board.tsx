@@ -174,12 +174,19 @@ const Board = () => {
     ArrowRight: { direction: "right", deltaY: 0, deltaX: 1 },
   };
 
+  const alternateDirection: ICharDirection = {
+    ArrowUp: { direction: "down", deltaY: -1, deltaX: 0 },
+    ArrowDown: { direction: "up", deltaY: 1, deltaX: 0 },
+    ArrowLeft: { direction: "right", deltaY: 0, deltaX: -1 },
+    ArrowRight: { direction: "left", deltaY: 0, deltaX: 1 },
+  };
+
   const handleKeyDown = (key: string) => {
     // event.preventDefault();
     if (gameEnded) return;
     if (!keyToDirection[key]) return;
     const { y: posY, x: posX } = charPos;
-    const { direction, deltaY, deltaX } = keyToDirection[key];
+    const { direction, deltaY, deltaX } = isCtrlPressed ? alternateDirection[key] : keyToDirection[key];
 
     const newPos: IPosition = { x: posX + deltaX, y: posY + deltaY };
     const oppPos: IPosition = { x: posX - deltaX, y: posY - deltaY };
@@ -191,6 +198,7 @@ const Board = () => {
       console.log("here")
       updateBoard(newPos.y, newPos.x)
       updateBoxPosition(charPos.y, charPos.x, oppPos)
+      
       return;
     } 
 
