@@ -19,6 +19,7 @@ import Highscore from "./Highscore";
 import Modal from "./Modal";
 import InputModal from "./InputModal";
 import { Arrows } from "./Arrows";
+import gameMusic from "../sounds/gameMusic.mp3"
 
 
 
@@ -51,6 +52,8 @@ const Board = () => {
 
   const gameContainerRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
+  const gameAudioRef = useRef<HTMLAudioElement>(null);
+  const [isAudioPlaying, setIsAudioPlaying] = useState(false);
 
   useEffect(() => {
   setCharPos(getCharStartPosition()); 
@@ -73,6 +76,20 @@ const Board = () => {
       gameContainerRef.current.focus();
     }
   }, []);
+
+  useEffect(() => {
+    const audio = gameAudioRef.current;
+    if (audio && isAudioPlaying) {
+      audio.loop = true;
+      audio.volume = 0.1;
+      audio.play();
+    }
+    return () => {if (audio) {audio.pause();}};
+  }, [isAudioPlaying]);
+
+  const toggleAudio = () => {
+    setIsAudioPlaying((prevIsAudioPlaying) => !prevIsAudioPlaying);
+  };
 
    const getCharStartPosition = (resetBoard?: number[][]) => {
 
@@ -106,7 +123,7 @@ const Board = () => {
     if (correct === 2) {
       updateGameEnded(level);
       setCharacterDirection("down");
-      playSound(audioRef, "complete");
+      playSound(audioRef, "complete", isAudioPlaying);
     }
   };
 
@@ -162,19 +179,19 @@ const Board = () => {
    {
       updateBoxPosition(newBoxPos.y, newBoxPos.x);
       updateBoard(newPos.y, newPos.x);
-      playSound(audioRef, "success");
+      playSound(audioRef, "success", isAudioPlaying);
     } 
     else if (
       board[newPos.y][newPos.x] === 2 && board[newBoxPos.y][newBoxPos.x] === 3) 
       {
       updateBoxPosition(newBoxPos.y, newBoxPos.x);
       updateBoard(newPos.y, newPos.x);
-      playSound(audioRef, "push");
+      playSound(audioRef, "push", isAudioPlaying);
     } 
     else if (
       board[newPos.y][newPos.x] === 1) 
       {
-      playSound(audioRef, "wallHit")
+      playSound(audioRef, "wallHit", isAudioPlaying);
     } 
   };
 
@@ -190,6 +207,7 @@ const Board = () => {
   return (
     <div className="game-container">
       <audio ref={audioRef} />
+      <audio ref={gameAudioRef} src={gameMusic} />
       <Arrows onKeyDown={handleKeyDown} />
       <Highscore
         level={level}
@@ -197,6 +215,8 @@ const Board = () => {
         moves={moves}
         time={time}
         restartLevel={restartLevel}
+        toggleAudio={toggleAudio}
+        isAudioPlaying={isAudioPlaying}
       />
 
       {gameEnded && (
@@ -209,7 +229,9 @@ const Board = () => {
           restart={restartLevel}
         />
       )}
-      {isNewHighscore && <InputModal />}
+      {isNewHighscore && (
+        <InputModal audioRef={audioRef} isAudioPlaying={isAudioPlaying} />
+      )}
       <div
         className="board"
         ref={gameContainerRef}

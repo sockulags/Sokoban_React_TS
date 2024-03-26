@@ -3,21 +3,24 @@ import Logo from "../assets/sokoban-header.png";
 import { useContext, useState } from "react";
 import { ScoreDataContext } from "../context/ScoreDataContext";
 
+interface IInputModalProps {
+  audioRef: React.RefObject<HTMLAudioElement>;
+  isAudioPlaying: boolean;
+}
 
 
-const InputModal = () => {
+const InputModal = ({ audioRef, isAudioPlaying }: IInputModalProps) => {
   const [name, setName] = useState("");
   const { saveHighscore } = useContext(ScoreDataContext);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    
     setName(event.target.value);
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(name);
-    saveHighscore(name);
-    setName(""); // Reset the input field after submission
+    saveHighscore(name, audioRef, isAudioPlaying);
+    setName("");
   };
 
   return (
