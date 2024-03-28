@@ -6,7 +6,6 @@ import wallHitSound from "../sounds/wallHit.mp3";
 import completeSound from "../sounds/complete.mp3";
 import highscoreSound from "../sounds/highscore.mp3";
 
-
 export const getCorrectBoxCount = (
   positions: IPosition[],
   targets: IPosition[],

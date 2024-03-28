@@ -38,6 +38,10 @@
     justify-content: center;
 }
 
+.button-clicked {
+      color: #ecc0106b;
+}
+
 .modal-confirm {
     color: #1e1e1e;
     padding: 0.2rem 0.5rem;

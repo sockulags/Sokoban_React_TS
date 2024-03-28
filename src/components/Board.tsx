@@ -19,7 +19,7 @@ import Highscore from "./Highscore";
 import Modal from "./Modal";
 import InputModal from "./InputModal";
 import { Arrows } from "./Arrows";
-import gameMusic from "../sounds/gameMusic.mp3"
+import gameMusic from "../sounds/gameMusic.mp3";
 
 
 
@@ -175,22 +175,17 @@ const Board = () => {
       updateBoard(newPos.y, newPos.x);
     }
     // Check if pushing a box to the new position is a valid move
-    else if (board[newPos.y][newPos.x] === 2 && board[newBoxPos.y][newBoxPos.x] === 4 )
-   {
+    else if (board[newPos.y][newPos.x] === 2 && board[newBoxPos.y][newBoxPos.x] === 4 ){
       updateBoxPosition(newBoxPos.y, newBoxPos.x);
       updateBoard(newPos.y, newPos.x);
       playSound(audioRef, "success", isAudioPlaying);
     } 
-    else if (
-      board[newPos.y][newPos.x] === 2 && board[newBoxPos.y][newBoxPos.x] === 3) 
-      {
+    else if (board[newPos.y][newPos.x] === 2 && board[newBoxPos.y][newBoxPos.x] === 3) {
       updateBoxPosition(newBoxPos.y, newBoxPos.x);
       updateBoard(newPos.y, newPos.x);
       playSound(audioRef, "push", isAudioPlaying);
     } 
-    else if (
-      board[newPos.y][newPos.x] === 1) 
-      {
+    else if (board[newPos.y][newPos.x] === 1) {
       playSound(audioRef, "wallHit", isAudioPlaying);
     } 
   };
