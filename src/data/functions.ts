@@ -62,7 +62,7 @@ export const saveNewHighscore = (
   moves: number,
   time: string,
   audioRef: React.RefObject<HTMLAudioElement>,
-  isAudioPlaying: boolean
+  isAudioPlaying: boolean,
 ) => {
   const highscoresString = localStorage.getItem(`sokoban-level${level}`);
   updateCompletedLevels(level);
@@ -101,6 +101,7 @@ export const saveNewHighscore = (
       time: time,
     });
     localStorage.setItem(`sokoban-level${level}`, JSON.stringify(newHighscore));
+    playSound(audioRef, "highscore", isAudioPlaying);
   }
 };
 

@@ -48,6 +48,12 @@
     background-color: #ecc010;
     border: 1px solid #1e1e1e;
     border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.modal-confirm:hover {
+    background-color: #ecc010b7;
 }
 
 .highscore-list {
