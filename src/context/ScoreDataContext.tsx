@@ -27,7 +27,11 @@ interface IScoreData {
   gameEndMessages: IGameEndProps;
   isNewHighscore: boolean;
   level: number;
-  saveHighscore: (name: string) => void;
+  saveHighscore: (
+    name: string,
+    audioRef: React.RefObject<HTMLAudioElement>,
+    isAudioPlaying: boolean
+  ) => void;
   setLevel: (level: number) => void;
 }
 
@@ -158,14 +162,18 @@ export function ScoreDataContextProvider({ children }: IScoreDataContextProps) {
     setGameEnded(false);
   };
 
-  const saveHighscore = (name: string) => {
+  const saveHighscore = (
+    name: string,
+    audioRef: React.RefObject<HTMLAudioElement>,
+    isAudioPlaying: boolean
+  ) => {
     setIsNewHighscore(false);
-    setGameEndMessages(prev=> ({
+    setGameEndMessages((prev) => ({
       ...prev,
-      data: getHighscores(level)}))
-    saveNewHighscore(level, name, score, moves, time);
+      data: getHighscores(level),
+    }));
+    saveNewHighscore(level, name, score, moves, time, audioRef, isAudioPlaying);
     updateGameTime(time);
-   
   };
 
   const resetLevel = () => {
