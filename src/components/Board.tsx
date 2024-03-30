@@ -19,6 +19,8 @@ import Highscore from "./Highscore";
 import Modal from "./Modal";
 import InputModal from "./InputModal";
 import { Arrows } from "./Arrows";
+
+import superStrength from "../assets/superStrength.";
 import gameMusic from "../sounds/gameMusic.mp3"
 
 
@@ -48,7 +50,9 @@ const Board = () => {
   const [board, setBoard] = useState<number[][]>(deepCopy(levels[level].board));
   const [charPos, setCharPos] = useState<IPosition>({ x: -1, y: -1 });
   const [boxLocations, setBoxLocations] = useState<IPosition[]>([]);
-  const [characterDirection, setCharacterDirection] = useState<Direction>("down");
+  const [characterDirection, setCharacterDirection] =
+    useState<Direction>("down");
+    const [isCtrlPressed, setIsCtrlPressed] = useState<boolean>(false);
 
   const gameContainerRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -127,9 +131,15 @@ const Board = () => {
     }
   };
 
-  const updateBoxPosition = (y: number, x: number) => {
+  const updateBoxPosition = (y: number, x: number, oldPos: IPosition | undefined = undefined) => {
+   
     setBoard((prevBoard) => {
       const newBoard = [...prevBoard];
+      if(oldPos){
+        const isStorageLocation = storageLocations.some(
+          (pos) => pos.y === oldPos.y && pos.x === oldPos.x);
+        newBoard[oldPos.y][oldPos.x] = isStorageLocation ? 4 : 3;
+      }
       newBoard[y][x] = 2;
       return newBoard;
     });
@@ -152,6 +162,34 @@ const Board = () => {
     return sandLayout[tile];
   };
 
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.ctrlKey && !isCtrlPressed) {
+        event.preventDefault();
+        setIsCtrlPressed(true);
+        console.log("ctrl pressed")
+      }
+    };
+  
+    const handleKeyUp = (event: KeyboardEvent) => {
+      if (!event.ctrlKey && isCtrlPressed) {
+        setIsCtrlPressed(false);
+      }
+    };
+  
+    const gameContainer = gameContainerRef.current;
+  
+    if (gameContainer) {
+      gameContainer.addEventListener("keydown", handleKeyDown);
+      gameContainer.addEventListener("keyup", handleKeyUp);
+  
+      return () => {
+        gameContainer.removeEventListener("keydown", handleKeyDown);
+        gameContainer.removeEventListener("keyup", handleKeyUp);
+      };
+    }
+  }, [isCtrlPressed]);
+
   const keyToDirection: ICharDirection = {
     ArrowUp: { direction: "up", deltaY: -1, deltaX: 0 },
     ArrowDown: { direction: "down", deltaY: 1, deltaX: 0 },
@@ -159,22 +197,46 @@ const Board = () => {
     ArrowRight: { direction: "right", deltaY: 0, deltaX: 1 },
   };
 
+  const alternateDirection: ICharDirection = {
+    ArrowUp: { direction: "down", deltaY: -1, deltaX: 0 },
+    ArrowDown: { direction: "up", deltaY: 1, deltaX: 0 },
+    ArrowLeft: { direction: "right", deltaY: 0, deltaX: -1 },
+    ArrowRight: { direction: "left", deltaY: 0, deltaX: 1 },
+  };
+
   const handleKeyDown = (key: string) => {
     // event.preventDefault();
     if (gameEnded) return;
     if (!keyToDirection[key]) return;
     const { y: posY, x: posX } = charPos;
-    const { direction, deltaY, deltaX } = keyToDirection[key];
+    const { direction, deltaY, deltaX } = isCtrlPressed ? alternateDirection[key] : keyToDirection[key];
 
     const newPos: IPosition = { x: posX + deltaX, y: posY + deltaY };
+    const oppPos: IPosition = { x: posX - deltaX, y: posY - deltaY };
     const newBoxPos: IPosition = { x: newPos.x + deltaX, y: newPos.y + deltaY };
 
     setCharacterDirection(direction);
+
+    if(isCtrlPressed && [3, 4].includes(board[newPos.y][newPos.x]) && [2].includes(board[oppPos.y][oppPos.x])){
+      console.log("here")
+      updateBoard(newPos.y, newPos.x)
+      updateBoxPosition(charPos.y, charPos.x, oppPos)
+      
+      return;
+    } 
+
     // Check if the new position is a valid move
     if ([3, 4].includes(board[newPos.y][newPos.x])) {
       updateBoard(newPos.y, newPos.x);
+      return;
     }
     // Check if pushing a box to the new position is a valid move
+//     if (board[newPos.y][newPos.x] === 2 && [3, 4].includes(board[newBoxPos.y][newBoxPos.x])) {
+//       updateBoxPosition(newBoxPos.y, newBoxPos.x);
+//       updateBoard(newPos.y, newPos.x);
+//       return;
+//     }
+
     else if (board[newPos.y][newPos.x] === 2 && board[newBoxPos.y][newBoxPos.x] === 4 )
    {
       updateBoxPosition(newBoxPos.y, newBoxPos.x);

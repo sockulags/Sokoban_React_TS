@@ -7,6 +7,7 @@ import { About } from "./pages/About";
 import { Play } from "./pages/Play";
 import { HighscorePage } from "./pages/HighscorePage";
 import GamePlay from "./pages/GamePlay";
+import LevelCreator from "./pages/LevelCreator";
 
 export function App() {
   return (
@@ -17,6 +18,7 @@ export function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/play" element={<Play />} />
+          <Route path="/create-level" element={<LevelCreator />} />
           <Route path="/play/:id" element={<GamePlay />} />
           <Route path="/highscore/:id?" element={<HighscorePage />} />
           {/* Define other routes here */}

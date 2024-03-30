@@ -29,6 +29,11 @@ const routes: NavbarRoutes[] = [
     name: "Highscore",
     path: "/highscore",
   },
+  {
+    id: 5,
+    name: "Create Level",
+    path: "/create-level",
+  },
 ];
 
 export const Navbar = () => {
