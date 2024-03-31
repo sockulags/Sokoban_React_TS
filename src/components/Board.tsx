@@ -1,11 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useContext, useRef } from "react";
 import Tile from "./Tile";
-import {
-  sandLayout,
-  levels,
-  characterImages,
-} from "../data/levels";
+import { sandLayout, levels, characterImages } from "../data/levels";
 import "./board.css";
 import { ScoreDataContext } from "../context/ScoreDataContext";
 import { IPosition, ICharDirection, Direction } from "../interface";
@@ -19,36 +15,37 @@ import Highscore from "./Highscore";
 import Modal from "./Modal";
 import InputModal from "./InputModal";
 import { Arrows } from "./Arrows";
+
+// import superStrength from "../assets/superStrength.";
 import gameMusic from "../sounds/gameMusic.mp3";
-
-
 
 const deepCopy = (arr: number[][]): number[][] => {
   return arr.map((subArr) => [...subArr]);
-}; 
-
+};
 
 const Board = () => {
-   const {
-     level,
-     pushes,
-     updatePushesCount,
-     moves,
-     updateMovesCount,
-     time,   
-     startGame, 
-     updateGameEnded,
-     gameEnded,   
-     gameEndMessages,
-     isNewHighscore,
-     resetLevel,    
-   } = useContext(ScoreDataContext);
+  const {
+    level,
+    pushes,
+    updatePushesCount,
+    moves,
+    updateMovesCount,
+    time,
+    startGame,
+    updateGameEnded,
+    gameEnded,
+    gameEndMessages,
+    isNewHighscore,
+    resetLevel,
+  } = useContext(ScoreDataContext);
   const [boardSize, setBoardSize] = useState({ numRows: 0, numCols: 0 });
   const [storageLocations, setStorageLocation] = useState<IPosition[]>([]);
   const [board, setBoard] = useState<number[][]>(deepCopy(levels[level].board));
   const [charPos, setCharPos] = useState<IPosition>({ x: -1, y: -1 });
   const [boxLocations, setBoxLocations] = useState<IPosition[]>([]);
-  const [characterDirection, setCharacterDirection] = useState<Direction>("down");
+  const [characterDirection, setCharacterDirection] =
+    useState<Direction>("down");
+  const [isCtrlPressed, setIsCtrlPressed] = useState<boolean>(false);
 
   const gameContainerRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -56,20 +53,18 @@ const Board = () => {
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
 
   useEffect(() => {
-  setCharPos(getCharStartPosition()); 
-   
+    setCharPos(getCharStartPosition());
+
     setStorageLocation(getStorageLocations(level));
-   
   }, []);
 
-  useEffect (() => {
+  useEffect(() => {
     const newBoard = deepCopy(levels[level].board);
     setBoard(newBoard);
-      setCharPos(getCharStartPosition(newBoard));   
-      setStorageLocation(getStorageLocations(level));
-      setBoardSize({ numRows: newBoard.length, numCols: newBoard[0].length });
-  
-  },[level])
+    setCharPos(getCharStartPosition(newBoard));
+    setStorageLocation(getStorageLocations(level));
+    setBoardSize({ numRows: newBoard.length, numCols: newBoard[0].length });
+  }, [level]);
 
   useEffect(() => {
     if (gameContainerRef.current) {
@@ -84,15 +79,18 @@ const Board = () => {
       audio.volume = 0.1;
       audio.play();
     }
-    return () => {if (audio) {audio.pause();}};
+    return () => {
+      if (audio) {
+        audio.pause();
+      }
+    };
   }, [isAudioPlaying]);
 
   const toggleAudio = () => {
     setIsAudioPlaying((prevIsAudioPlaying) => !prevIsAudioPlaying);
   };
 
-   const getCharStartPosition = (resetBoard?: number[][]) => {
-
+  const getCharStartPosition = (resetBoard?: number[][]) => {
     const newBoard = resetBoard ?? board;
     const posY = newBoard.findIndex((row) => row.includes(5));
     const posX = newBoard[posY].findIndex((x) => x === 5);
@@ -119,7 +117,7 @@ const Board = () => {
   };
 
   const checkCompletion = () => {
-    const correct = getCorrectBoxCount(storageLocations, boxLocations);  
+    const correct = getCorrectBoxCount(storageLocations, boxLocations);
     if (correct === 2) {
       updateGameEnded(level);
       setCharacterDirection("down");
@@ -127,9 +125,22 @@ const Board = () => {
     }
   };
 
-  const updateBoxPosition = (y: number, x: number) => {
+  const updateBoxPosition = (
+    y: number,
+    x: number,
+    oldPos: IPosition | undefined = undefined
+  ) => {
     setBoard((prevBoard) => {
       const newBoard = [...prevBoard];
+      if (oldPos) {
+        const isStorageLocation = storageLocations.some(
+          (pos) => pos.y === oldPos.y && pos.x === oldPos.x
+        );
+        newBoard[oldPos.y][oldPos.x] = isStorageLocation ? 4 : 3;
+        if (isStorageLocation && board[y][x] === 4) {
+          playSound(audioRef, "success", isAudioPlaying);
+        }
+      }
       newBoard[y][x] = 2;
       return newBoard;
     });
@@ -146,11 +157,39 @@ const Board = () => {
     if (tile === 2) {
       const isOnStorage = storageLocations.some(
         (pos) => pos.y === rowIndex && pos.x === colIndex
-        );
+      );
       return isOnStorage ? sandLayout[5] : sandLayout[tile];
     }
     return sandLayout[tile];
   };
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.ctrlKey && !isCtrlPressed) {
+        event.preventDefault();
+        setIsCtrlPressed(true);
+        console.log("ctrl pressed");
+      }
+    };
+
+    const handleKeyUp = (event: KeyboardEvent) => {
+      if (!event.ctrlKey && isCtrlPressed) {
+        setIsCtrlPressed(false);
+      }
+    };
+
+    const gameContainer = gameContainerRef.current;
+
+    if (gameContainer) {
+      gameContainer.addEventListener("keydown", handleKeyDown);
+      gameContainer.addEventListener("keyup", handleKeyUp);
+
+      return () => {
+        gameContainer.removeEventListener("keydown", handleKeyDown);
+        gameContainer.removeEventListener("keyup", handleKeyUp);
+      };
+    }
+  }, [isCtrlPressed]);
 
   const keyToDirection: ICharDirection = {
     ArrowUp: { direction: "up", deltaY: -1, deltaX: 0 },
@@ -159,45 +198,89 @@ const Board = () => {
     ArrowRight: { direction: "right", deltaY: 0, deltaX: 1 },
   };
 
+  const alternateDirection: ICharDirection = {
+    ArrowUp: { direction: "down", deltaY: -1, deltaX: 0 },
+    ArrowDown: { direction: "up", deltaY: 1, deltaX: 0 },
+    ArrowLeft: { direction: "right", deltaY: 0, deltaX: -1 },
+    ArrowRight: { direction: "left", deltaY: 0, deltaX: 1 },
+  };
+
   const handleKeyDown = (key: string) => {
     // event.preventDefault();
     if (gameEnded) return;
     if (!keyToDirection[key]) return;
     const { y: posY, x: posX } = charPos;
-    const { direction, deltaY, deltaX } = keyToDirection[key];
+    const { direction, deltaY, deltaX } = isCtrlPressed
+      ? alternateDirection[key]
+      : keyToDirection[key];
 
     const newPos: IPosition = { x: posX + deltaX, y: posY + deltaY };
+    const oppPos: IPosition = { x: posX - deltaX, y: posY - deltaY };
     const newBoxPos: IPosition = { x: newPos.x + deltaX, y: newPos.y + deltaY };
 
     setCharacterDirection(direction);
-    // Check if the new position is a valid move
-    if ([3, 4].includes(board[newPos.y][newPos.x])) {
+
+    if (
+      isCtrlPressed &&
+      [3].includes(board[newPos.y][newPos.x]) &&
+      [2].includes(board[oppPos.y][oppPos.x])
+    ) {
+      console.log("here");
       updateBoard(newPos.y, newPos.x);
+      updateBoxPosition(charPos.y, charPos.x, oppPos);
+      playSound(audioRef, "pull", isAudioPlaying);
+      return;
     }
-    // Check if pushing a box to the new position is a valid move
-    else if (board[newPos.y][newPos.x] === 2 && board[newBoxPos.y][newBoxPos.x] === 4 ){
-      updateBoxPosition(newBoxPos.y, newBoxPos.x);
+
+    if (
+      isCtrlPressed &&
+      [4].includes(board[newPos.y][newPos.x]) &&
+      [2].includes(board[oppPos.y][oppPos.x])
+    ) {
+      console.log("here");
       updateBoard(newPos.y, newPos.x);
-      playSound(audioRef, "success", isAudioPlaying);
-    } 
-    else if (board[newPos.y][newPos.x] === 2 && board[newBoxPos.y][newBoxPos.x] === 3) {
+      updateBoxPosition(charPos.y, charPos.x, oppPos);
+      return;
+    }
+
+    if (
+      [3].includes(board[newBoxPos.y][newBoxPos.x]) &&
+      [2].includes(board[newPos.y][newPos.x])
+    ) {
       updateBoxPosition(newBoxPos.y, newBoxPos.x);
       updateBoard(newPos.y, newPos.x);
       playSound(audioRef, "push", isAudioPlaying);
-    } 
-    else if (board[newPos.y][newPos.x] === 1) {
+      return;
+    }
+
+    if (
+      [4].includes(board[newBoxPos.y][newBoxPos.x]) &&
+      [2].includes(board[newPos.y][newPos.x])
+    ) {
+      updateBoxPosition(newBoxPos.y, newBoxPos.x);
+      updateBoard(newPos.y, newPos.x);
+      playSound(audioRef, "success", isAudioPlaying);
+      return;
+    }
+
+    if ([3, 4].includes(board[newPos.y][newPos.x])) {
+      updateBoard(newPos.y, newPos.x);
+      return;
+    }
+
+    if (board[newPos.y][newPos.x] === 1) {
       playSound(audioRef, "wallHit", isAudioPlaying);
-    } 
+      return;
+    }
   };
 
   const restartLevel = () => {
     setBoard(deepCopy(levels[level].board));
-    setCharPos(getCharStartPosition(deepCopy(levels[level].board)))
+    setCharPos(getCharStartPosition(deepCopy(levels[level].board)));
     setBoxLocations(getBoxLocations(level));
     setCharacterDirection("down");
     resetLevel();
-  }
-
+  };
 
   return (
     <div className="game-container">
