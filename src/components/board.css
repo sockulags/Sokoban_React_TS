@@ -6,6 +6,7 @@
   border-radius: 10px;
   margin: 0 auto;
   height: 75vh;
+  position: relative;
 }
 
 .board {
@@ -16,11 +17,12 @@
   width: 100%;
   margin: auto;
   padding: 10px;
-  height: 100%;
+  height: 90%;
 }
+
 .row {
   height: calc(100% / var(--numRows));
-  max-height: 64px;
+  display: flex;
 }
 
 .tile {
@@ -41,20 +43,20 @@
   outline: none;
 }
 
-.row {
-  display: flex;
-}
-
 @media screen and (max-height: 480px) and (orientation: landscape) {
   .game-container {
     height: 100dvh;
-    width: auto;
+    width: 100%;
+    margin: 0 auto;
+  }
 
-    .board {
-      margin-top: 2rem;
-      max-height: 90dvh;
-      .tile {
-      }
-    }
+  .board {
+    margin-top: 2rem;
+    max-height: 95dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
   }
 }

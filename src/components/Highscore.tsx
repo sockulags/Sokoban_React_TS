@@ -23,7 +23,7 @@ const Highscore = (props: IHighscoreProps) => {
   return (
     <>
       <div className="highscore-data">
-        <button className="reset-btn" onClick={handleGoBack}>
+        <button className="level-btn" onClick={handleGoBack}>
           Levels
         </button>
         <button className="reset-btn" onClick={props.restartLevel}>

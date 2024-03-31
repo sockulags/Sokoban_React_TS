@@ -1,11 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useContext, useRef } from "react";
 import Tile from "./Tile";
-import {
-  sandLayout,
-  levels,
-  characterImages,
-} from "../data/levels";
+import { sandLayout, levels, characterImages } from "../data/levels";
 import "./board.css";
 import { ScoreDataContext } from "../context/ScoreDataContext";
 import { IPosition, ICharDirection, Direction } from "../interface";
@@ -19,52 +15,58 @@ import Modal from "./Modal";
 import InputModal from "./InputModal";
 import { Arrows } from "./Arrows";
 
-
 const deepCopy = (arr: number[][]): number[][] => {
   return arr.map((subArr) => [...subArr]);
-}; 
-
+};
 
 const Board = () => {
-   const {
-     level,
-     pushes,
-     updatePushesCount,
-     moves,
-     updateMovesCount,
-     time,   
-     startGame, 
-     updateGameEnded,
-     gameEnded,   
-     gameEndMessages,
-     isNewHighscore,
-     resetLevel,    
-   } = useContext(ScoreDataContext);
-   const [boardSize, setBoardSize] = useState({ numRows: 0, numCols: 0 });
+  const {
+    level,
+    pushes,
+    updatePushesCount,
+    moves,
+    updateMovesCount,
+    time,
+    startGame,
+    updateGameEnded,
+    gameEnded,
+    gameEndMessages,
+    isNewHighscore,
+    resetLevel,
+  } = useContext(ScoreDataContext);
+  const [boardSize, setBoardSize] = useState({ numRows: 0, numCols: 0 });
   const [storageLocations, setStorageLocation] = useState<IPosition[]>([]);
- const [board, setBoard] = useState<number[][]>(deepCopy(levels[level].board));
+  const [board, setBoard] = useState<number[][]>(deepCopy(levels[level].board));
   const [charPos, setCharPos] = useState<IPosition>({ x: -1, y: -1 });
   const [boxLocations, setBoxLocations] = useState<IPosition[]>([]);
   const [characterDirection, setCharacterDirection] =
     useState<Direction>("down");
 
-    const gameContainerRef = useRef<HTMLDivElement>(null);
+  const gameContainerRef = useRef<HTMLDivElement>(null);
+
+  const [scale, setScale] = useState(1); // State för skalning
+
+  const handleZoomIn = () => {
+    setScale((prevScale) => prevScale + 0.1); // Öka skalan med 0.1 enheter
+  };
+
+  const handleZoomOut = () => {
+    setScale((prevScale) => Math.max(0.1, prevScale - 0.1)); // Minska skalan med 0.1 enheter, men minst 0.1
+  };
 
   useEffect(() => {
-  setCharPos(getCharStartPosition()); 
-   
+    setCharPos(getCharStartPosition());
+
     setStorageLocation(getStorageLocations(level));
-   
   }, []);
 
-  useEffect (() => {
+  useEffect(() => {
     const newBoard = deepCopy(levels[level].board);
     setBoard(newBoard);
-      setCharPos(getCharStartPosition(newBoard));   
-      setStorageLocation(getStorageLocations(level));
-      setBoardSize({ numRows: newBoard.length, numCols: newBoard[0].length });
-  
-  },[level])
+    setCharPos(getCharStartPosition(newBoard));
+    setStorageLocation(getStorageLocations(level));
+    setBoardSize({ numRows: newBoard.length, numCols: newBoard[0].length });
+  }, [level]);
 
   useEffect(() => {
     if (gameContainerRef.current) {
@@ -72,8 +74,7 @@ const Board = () => {
     }
   }, []);
 
-   const getCharStartPosition = (resetBoard?: number[][]) => {
-
+  const getCharStartPosition = (resetBoard?: number[][]) => {
     const newBoard = resetBoard ?? board;
     const posY = newBoard.findIndex((row) => row.includes(5));
     const posX = newBoard[posY].findIndex((x) => x === 5);
@@ -100,7 +101,7 @@ const Board = () => {
   };
 
   const checkCompletion = () => {
-    const correct = getCorrectBoxCount(storageLocations, boxLocations);  
+    const correct = getCorrectBoxCount(storageLocations, boxLocations);
     if (correct === 1) {
       updateGameEnded(level);
       setCharacterDirection("down");
@@ -166,63 +167,71 @@ const Board = () => {
 
   const restartLevel = () => {
     setBoard(deepCopy(levels[level].board));
-    setCharPos(getCharStartPosition(deepCopy(levels[level].board)))
+    setCharPos(getCharStartPosition(deepCopy(levels[level].board)));
     setBoxLocations(getBoxLocations(level));
     setCharacterDirection("down");
     resetLevel();
-  }
+  };
 
   return (
-    <div className="game-container">
-      <Arrows onKeyDown={handleKeyDown} />
-      <Highscore
-        level={level}
-        pushes={pushes}
-        moves={moves}
-        time={time}
-        restartLevel={restartLevel}
-      />
-
-      {gameEnded && (
-        <Modal
-          title={gameEndMessages.title}
-          message1={gameEndMessages.message1}
-          message2={gameEndMessages.message2}
-          data={gameEndMessages.data}
-          onConfirm={gameEndMessages.onConfirm}
-          restart={restartLevel}
+    <>
+      {/** 
+      <button onClick={handleZoomIn}>Zoom In</button>{" "}
+     
+      <button onClick={handleZoomOut}>Zoom Out</button>{" "}
+  */}
+      <div className="game-container">
+        <Arrows onKeyDown={handleKeyDown} />
+        <Highscore
+          level={level}
+          pushes={pushes}
+          moves={moves}
+          time={time}
+          restartLevel={restartLevel}
         />
-      )}
-      {isNewHighscore && <InputModal />}
-      <div
-        className="board"
-        ref={gameContainerRef}
-        style={
-          {
-            "--numRows":
-              boardSize.numRows > boardSize.numCols
-                ? boardSize.numRows
-                : boardSize.numCols,
-          } as React.CSSProperties
-        }
-        tabIndex={0}
-        onKeyDown={(e) => handleKeyDown(e.key)}
-      >
-        {board.map((row, rowIndex) => (
-          <div className="row" key={rowIndex}>
-            {row.map((_tile, colInd) => (
-              <Tile
-                key={`${rowIndex}-${colInd}`}
-                getTileImage={getTileImage}
-                rowIndex={rowIndex}
-                colIndex={colInd}
-              />
-            ))}
-          </div>
-        ))}
+
+        {gameEnded && (
+          <Modal
+            title={gameEndMessages.title}
+            message1={gameEndMessages.message1}
+            message2={gameEndMessages.message2}
+            data={gameEndMessages.data}
+            onConfirm={gameEndMessages.onConfirm}
+            restart={restartLevel}
+          />
+        )}
+        {isNewHighscore && <InputModal />}
+        <div
+          className="board"
+          ref={gameContainerRef}
+          style={
+            {
+              "--numRows": boardSize.numRows,
+              "--numCols": boardSize.numCols,
+              transform: `scale(${scale})`,
+              transformOrigin: "top left",
+            } as React.CSSProperties
+          }
+          tabIndex={0}
+          onKeyDown={(e) => handleKeyDown(e.key)}
+        >
+          {board.map((row, rowIndex) => (
+            <div className="row" key={rowIndex}>
+              {row.map((_tile, colInd) => (
+                <Tile
+                  key={`${rowIndex}-${colInd}`}
+                  getTileImage={getTileImage}
+                  rowIndex={rowIndex}
+                  colIndex={colInd}
+                />
+              ))}
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
 export default Board;
+

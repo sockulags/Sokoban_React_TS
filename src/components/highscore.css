@@ -1,16 +1,23 @@
 .highscore-data {
+  position: absolute;
+  top: 0;
+  right: 0; 
   display: flex;
   justify-content: space-around;
   align-items: center;
   width: 100%;
   background-color: #8b2b2b;
-  span {
-    font-size: 1.5rem;
-    color: #ece3ce;
-  }
+  z-index: 1; 
 }
 
-.reset-btn {
+.highscore-data span {
+  font-size: 1.5rem;
+  color: #ece3ce;
+}
+
+
+.reset-btn,
+.level-btn {
   background-color: transparent;
   color: #ece3ce;
   padding: 0.5rem 1rem;
@@ -28,7 +35,12 @@
   }
 }
 
-@media screen and (max-height: 480px) and (orientation: landscape) {
+.level-btn {
+  display: none;
+}
+
+@media screen and (max-height: 480px) and (orientation: landscape),
+  (max-width: 810px) {
   .highscore-data {
     position: fixed;
     align-items: center;
@@ -44,10 +56,14 @@
   .time {
     font-size: 1rem;
   }
-  .reset-btn {
+  .reset-btn,
+  .level-btn {
     padding: 8px 13px;
     font-size: 1rem;
     border-left: 1px solid #ece3ce;
     border-right: 1px solid #ece3ce;
+  }
+  .level-btn {
+    display: flex;
   }
 }
