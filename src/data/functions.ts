@@ -1,6 +1,7 @@
 import { levels } from "./levels";
 import { IPosition } from "../interface";
 import pushSound from "../sounds/push.mp3";
+import pullSound from "../sounds/pull.mp3";
 import successSound from "../sounds/success.mp3";
 import wallHitSound from "../sounds/wallHit.mp3";
 import completeSound from "../sounds/complete.mp3";
@@ -139,6 +140,9 @@ export const playSound = (
   switch (soundType) {
     case "push":
       soundFile = pushSound;
+      break;
+    case "pull":
+      soundFile = pullSound;
       break;
     case "success":
       soundFile = successSound;

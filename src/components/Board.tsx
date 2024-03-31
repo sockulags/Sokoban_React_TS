@@ -20,7 +20,7 @@ import Modal from "./Modal";
 import InputModal from "./InputModal";
 import { Arrows } from "./Arrows";
 
-import superStrength from "../assets/superStrength.";
+// import superStrength from "../assets/superStrength.";
 import gameMusic from "../sounds/gameMusic.mp3"
 
 
@@ -139,6 +139,9 @@ const Board = () => {
         const isStorageLocation = storageLocations.some(
           (pos) => pos.y === oldPos.y && pos.x === oldPos.x);
         newBoard[oldPos.y][oldPos.x] = isStorageLocation ? 4 : 3;
+        if (isStorageLocation && board[y][x] === 4) {
+          playSound(audioRef, "success", isAudioPlaying);
+        }
       }
       newBoard[y][x] = 2;
       return newBoard;
@@ -217,43 +220,44 @@ const Board = () => {
 
     setCharacterDirection(direction);
 
-    if(isCtrlPressed && [3, 4].includes(board[newPos.y][newPos.x]) && [2].includes(board[oppPos.y][oppPos.x])){
+
+    if(isCtrlPressed && [3].includes(board[newPos.y][newPos.x]) && [2].includes(board[oppPos.y][oppPos.x])){
       console.log("here")
       updateBoard(newPos.y, newPos.x)
       updateBoxPosition(charPos.y, charPos.x, oppPos)
-      
+      playSound(audioRef, "pull", isAudioPlaying);
       return;
     } 
 
-    // Check if the new position is a valid move
+    if(isCtrlPressed && [4].includes(board[newPos.y][newPos.x]) && [2].includes(board[oppPos.y][oppPos.x])){
+      console.log("here")
+      updateBoard(newPos.y, newPos.x)
+      updateBoxPosition(charPos.y, charPos.x, oppPos)
+      return;
+    } 
+
+    if ([3].includes(board[newBoxPos.y][newBoxPos.x]) && [2].includes(board[newPos.y][newPos.x])){
+      updateBoxPosition(newBoxPos.y, newBoxPos.x);
+      updateBoard(newPos.y, newPos.x);
+      playSound(audioRef, "push", isAudioPlaying);
+      return;
+    }
+
+    if ([4].includes(board[newBoxPos.y][newBoxPos.x]) && [2].includes(board[newPos.y][newPos.x])){
+      updateBoxPosition(newBoxPos.y, newBoxPos.x);
+      updateBoard(newPos.y, newPos.x);
+      playSound(audioRef, "success", isAudioPlaying);
+      return;
+    }  
+
     if ([3, 4].includes(board[newPos.y][newPos.x])) {
       updateBoard(newPos.y, newPos.x);
       return;
     }
-    // Check if pushing a box to the new position is a valid move
-//     if (board[newPos.y][newPos.x] === 2 && [3, 4].includes(board[newBoxPos.y][newBoxPos.x])) {
-//       updateBoxPosition(newBoxPos.y, newBoxPos.x);
-//       updateBoard(newPos.y, newPos.x);
-//       return;
-//     }
 
-    else if (board[newPos.y][newPos.x] === 2 && board[newBoxPos.y][newBoxPos.x] === 4 )
-   {
-      updateBoxPosition(newBoxPos.y, newBoxPos.x);
-      updateBoard(newPos.y, newPos.x);
-      playSound(audioRef, "success", isAudioPlaying);
-    } 
-    else if (
-      board[newPos.y][newPos.x] === 2 && board[newBoxPos.y][newBoxPos.x] === 3) 
-      {
-      updateBoxPosition(newBoxPos.y, newBoxPos.x);
-      updateBoard(newPos.y, newPos.x);
-      playSound(audioRef, "push", isAudioPlaying);
-    } 
-    else if (
-      board[newPos.y][newPos.x] === 1) 
-      {
+    if (board[newPos.y][newPos.x] === 1) {
       playSound(audioRef, "wallHit", isAudioPlaying);
+      return;
     } 
   };
 
