@@ -44,16 +44,6 @@ const Board = () => {
 
   const gameContainerRef = useRef<HTMLDivElement>(null);
 
-  const [scale, setScale] = useState(1); // State för skalning
-
-  const handleZoomIn = () => {
-    setScale((prevScale) => prevScale + 0.1); // Öka skalan med 0.1 enheter
-  };
-
-  const handleZoomOut = () => {
-    setScale((prevScale) => Math.max(0.1, prevScale - 0.1)); // Minska skalan med 0.1 enheter, men minst 0.1
-  };
-
   useEffect(() => {
     setCharPos(getCharStartPosition());
 
@@ -175,11 +165,7 @@ const Board = () => {
 
   return (
     <>
-      {/** 
-      <button onClick={handleZoomIn}>Zoom In</button>{" "}
-     
-      <button onClick={handleZoomOut}>Zoom Out</button>{" "}
-  */}
+    
       <div className="game-container">
         <Arrows onKeyDown={handleKeyDown} />
         <Highscore
@@ -208,8 +194,6 @@ const Board = () => {
             {
               "--numRows": boardSize.numRows,
               "--numCols": boardSize.numCols,
-              transform: `scale(${scale})`,
-              transformOrigin: "top left",
             } as React.CSSProperties
           }
           tabIndex={0}
@@ -234,4 +218,3 @@ const Board = () => {
 };
 
 export default Board;
-
