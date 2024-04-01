@@ -1,6 +1,6 @@
 import "./Navbar.css";
 import Logo from "../assets/sokoban-header.png";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 interface NavbarRoutes {
   id: number;
@@ -38,19 +38,32 @@ const routes: NavbarRoutes[] = [
 
 export const Navbar = () => {
   const nav = useNavigate();
+  const location = useLocation();
   const handleClick = (path: string) => {
     nav(path);
+  };
+  const isActive = (path: string) => {
+    if (path === "/") {
+      return location.pathname === path;
+    } else {
+      return location.pathname.startsWith(path);
+    }
   };
 
   return (
     <div className="navbar-container">
       <div className="logo-container" onClick={() => handleClick("/")}>
-        <img src={Logo} />
+        <img src={Logo} alt="logo" />
       </div>
       <div className="navbar-links">
         {routes.map((route) => {
+          const active = isActive(route.path);
           return (
-            <h2 key={route.id} onClick={() => handleClick(route.path)}>
+            <h2
+              key={route.id}
+              onClick={() => handleClick(route.path)}
+              className={active ? "active" : ""}
+            >
               {route.name}
             </h2>
           );
