@@ -86,7 +86,7 @@ input {
 
 .rotate-prompt {
   position: absolute;
-  top: 30%;
+  top: 40%;
   left: 50%;
   max-width: 90%;
   transform: translate(-50%, -50%);
