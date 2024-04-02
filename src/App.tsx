@@ -1,9 +1,5 @@
 import React, { useRef, useState, useEffect, useCallback } from "react";
-import {
-  Routes,
-  Route,
-  useLocation,
-} from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
 import { Home } from "./pages/Home";
 import "./App.css";
@@ -19,59 +15,60 @@ export function App() {
   const [isMobile, setIsMobile] = useState(false);
   const [showRotatePrompt, setShowRotatePrompt] = useState(false);
 
+  // Function to check if the device has touch capabilities
+  const isTouchDevice = useCallback(
+    () => "ontouchstart" in window || navigator.maxTouchPoints > 0,
+    []
+  );
+
+  // Function to handle resize event
   const handleResize = useCallback(() => {
     setIsMobile(window.innerWidth < 810 || window.innerHeight < 480);
   }, []);
 
   useEffect(() => {
-    handleResize();
-    windowRef.current.addEventListener("resize", handleResize);
-    return () => {
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      windowRef.current.removeEventListener("resize", handleResize);
-    };
-  }, [handleResize]);
-
-  useEffect(() => {
+    // Function to handle orientation change
     const handleOrientationChange = () => {
       setIsMobile(window.innerHeight > window.innerWidth);
-      setShowRotatePrompt(window.innerHeight <= window.innerWidth);
+      setShowRotatePrompt(
+        window.innerHeight <= window.innerWidth && isTouchDevice()
+      );
     };
-    handleOrientationChange();
+
+    // Function to handle window resize based on touch device and orientation
+    const handleWindowResize = () => {
+      handleResize();
+      setShowRotatePrompt(
+        isTouchDevice() && isMobile && window.innerHeight > window.innerWidth
+      );
+    };
+
+    handleResize();
+    windowRef.current.addEventListener("resize", handleResize);
     windowRef.current.addEventListener(
       "orientationchange",
       handleOrientationChange
     );
+    window.addEventListener("resize", handleWindowResize);
+
     return () => {
+      windowRef.current.removeEventListener("resize", handleResize);
       // eslint-disable-next-line react-hooks/exhaustive-deps
       windowRef.current.removeEventListener(
         "orientationchange",
         handleOrientationChange
       );
-    };
-  }, []);
-
-  useEffect(() => {
-    const handleWindowResize = () => {
-      handleResize(); 
-      if (isMobile && window.innerHeight > window.innerWidth) {
-        setShowRotatePrompt(true); 
-      } else {
-        setShowRotatePrompt(false); 
-      }
-    };
-    handleWindowResize();
-    window.addEventListener("resize", handleWindowResize);
-    return () => {
       window.removeEventListener("resize", handleWindowResize);
     };
-  }, [isMobile, handleResize]);
+  }, [handleResize, isMobile, isTouchDevice]);
 
+  // Check if the Navbar should be hidden based on the route and device type
   const hideNavbar = /^\/play\/\d+$/.test(location.pathname) && isMobile;
 
   return (
     <div>
       {!hideNavbar && <Navbar />}
+      {/* Show rotation prompt if necessary */}
       {showRotatePrompt && (
         <div className="rotate-prompt">
           <div>
@@ -84,7 +81,9 @@ export function App() {
           </div>
         </div>
       )}
+      {/* Overlay for rotation prompt */}
       {showRotatePrompt && <div className="overlay"></div>}
+      {/* Define routes */}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
