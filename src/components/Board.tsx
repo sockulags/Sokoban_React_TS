@@ -87,6 +87,14 @@ const Board = () => {
   }, []);
 
   useEffect(() => {
+    const savedAudioSetting = localStorage.getItem("isAudioPlaying");
+    if (savedAudioSetting !== null) {
+      setIsAudioPlaying(JSON.parse(savedAudioSetting));
+    }
+    const savedMusicSetting = localStorage.getItem("isMusicPlaying");
+    if (savedMusicSetting !== null) {
+      setIsMusicPlaying(JSON.parse(savedMusicSetting));
+    }
     const audio = gameAudioRef.current;
     if (audio && isMusicPlaying) {
       audio.loop = true;
@@ -98,13 +106,22 @@ const Board = () => {
         audio.pause();
       }
     };
-  }, [isMusicPlaying]);
+  }, [isMusicPlaying, isAudioPlaying]);
+
 
   const toggleAudio = () => {
-    setIsAudioPlaying((prevIsAudioPlaying) => !prevIsAudioPlaying);
+    setIsAudioPlaying((prevIsAudioPlaying) => {
+      const newIsIsAudioPlaying = !prevIsAudioPlaying;
+      localStorage.setItem("isAudioPlaying", JSON.stringify(newIsIsAudioPlaying));
+      return newIsIsAudioPlaying;
+    });
   };
   const toggleMusic = () => {
-    setIsMusicPlaying((prevIsMusicPlaying) => !prevIsMusicPlaying);
+    setIsMusicPlaying((prevIsMusicPlaying) => {
+      const newIsMusicPlaying = !prevIsMusicPlaying;
+      localStorage.setItem("isMusicPlaying", JSON.stringify(newIsMusicPlaying));
+      return newIsMusicPlaying;
+    });
   };
 
    const getCharStartPosition = (resetBoard?: number[][]) => {
