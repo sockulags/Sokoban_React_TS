@@ -12,8 +12,6 @@ interface IHighscoreProps {
   time: string;
   restartLevel: () => void;
   level: number;
-  toggleAudio: () => void;
-  isAudioPlaying: boolean;
 }
 
 // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -22,13 +20,6 @@ const Highscore = (props: IHighscoreProps) => {
   return (
     <>
       <div className="highscore-data">
-        <button className="audio-btn" onClick={props.toggleAudio}>
-          {props.isAudioPlaying ? (
-            <span className="material-symbols-outlined">volume_up</span>
-          ) : (
-            <span className="material-symbols-outlined">volume_off</span>
-          )}
-        </button>
         <button className="reset-btn" onClick={props.restartLevel}>
           Reset Level
         </button>

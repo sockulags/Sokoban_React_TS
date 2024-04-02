@@ -60,6 +60,7 @@ const Board = () => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const gameAudioRef = useRef<HTMLAudioElement>(null);
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
+  const [isMusicPlaying, setIsMusicPlaying] = useState(false);
 
 
   useEffect(() => {
@@ -87,16 +88,23 @@ const Board = () => {
 
   useEffect(() => {
     const audio = gameAudioRef.current;
-    if (audio && isAudioPlaying) {
+    if (audio && isMusicPlaying) {
       audio.loop = true;
       audio.volume = 0.1;
       audio.play();
     }
-    return () => {if (audio) {audio.pause();}};
-  }, [isAudioPlaying]);
+    return () => {
+      if (audio) {
+        audio.pause();
+      }
+    };
+  }, [isMusicPlaying]);
 
   const toggleAudio = () => {
     setIsAudioPlaying((prevIsAudioPlaying) => !prevIsAudioPlaying);
+  };
+  const toggleMusic = () => {
+    setIsMusicPlaying((prevIsMusicPlaying) => !prevIsMusicPlaying);
   };
 
    const getCharStartPosition = (resetBoard?: number[][]) => {
@@ -285,8 +293,6 @@ const Board = () => {
         moves={moves}
         time={time}
         restartLevel={restartLevel}
-        toggleAudio={toggleAudio}
-        isAudioPlaying={isAudioPlaying}
       />
 
       {gameEnded && (
@@ -302,7 +308,14 @@ const Board = () => {
       {isNewHighscore && (
         <InputModal audioRef={audioRef} isAudioPlaying={isAudioPlaying} />
       )}
-      {settings && <Settings />}
+      {settings && (
+        <Settings
+          isAudioPlaying={isAudioPlaying}
+          toggleAudio={toggleAudio}
+          isMusicPlaying={isMusicPlaying}
+          toggleMusic={toggleMusic}
+        />
+      )}
       <div
         className="board"
         ref={gameContainerRef}

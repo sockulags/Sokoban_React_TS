@@ -4,7 +4,19 @@ import { ScoreDataContext } from "../context/ScoreDataContext";
 import Control from "./Control";
 import Sounds from "./Sounds";
 
-const Settings = () => {
+interface ISettingsProps {
+  isAudioPlaying: boolean;
+  toggleAudio: () => void;
+  isMusicPlaying: boolean;
+  toggleMusic: () => void;
+}
+
+const Settings = ({
+  toggleAudio,
+  isAudioPlaying,
+  isMusicPlaying,
+  toggleMusic,
+}: ISettingsProps) => {
   const { toggleSettings } = useContext(ScoreDataContext);
   const [showControl, setShowControl] = useState(true);
 
@@ -21,13 +33,28 @@ const Settings = () => {
       <div className="background-blur"></div>
       <div className="settings">
         <div className="header">
-          <div>
-            <button onClick={handleControlClick}>Controls</button>
-            <button onClick={handleSoundsClick}>Sounds</button>
+          <div className="btns">
+            <button onClick={handleControlClick}>
+              Controls<span className="material-symbols-outlined">gamepad</span>
+            </button>
+            <button onClick={handleSoundsClick}>
+              Sounds<span className="material-symbols-outlined">volume_up</span>
+            </button>
           </div>
           <button className="close-btn" onClick={toggleSettings}>X</button>
         </div>
-        <div className="content">{showControl ? <Control /> : <Sounds />}</div>
+        <div className="content">
+          {showControl ? (
+            <Control />
+          ) : (
+            <Sounds
+              isAudioPlaying={isAudioPlaying}
+              toggleAudio={toggleAudio}
+              isMusicPlaying={isMusicPlaying}
+              toggleMusic={toggleMusic}
+            />
+          )}
+        </div>
       </div>
     </>
   );

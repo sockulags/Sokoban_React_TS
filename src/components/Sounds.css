@@ -1,0 +1,15 @@
+.sounds {
+    margin-top: 2rem;
+    .music-toggle {
+    font-size: 1.4rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    h4 {
+        min-width: 150px;
+    }
+    span {
+        font-size: 2rem;
+    }
+}
+}
