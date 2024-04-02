@@ -22,6 +22,7 @@ import { Arrows } from "./Arrows";
 
 // import superStrength from "../assets/superStrength.";
 import gameMusic from "../sounds/gameMusic.mp3"
+import Settings from "./Settings";
 
 
 
@@ -37,13 +38,14 @@ const Board = () => {
      updatePushesCount,
      moves,
      updateMovesCount,
-     time,   
-     startGame, 
+     time,
+     startGame,
      updateGameEnded,
-     gameEnded,   
+     gameEnded,
      gameEndMessages,
      isNewHighscore,
-     resetLevel,    
+     resetLevel,
+     settings,
    } = useContext(ScoreDataContext);
   const [boardSize, setBoardSize] = useState({ numRows: 0, numCols: 0 });
   const [storageLocations, setStorageLocation] = useState<IPosition[]>([]);
@@ -59,12 +61,14 @@ const Board = () => {
   const gameAudioRef = useRef<HTMLAudioElement>(null);
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
 
+
   useEffect(() => {
   setCharPos(getCharStartPosition()); 
    
     setStorageLocation(getStorageLocations(level));
    
   }, []);
+
 
   useEffect (() => {
     const newBoard = deepCopy(levels[level].board);
@@ -298,6 +302,7 @@ const Board = () => {
       {isNewHighscore && (
         <InputModal audioRef={audioRef} isAudioPlaying={isAudioPlaying} />
       )}
+      {settings && <Settings />}
       <div
         className="board"
         ref={gameContainerRef}

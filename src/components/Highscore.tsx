@@ -1,8 +1,10 @@
 
+import { useContext } from "react";
 import Moves from "./Moves";
 import Pushes from "./Pushes";
 import Time from "./Time";
 import "./highscore.css"
+import { ScoreDataContext } from "../context/ScoreDataContext";
 
 interface IHighscoreProps {
   moves: number;
@@ -16,7 +18,7 @@ interface IHighscoreProps {
 
 // eslint-disable-next-line react-hooks/rules-of-hooks
 const Highscore = (props: IHighscoreProps) => {
-   
+  const {toggleSettings} = useContext(ScoreDataContext);
   return (
     <>
       <div className="highscore-data">
@@ -34,6 +36,9 @@ const Highscore = (props: IHighscoreProps) => {
         <Moves moves={props.moves} />
         <Pushes pushes={props.pushes} />
         <Time time={props.time} />
+        <button className="instruction-btn" onClick={toggleSettings}>
+          <span className="material-symbols-outlined">settings</span>
+        </button>
       </div>
     </>
   );
