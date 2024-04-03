@@ -1,0 +1,40 @@
+.sounds {
+    margin-top: 2rem;
+    .music-toggle {
+        font-size: 1.4rem;
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+        h4 {
+            min-width: 150px;
+        }
+        span {
+            font-size: 2rem;
+        }
+    }
+}
+
+input[type="range"] {
+  --track-color: #ecc010;
+}
+
+/* WebKit thumb */
+input[type="range"]::-webkit-slider-thumb {
+  background-color: var(--thumb-color);
+}
+
+/* Firefox thumb */
+input[type="range"]::-moz-range-thumb {
+  background-color: var(--thumb-color);
+}
+
+/* Track */
+input[type="range"]::-webkit-slider-runnable-track {
+  background-color: var(--track-color);
+  border-radius: .5rem;
+}
+
+/* Firefox track */
+input[type="range"]::-moz-range-track {
+  background-color: var(--track-color);
+}

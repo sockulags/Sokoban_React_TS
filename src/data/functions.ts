@@ -103,6 +103,7 @@ export const saveNewHighscore = (
       time: time,
     });
     localStorage.setItem(`sokoban-level${level}`, JSON.stringify(newHighscore));
+    playSound(audioRef, "highscore", isAudioPlaying);
   }
 };
 

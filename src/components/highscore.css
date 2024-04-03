@@ -35,6 +35,16 @@
     padding: .5rem;
 }
 
+.instruction-btn {
+    background-color: transparent;
+    font-size: 2rem;
+    border: none;
+    border-radius: 50%;
+    outline: none;
+    cursor: pointer;
+    padding: .5rem;
+}
+
 @media screen and (max-height:480px) and (orientation: landscape){    
     .highscore-data{
         position: fixed;
