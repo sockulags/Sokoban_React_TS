@@ -1,4 +1,4 @@
-import { levels } from "./levels";
+import { lvls as levels } from "../context/ScoreDataContext";
 import { IPosition } from "../interface";
 import pushSound from "../sounds/push.mp3";
 import pullSound from "../sounds/pull.mp3";
@@ -6,6 +6,7 @@ import successSound from "../sounds/success.mp3";
 import wallHitSound from "../sounds/wallHit.mp3";
 import completeSound from "../sounds/complete.mp3";
 import highscoreSound from "../sounds/highscore.mp3";
+
 
 
 export const getCorrectBoxCount = (

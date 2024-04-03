@@ -21,9 +21,9 @@ const Modal = ({
   message2,
   onConfirm,
   data,
-  restart,
+  restart,  
 }: IModalProps) => {
-  const { level, setLevel } = useContext(ScoreDataContext);
+  const { level, setLevel, isCustomLevel } = useContext(ScoreDataContext);
   const nav = useNavigate();
 
   const levels = () => {
@@ -66,9 +66,10 @@ const Modal = ({
             <button className="modal-confirm" onClick={levels}>
               Levels
             </button>
+            {!isCustomLevel &&
             <button className="modal-confirm" onClick={nextLevel}>
               Next level
-            </button>
+            </button>}
           </div>
         </div>
         <div className="background-blur"></div>

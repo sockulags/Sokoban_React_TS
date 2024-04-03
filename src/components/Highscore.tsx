@@ -5,6 +5,7 @@ import Moves from "./Moves";
 import Pushes from "./Pushes";
 import Time from "./Time";
 import "./highscore.css";
+import { ScoreDataContext } from "../context/ScoreDataContext";
 
 interface IHighscoreProps {
   moves: number;

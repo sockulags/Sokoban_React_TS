@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useContext, useRef } from "react";
 import Tile from "./Tile";
-import { sandLayout, levels, characterImages } from "../data/levels";
+import { sandLayout, characterImages } from "../data/levels";
 import "./board.css";
 import { ScoreDataContext } from "../context/ScoreDataContext";
 import { IPosition, ICharDirection, Direction } from "../interface";
@@ -50,6 +50,7 @@ const Board = () => {
      isNewHighscore,
      resetLevel,
      settings,
+     levels
    } = useContext(ScoreDataContext);
 
   const [boardSize, setBoardSize] = useState({ numRows: 0, numCols: 0 });
@@ -179,11 +180,8 @@ const Board = () => {
   };
 
   const checkCompletion = () => {
-
-
     const correct = getCorrectBoxCount(storageLocations, boxLocations);
-    if (correct === 1) {
-
+    if (correct === storageLocations.length) {
       updateGameEnded(level);
       setCharacterDirection("down");
       playSound(audioRef, "complete", isAudioPlaying);

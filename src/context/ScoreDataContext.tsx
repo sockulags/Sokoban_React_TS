@@ -1,10 +1,17 @@
 import { ReactElement, createContext, useState, useEffect } from "react";
 import { IHighscore } from "../interface";
+import {levels as originalLevels} from "../data/levels";
 import { getHighscores, saveNewHighscore } from "../data/functions";
 
 import { useParams, useLocation } from "react-router-dom";
 
 type IntervalId = ReturnType<typeof setInterval>;
+
+interface ILevels{
+  level: number;
+  board: number[][];
+  image?: string;
+}
 
 interface IScoreData {
   moves: number;
@@ -35,6 +42,8 @@ interface IScoreData {
   setLevel: (level: number) => void;
   settings: boolean;
   toggleSettings: () => void;
+  levels: ILevels[];
+  isCustomLevel: boolean;
 }
 
 interface IScoreDataContextProps {
@@ -49,15 +58,36 @@ interface IGameEndProps {
   onConfirm: IScoreData["handleGameEnd"];
 }
 
+const getCustomLevels = () => {
+  const data = localStorage.getItem("customLevels");
+  let customLevels;
+  if(data){
+    customLevels = JSON.parse(data);
+  }
+  const custom:ILevels[] = customLevels.map((b:number[][], l:number) => {
+   return {level: l, board: b}
+  })
+  return custom;
+}
+export let lvls: ILevels[];
+
+const getLevelType = (isCustomLevel:boolean) => {
+  const custom = getCustomLevels();
+  lvls = isCustomLevel ? custom : originalLevels;
+  return lvls;
+}
+
 export const ScoreDataContext = createContext({} as IScoreData);
 
 export function ScoreDataContextProvider({ children }: IScoreDataContextProps) {
   const params = useParams();
   const location = useLocation();
   console.log(location.pathname)
+
+  const isCustomLevel = location.pathname.includes("custom");
   const lvl = params.id ? parseInt(params.id) : 0;
   const [level, setLevel] = useState<number>(lvl);
-
+  const levels = getLevelType(isCustomLevel);
 
   const [moves, setMoves] = useState<number>(0);
   const [pushes, setPushes] = useState<number>(0);
@@ -78,7 +108,6 @@ export function ScoreDataContextProvider({ children }: IScoreDataContextProps) {
   const [score, setScore] = useState(0);
   const [isNewHighscore, setIsNewHighscore] = useState<boolean>(false);
   const [settings, setSettings] = useState<boolean>(false);
-
 
   function updateConter(counter: number) {
     const updatedCounter = counter + 1;
@@ -105,14 +134,14 @@ export function ScoreDataContextProvider({ children }: IScoreDataContextProps) {
     const highscoreList = getHighscores(level);
 
     setGameEndMessages({
-      title: `Congratulations, you finished level ${level}`,
+      title: `Congratulations, you finished ${isCustomLevel ? "custom ": ""}level ${level}`,
       message1: "Moves: " + moves + " Pushes: " + pushes + " Time: " + time,
       message2: "Points: " + newScore,
-      data: highscoreList,
+      data: isCustomLevel? undefined : highscoreList,
       onConfirm: () => handleGameEnd(),
     });
    
-    if (!highscoreList || highscoreList.length < 5 || highscoreList?.some(s => s.points < newScore)) setIsNewHighscore(true);
+    if (!highscoreList || highscoreList.length < 5 || highscoreList?.some(s => s.points < newScore)) setIsNewHighscore(!isCustomLevel);
   }
 
   function updateGameTime(time: string) {
@@ -172,11 +201,12 @@ export function ScoreDataContextProvider({ children }: IScoreDataContextProps) {
     audioRef: React.RefObject<HTMLAudioElement>,
     isAudioPlaying: boolean
   ) => {
+    if(isCustomLevel) return;
     setIsNewHighscore(false);
     setGameEndMessages((prev) => ({
       ...prev,
       data: getHighscores(level),
-    }));
+    }));    
     saveNewHighscore(level, name, score, moves, time, audioRef, isAudioPlaying);
     updateGameTime(time);
   };
@@ -236,6 +266,8 @@ export function ScoreDataContextProvider({ children }: IScoreDataContextProps) {
     setLevel,
     settings,
     toggleSettings,
+    levels,
+    isCustomLevel
   };
 
   return (
