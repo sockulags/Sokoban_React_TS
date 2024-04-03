@@ -10,11 +10,6 @@
   z-index: 1; 
 }
 
-.highscore-data span {
-  font-size: 1.5rem;
-  color: #ece3ce;
-}
-
 
 .reset-btn,
 .level-btn {
@@ -31,6 +26,35 @@
     color: #1e1e1e;
     p {
       color: #1e1e1e;
+
+.audio-btn {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: .5rem;
+}
+
+@media screen and (max-height:480px) and (orientation: landscape){    
+    .highscore-data{
+        position: fixed;
+        align-items: center;       
+        font-size: 0.5rem;
+        height: 10dvh;
+        div{
+            font-size: 1rem;
+           
+        }
+    }     
+  
+    .time{
+        font-size: 1rem;
+
+.highscore-data span {
+  font-size: 1.5rem;
+  color: #ece3ce;
+}
+
     }
   }
 }

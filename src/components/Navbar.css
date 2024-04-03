@@ -34,6 +34,9 @@
     li:hover {
       border-bottom: 3px solid #ecc010;
     }
+    h2.active {
+      border-bottom: 3px solid #ecc010;
+    }
   }
 }
 
