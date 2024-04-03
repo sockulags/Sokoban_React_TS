@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import "./LevelCreator.css";
 import Tile from "../components/Tile";
-import { themes } from "../data/layout";
+import { themes, powerUps } from "../data/layout";
 
 const renderBoard = (size: number): number[][] => {
   const board: number[][] = [];
   for (let i = 0; i < size; i++) {
     const row: number[] = [];
     for (let j = 0; j < size; j++) {
-      row.push(0);
+      row.push(3);
     }
     board.push(row);
   }
@@ -44,7 +44,7 @@ const LevelCreator = () => {
   const getTileImage = (rowIndex: number, colIndex: number) => {
     const tileType = board[rowIndex][colIndex];
     const theme: string[] = themes[themeIndex];
-    return theme[tileType];
+    return tileType > 9 ? powerUps[(tileType/10)-1] : theme[tileType];
   };
 
   const handleThemeChange = (themeIdx: ThemeKey) => {
@@ -62,6 +62,20 @@ const LevelCreator = () => {
       return newBoard;
     });
   };
+
+  const saveCustomLevel = () => {
+    const customLevels = localStorage.getItem('customLevels');
+    if(customLevels){
+      const levels = JSON.parse(customLevels);
+      levels.push(board);
+      localStorage.setItem('customLevels', JSON.stringify(levels));
+    } else{
+      const levels = [];
+      levels.push(board);
+      localStorage.setItem('customLevels', JSON.stringify(levels));
+    }
+    setBoard(renderBoard(selectedSize));
+  }
 
   return (
     <div className="levelcreator-container">
@@ -85,6 +99,32 @@ const LevelCreator = () => {
         </div>
       </div>
       <div className="playground">
+        <button onClick={saveCustomLevel}>Save</button>
+        <div className="tiles-container">
+        <div className="theme-selector">
+            Character
+            <div className="themes-images">              
+                <img                
+                src={themes.sand[5]}
+                onClick={() => setTileType(5)}
+                />
+                
+              </div>
+          </div>
+          <div className="theme-selector">
+            Power-ups
+            <div className="themes-images">
+              {powerUps.map((imageUrl, imageIndex)=> (
+                <img 
+                key={imageIndex}
+                src={imageUrl}
+                onClick={() => setTileType((imageIndex+1)*10)}
+                />
+                
+              ))}
+            </div>
+          </div>
+        </div>
         <div
           className="board"
           style={{ "--size": selectedSize } as React.CSSProperties}

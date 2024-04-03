@@ -2,7 +2,7 @@ import { ReactElement, createContext, useState, useEffect } from "react";
 import { IHighscore } from "../interface";
 import { getHighscores, saveNewHighscore } from "../data/functions";
 
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 
 type IntervalId = ReturnType<typeof setInterval>;
 
@@ -51,6 +51,8 @@ export const ScoreDataContext = createContext({} as IScoreData);
 
 export function ScoreDataContextProvider({ children }: IScoreDataContextProps) {
   const params = useParams();
+  const location = useLocation();
+  console.log(location.pathname)
   const lvl = params.id ? parseInt(params.id) : 0;
   const [level, setLevel] = useState<number>(lvl);
 

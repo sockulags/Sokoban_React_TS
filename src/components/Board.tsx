@@ -25,6 +25,14 @@ const deepCopy = (arr: number[][]): number[][] => {
   return arr.map((subArr) => [...subArr]);
 };
 
+const customLevels = (level: number) => {
+  const customLevels = localStorage.getItem("customLevels");
+  if(customLevels){
+    const parsed = JSON.parse(customLevels);
+    return parsed[level];
+  }
+}
+
 const Board = () => {
 
    const {

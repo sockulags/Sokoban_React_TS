@@ -47,6 +47,10 @@ import purpleEndPoint from "../assets/EndPoint_Purple.png";
 import redEndPoint from "../assets/EndPoint_Red.png";
 import yellowEndPoint from "../assets/EndPoint_Yellow.png";
 
+// Powerups
+import superStrength from "../assets/super-strength.png";
+import pullingStrength from "../assets/pulling-strength.png";
+
 import { characterImages } from "./levels";
 
 const storageLocations = [
@@ -103,6 +107,11 @@ const walls = [
     brownWall,
     grayWall
 ];
+
+export const powerUps = [
+    superStrength,
+    pullingStrength
+]
 
 
 const charImages = [ characterImages.down]

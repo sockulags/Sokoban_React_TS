@@ -92,6 +92,7 @@ export function App() {
         <Route path="/about" element={<About />} />
         <Route path="/play" element={<Play />} />
         <Route path="/play/:id" element={<GamePlay />} />
+        <Route path="/play/custom/:id" element={<GamePlay />} />
         <Route path="/create-level" element={<LevelCreator />} />
         <Route path="/highscore/:id?" element={<HighscorePage />} />
         {/* Define other routes here */}
