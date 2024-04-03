@@ -82,13 +82,13 @@ export const ScoreDataContext = createContext({} as IScoreData);
 export function ScoreDataContextProvider({ children }: IScoreDataContextProps) {
   const params = useParams();
   const location = useLocation();
-  console.log(location.pathname)
+  // console.log(location.pathname)
 
-  const isCustomLevel = location.pathname.includes("custom");
+  
   const lvl = params.id ? parseInt(params.id) : 0;
   const [level, setLevel] = useState<number>(lvl);
+  const [isCustomLevel] = useState<boolean>(location.pathname.includes("custom"))
   const levels = getLevelType(isCustomLevel);
-
   const [moves, setMoves] = useState<number>(0);
   const [pushes, setPushes] = useState<number>(0);
   const [start, setStart] = useState(false);

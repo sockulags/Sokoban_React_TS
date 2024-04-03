@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import Tile from "./Tile";
 import { sandLayout, characterImages } from "../data/levels";
+import { powerUps } from "../data/layout";
 import "./board.css";
 import { ScoreDataContext } from "../context/ScoreDataContext";
 import { IPosition, ICharDirection, Direction } from "../interface";
@@ -69,6 +70,8 @@ const Board = () => {
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
   const [volume, setVolume] = useState<number>(0.1);
+  const [hasPullStrength, setHasPullStrength] = useState<boolean>(false);
+  const [hasSuperStrength, setHasSuperStrength] = useState<boolean>(false);
 
 
   useEffect(() => {
@@ -219,12 +222,16 @@ const Board = () => {
         );
       return isOnStorage ? sandLayout[5] : sandLayout[tile];
     }
+
+    if(tile > 9){
+      return powerUps[(tile/10)-1]
+    }
     return sandLayout[tile];
   };
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.ctrlKey && !isCtrlPressed) {
+      if (event.ctrlKey && !isCtrlPressed && hasPullStrength) {
         event.preventDefault();
         setIsCtrlPressed(true);
         console.log("ctrl pressed")
@@ -274,6 +281,7 @@ const Board = () => {
     const newPos: IPosition = { x: posX + deltaX, y: posY + deltaY };
     const oppPos: IPosition = { x: posX - deltaX, y: posY - deltaY };
     const newBoxPos: IPosition = { x: newPos.x + deltaX, y: newPos.y + deltaY };
+    const secondBoxNewPos: IPosition = { x: newBoxPos.x + deltaX, y: newBoxPos.y + deltaY };
 
     setCharacterDirection(direction);
 
@@ -293,6 +301,21 @@ const Board = () => {
       return;
     } 
 
+    if (![0,1,2].includes(board[newPos.y][newPos.x])) {
+      if(board[newPos.y][newPos.x] === 20) setHasPullStrength(true);
+      if(board[newPos.y][newPos.x] === 10) setHasSuperStrength(true);
+      updateBoard(newPos.y, newPos.x);
+      return;
+    }
+
+    if (hasSuperStrength && [2].includes(board[newPos.y][newPos.x]) && [2].includes(board[newBoxPos.y][newBoxPos.x])&& [3,4].includes(board[secondBoxNewPos.y][secondBoxNewPos.x])){
+      updateBoxPosition(secondBoxNewPos.y, secondBoxNewPos.x);
+      updateBoxPosition(newBoxPos.y, newBoxPos.x);
+      updateBoard(newPos.y, newPos.x);
+      playSound(audioRef, "push", isAudioPlaying);
+      return;
+    }
+
     if ([3].includes(board[newBoxPos.y][newBoxPos.x]) && [2].includes(board[newPos.y][newPos.x])){
       updateBoxPosition(newBoxPos.y, newBoxPos.x);
       updateBoard(newPos.y, newPos.x);
@@ -307,10 +330,7 @@ const Board = () => {
       return;
     }  
 
-    if ([3, 4].includes(board[newPos.y][newPos.x])) {
-      updateBoard(newPos.y, newPos.x);
-      return;
-    }
+   
 
     if (board[newPos.y][newPos.x] === 1) {
       playSound(audioRef, "wallHit", isAudioPlaying);
