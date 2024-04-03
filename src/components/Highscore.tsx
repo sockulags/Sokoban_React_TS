@@ -22,6 +22,7 @@ const Highscore = (props: IHighscoreProps) => {
     nav("/play/");
   };
 
+
   return (
     <>
       <div className="highscore-data">
@@ -32,7 +33,7 @@ const Highscore = (props: IHighscoreProps) => {
           ) : (
             <span className="material-symbols-outlined">volume_off</span>
           )}
-
+</button>
         <button className="level-btn" onClick={handleGoBack}>
           Levels
 
