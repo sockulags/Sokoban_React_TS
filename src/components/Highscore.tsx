@@ -27,14 +27,6 @@ const Highscore = (props: IHighscoreProps) => {
   return (
     <>
       <div className="highscore-data">
-
-        <button className="audio-btn" onClick={props.toggleAudio}>
-          {props.isAudioPlaying ? (
-            <span className="material-symbols-outlined">volume_up</span>
-          ) : (
-            <span className="material-symbols-outlined">volume_off</span>
-          )}
-</button>
         <button className="level-btn" onClick={handleGoBack}>
           Levels
 
