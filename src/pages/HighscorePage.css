@@ -4,11 +4,11 @@
   justify-content: center;
   align-items: center;
   width: 70%;
-  margin: 0 auto;  
+  margin: 0 auto;
 }
 
 .highscore-header {
-margin: 16px 0px 8px 0px;
+  margin: 16px 0px 8px 0px;
   display: grid;
   justify-items: center;
   height: 2.3rem;
@@ -18,7 +18,7 @@ margin: 16px 0px 8px 0px;
   border-bottom: 2px solid #eee;
   width: 100%;
   column-gap: 3rem;
-  .header-text{
+  .header-text {
     text-transform: capitalize;
   }
 }
@@ -26,47 +26,57 @@ margin: 16px 0px 8px 0px;
 .highscore-row {
   width: 100%;
   height: 2rem;
-  font-size: 1.3rem;  
+  font-size: 1.3rem;
   justify-items: center;
   display: grid;
   column-gap: 3rem;
   grid-template-columns: 60px 4fr 2fr 2fr 2fr;
 }
 
-.highscore-body{
-    width: 100%;
-    height: 200px;
+.highscore-body {
+  width: 100%;
+  height: 200px;
 }
 
 .no-highscore-to-show {
-  padding-top: 16px; 
+  padding-top: 16px;
   font-size: 1.4rem;
   font-weight: 500;
 }
 
-.other-levels-container{
+.other-levels-container {
+  display: flex;
+  gap: 50px;
+  margin-top: 30px;
+  height: 40px;
+  button {
+    background-color: transparent;
+    outline: none;
+    border: none;
     display: flex;
-    gap: 50px;
-    margin-top: 30px;
-    height: 40px;
-    button{
-        background-color: transparent;
-        outline: none;
-        border: none;
-        display: flex;
-        align-items: center;
-        justify-content: center;     
-        font-size: 1.5rem;
-        font-family: "Edmund";
-        cursor: pointer;
-        color: #ecc010;
-        transition: all 0.2s;
-        span{   
-            font-size: 2.5rem;  
-            color: #ecc010;
-        }
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-family: "Edmund";
+    cursor: pointer;
+    color: #ecc010;
+    transition: all 0.2s;
+    span {
+      font-size: 2.5rem;
+      color: #ecc010;
     }
-    button:hover{
-      transform: scale(1.15);
-    }
+  }
+  button:hover {
+    transform: scale(1.15);
+  }
+}
+
+@media screen and (max-width: 810px) {
+  .highscore-row {
+    font-size: 1rem;
+  }
+
+  .highscore-header {
+    font-size: 1rem;
+  }
 }

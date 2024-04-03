@@ -71,3 +71,12 @@
         display: block;
     }
 }
+
+/* Show arrows on touchscreen */
+@media (pointer: coarse) {
+  .arrows-container{
+    display: block; 
+  }
+}
+
+
