@@ -9,6 +9,7 @@ import { Play } from "./pages/Play";
 import { HighscorePage } from "./pages/HighscorePage";
 import GamePlay from "./pages/GamePlay";
 import LevelCreator from "./pages/LevelCreator";
+import HowToPlay from "./pages/HowToPlay";
 
 export function App() {
   const location = useLocation();
@@ -67,8 +68,6 @@ export function App() {
   const hideNavbar = /^\/play\/\d+$/.test(location.pathname) && isMobile;
 
   return (
-
-   
     <div>
       {!hideNavbar && <Navbar />}
       {/* Show rotation prompt if necessary */}
@@ -90,6 +89,7 @@ export function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
+        <Route path="/how-to-play" element={<HowToPlay />} />
         <Route path="/play" element={<Play />} />
         <Route path="/play/:id" element={<GamePlay />} />
         <Route path="/play/custom/:id" element={<GamePlay />} />
@@ -98,6 +98,5 @@ export function App() {
         {/* Define other routes here */}
       </Routes>
     </div>
-
   );
 }

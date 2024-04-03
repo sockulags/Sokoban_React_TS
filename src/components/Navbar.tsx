@@ -3,7 +3,6 @@ import Logo from "../assets/sokoban-header.png";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 
-
 interface NavbarRoutes {
   id: number;
   name: string;
@@ -23,16 +22,21 @@ const routes: NavbarRoutes[] = [
   },
   {
     id: 3,
+    name: "How To Play",
+    path: "/how-to-play",
+  },
+  {
+    id: 4,
     name: "Play",
     path: "/play",
   },
   {
-    id: 4,
+    id:5,
     name: "Highscore",
     path: "/highscore",
   },
   {
-    id: 5,
+    id: 6,
     name: "Create Level",
     path: "/create-level",
   },
@@ -60,14 +64,12 @@ export const Navbar = () => {
   return (
     <div className="navbar-container">
       <div className="logo-container" onClick={() => handleClick("/")}>
-
         <img src={Logo} alt="logo" id="logo-img" />
       </div>
       <div className={`navbar-links ${isMenuOpen ? "active" : ""}`}>
         <ul>
           {routes.map((route) => (
             <li key={route.id} onClick={() => handleClick(route.path)}>
-
               {route.name}
             </li>
           ))}

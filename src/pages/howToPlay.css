@@ -1,0 +1,16 @@
+.how-to-container {
+  width: 90%;
+  max-width: 700px;
+  margin: 0 auto;
+  margin-bottom: 3rem;
+  h1,
+  h2 {
+    margin-top: 20px;
+  }
+  p {
+    margin-bottom: 10px;
+  }
+  h3 {
+    margin-top: 10px;
+  }
+}
