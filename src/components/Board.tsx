@@ -231,31 +231,33 @@ const Board = () => {
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.ctrlKey && !isCtrlPressed && hasPullStrength) {
-        event.preventDefault();
+      if (event.key === 'Control') {
         setIsCtrlPressed(true);
-        console.log("ctrl pressed")
       }
     };
   
     const handleKeyUp = (event: KeyboardEvent) => {
-      if (!event.ctrlKey && isCtrlPressed) {
+      if (event.key === 'Control') {
         setIsCtrlPressed(false);
       }
     };
   
     const gameContainer = gameContainerRef.current;
   
-    if (gameContainer) {
-      gameContainer.addEventListener("keydown", handleKeyDown);
-      gameContainer.addEventListener("keyup", handleKeyUp);
-  
-      return () => {
-        gameContainer.removeEventListener("keydown", handleKeyDown);
-        gameContainer.removeEventListener("keyup", handleKeyUp);
-      };
+    if (hasPullStrength && gameContainer) {
+      gameContainer.addEventListener('keydown', handleKeyDown);
+      gameContainer.addEventListener('keyup', handleKeyUp);
+    } else {
+      gameContainer?.removeEventListener('keydown', handleKeyDown);
+      gameContainer?.removeEventListener('keyup', handleKeyUp);
     }
-  }, [isCtrlPressed]);
+  
+    return () => {
+      gameContainer?.removeEventListener('keydown', handleKeyDown);
+      gameContainer?.removeEventListener('keyup', handleKeyUp);
+    };
+  }, [hasPullStrength]);
+  
 
   const keyToDirection: ICharDirection = {
     ArrowUp: { direction: "up", deltaY: -1, deltaX: 0 },
@@ -272,9 +274,9 @@ const Board = () => {
   };
 
   const handleKeyDown = (key: string) => {
-    // event.preventDefault();
     if (gameEnded) return;
-    if (!keyToDirection[key]) return;
+    if (!keyToDirection[key])
+     return;
     const { y: posY, x: posX } = charPos;
     const { direction, deltaY, deltaX } = isCtrlPressed ? alternateDirection[key] : keyToDirection[key];
 
@@ -300,11 +302,13 @@ const Board = () => {
       updateBoxPosition(charPos.y, charPos.x, oppPos)
       return;
     } 
+  
 
     if (![0,1,2].includes(board[newPos.y][newPos.x])) {
       if(board[newPos.y][newPos.x] === 20) setHasPullStrength(true);
       if(board[newPos.y][newPos.x] === 10) setHasSuperStrength(true);
       updateBoard(newPos.y, newPos.x);
+      console.log(hasPullStrength)
       return;
     }
 
