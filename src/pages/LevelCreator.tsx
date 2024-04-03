@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./LevelCreator.css";
 import Tile from "../components/Tile";
-import { layout } from "../data/layout";
+import { themes } from "../data/layout";
 
 const renderBoard = (size: number): number[][] => {
   const board: number[][] = [];
@@ -14,8 +14,12 @@ const renderBoard = (size: number): number[][] => {
   }
   return board;
 };
+type ThemeKey = keyof typeof themes;
+
 const LevelCreator = () => {
   const [selectedSize, setSelectedSize] = useState(10);
+  const [themeIndex, setThemeIndex] = useState<ThemeKey>("sand");
+  const [tileType, setTileType] = useState<number>(0);
   const [board, setBoard] = useState<number[][]>(renderBoard(selectedSize));
 
   const incrementSize = () => {
@@ -27,19 +31,36 @@ const LevelCreator = () => {
   }, [selectedSize]);
 
   const decrementSize = () => {
-    setSelectedSize((prevSize) => (prevSize > 10 ? prevSize - 1 : prevSize));
+    setSelectedSize((prevSize) => (prevSize > 6 ? prevSize - 1 : prevSize));
   };
 
   const handleSizeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newSize = parseInt(event.target.value);
-    if (!isNaN(newSize) && newSize >= 10 && newSize <= 20) {
+    if (!isNaN(newSize) && newSize >= 6 && newSize <= 20) {
       setSelectedSize(newSize);
     }
   };
-  const getTileImage = (rowIndex: number, colIndex: number) => {
-    const tile = board[rowIndex][colIndex];
 
-    return layout[tile][0];
+  const getTileImage = (rowIndex: number, colIndex: number) => {
+    const tileType = board[rowIndex][colIndex];
+    const theme: string[] = themes[themeIndex];
+    return theme[tileType];
+  };
+
+  const handleThemeChange = (themeIdx: ThemeKey) => {
+    setThemeIndex(themeIdx);
+  };
+
+  const updateBoard = (
+    rowIndex: number,
+    colIndex: number,
+    tileType: number
+  ) => {
+    setBoard((prevBoard) => {
+      const newBoard = [...prevBoard];
+      newBoard[rowIndex][colIndex] = tileType;
+      return newBoard;
+    });
   };
 
   return (
@@ -75,22 +96,35 @@ const LevelCreator = () => {
                 getTileImage={getTileImage}
                 rowIndex={rowIndex}
                 colIndex={colInd}
+                onClick={() => updateBoard(rowIndex, colInd, tileType)}
               />
             ))
           )}
         </div>
 
         <div className="tiles-container">
-          {layout.map((type, typeIndex) => (
-            <div key={typeIndex} className="tile-row">
-              {type.map((imageUrl, imageIndex) => (
-                <div key={imageIndex} className="tile">
-                  <img src={imageUrl} alt={`Tile ${typeIndex}-${imageIndex}`} />
-                </div>
-              ))}
-            </div>
-          ))}
-        </div>
+  {Object.entries(themes).map(([themeName, theme]) => (
+    <div
+      key={themeName}
+      className="theme-selector"
+      onClick={() => handleThemeChange(themeName as ThemeKey)}
+    >
+      {themeName}
+      <div className={`themes-images ${themeName === themeIndex ? "" : "disabled"}`}>
+        {theme.map((imageUrl, imageIndex) => (
+          ![0,5,6].includes(imageIndex) &&   <img
+            key={imageIndex}
+            src={imageUrl}
+            className={themeName === themeIndex && tileType === imageIndex ? "active" : ""}
+            alt={`Tile ${themeName}-${imageIndex}`}
+            onClick={() => setTileType(imageIndex)}
+          />
+        ))}
+      </div>
+    </div>
+  ))}
+</div>
+
       </div>
     </div>
   );

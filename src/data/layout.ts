@@ -116,3 +116,50 @@ export const layout = [
     cratesOnStorageLocation,
     charImages
 ]
+
+const sandTheme = [
+    sand,
+    brownWall,
+    brownCrate,
+    sandGround,
+    brownEndPoint,
+    characterImages.down,
+    brownCrateStorage
+]
+
+const dullTheme = [
+    concrete,
+    blackWall,
+    concreteGround,
+    grayCrate,
+    grayEndPoint,
+    characterImages.down,
+    grayCrateStorage
+]
+
+const natureTheme = [
+    grass,
+    beigeWall,
+    brownCrate,
+    grassGround,
+    redEndPoint,
+    characterImages.down,
+    brownCrateStorage
+]
+
+const vampireTheme = [
+    concrete,
+    blackWall,
+    purpleCrate,
+    sandGround,
+    redEndPoint,
+    characterImages.down,
+    purpleCrateStorage
+]
+
+export const themes = {
+    sand: sandTheme,
+    dull: dullTheme,
+    nature: natureTheme,
+    vampire: vampireTheme,
+}
