@@ -1,41 +1,40 @@
 .modal {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: white;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    z-index: 9999;
-    background-color: #1e1e1e;
-
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+  background-color: #1e1e1e;
 }
 
 .background-blur {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 9998;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9998;
 }
 
 .modal-header {
-    width: 100%;
-    margin-bottom: 1.5rem;
+  width: 100%;
+  margin-bottom: 1.5rem;
 }
 
 .modal-logo {
-    height: 2.5rem;
+  height: 2.5rem;
 }
 
 .modal-buttons {
-    padding-top: 1rem;
-    display: flex;
-    justify-content: center;
+  padding-top: 1rem;
+  display: flex;
+  justify-content: center;
 }
 
 .modal-confirm {
@@ -52,7 +51,20 @@
 }
 
 .highscore-list {
-    padding-left: 2rem;
-    padding-top: 0.5rem;
+  padding-left: 2rem;
+  padding-top: 0.5rem;
 }
 
+@media screen and (max-height: 480px) and (orientation: landscape) {
+  .modal {
+    max-height: 95dvh;
+    padding: 1rem;
+  }
+  .modal-header {
+    margin-bottom: 0.5rem;
+  }
+  .title,
+  .highscore {
+    font-size: 1.2rem;
+  }
+}

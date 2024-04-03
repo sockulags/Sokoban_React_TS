@@ -1,11 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useContext, useRef } from "react";
 import Tile from "./Tile";
-import {
-  sandLayout,
-  levels,
-  characterImages,
-} from "../data/levels";
+import { sandLayout, levels, characterImages } from "../data/levels";
 import "./board.css";
 import { ScoreDataContext } from "../context/ScoreDataContext";
 import { IPosition, ICharDirection, Direction } from "../interface";
@@ -20,18 +16,18 @@ import Modal from "./Modal";
 import InputModal from "./InputModal";
 import { Arrows } from "./Arrows";
 
+
 // import superStrength from "../assets/superStrength.";
 import gameMusic from "../sounds/gameMusic.mp3"
 import Settings from "./Settings";
 
 
-
 const deepCopy = (arr: number[][]): number[][] => {
   return arr.map((subArr) => [...subArr]);
-}; 
-
+};
 
 const Board = () => {
+
    const {
      level,
      pushes,
@@ -47,6 +43,7 @@ const Board = () => {
      resetLevel,
      settings,
    } = useContext(ScoreDataContext);
+
   const [boardSize, setBoardSize] = useState({ numRows: 0, numCols: 0 });
   const [storageLocations, setStorageLocation] = useState<IPosition[]>([]);
   const [board, setBoard] = useState<number[][]>(deepCopy(levels[level].board));
@@ -57,6 +54,7 @@ const Board = () => {
     const [isCtrlPressed, setIsCtrlPressed] = useState<boolean>(false);
 
   const gameContainerRef = useRef<HTMLDivElement>(null);
+
   const audioRef = useRef<HTMLAudioElement>(null);
   const gameAudioRef = useRef<HTMLAudioElement>(null);
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
@@ -65,27 +63,26 @@ const Board = () => {
 
 
   useEffect(() => {
-  setCharPos(getCharStartPosition()); 
-   
+    setCharPos(getCharStartPosition());
+
     setStorageLocation(getStorageLocations(level));
-   
   }, []);
 
 
-  useEffect (() => {
+  useEffect(() => {
     const newBoard = deepCopy(levels[level].board);
     setBoard(newBoard);
-      setCharPos(getCharStartPosition(newBoard));   
-      setStorageLocation(getStorageLocations(level));
-      setBoardSize({ numRows: newBoard.length, numCols: newBoard[0].length });
-  
-  },[level])
+    setCharPos(getCharStartPosition(newBoard));
+    setStorageLocation(getStorageLocations(level));
+    setBoardSize({ numRows: newBoard.length, numCols: newBoard[0].length });
+  }, [level]);
 
   useEffect(() => {
     if (gameContainerRef.current) {
       gameContainerRef.current.focus();
     }
   }, []);
+
 
   useEffect(() => {
     const savedVolume = localStorage.getItem("volume");
@@ -174,8 +171,11 @@ const Board = () => {
   };
 
   const checkCompletion = () => {
-    const correct = getCorrectBoxCount(storageLocations, boxLocations);  
-    if (correct === 2) {
+
+
+    const correct = getCorrectBoxCount(storageLocations, boxLocations);
+    if (correct === 1) {
+
       updateGameEnded(level);
       setCharacterDirection("down");
       playSound(audioRef, "complete", isAudioPlaying);
@@ -314,14 +314,15 @@ const Board = () => {
 
   const restartLevel = () => {
     setBoard(deepCopy(levels[level].board));
-    setCharPos(getCharStartPosition(deepCopy(levels[level].board)))
+    setCharPos(getCharStartPosition(deepCopy(levels[level].board)));
     setBoxLocations(getBoxLocations(level));
     setCharacterDirection("down");
     resetLevel();
-  }
+  };
 
 
   return (
+
     <div className="game-container">
       <audio ref={audioRef} />
       <audio ref={gameAudioRef} src={gameMusic} />
@@ -361,13 +362,11 @@ const Board = () => {
         className="board"
         ref={gameContainerRef}
         style={
-          {
-            "--numRows":
-              boardSize.numRows > boardSize.numCols
-                ? boardSize.numRows
-                : boardSize.numCols,
-          } as React.CSSProperties
-        }
+            {
+              "--numRows": boardSize.numRows,
+              "--numCols": boardSize.numCols,
+            } as React.CSSProperties
+          }
         tabIndex={0}
         onKeyDown={(e) => handleKeyDown(e.key)}
       >
@@ -383,6 +382,8 @@ const Board = () => {
             ))}
           </div>
         ))}
+
+
       </div>
     </div>
   );
