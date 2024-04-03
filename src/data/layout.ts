@@ -47,6 +47,10 @@ import purpleEndPoint from "../assets/EndPoint_Purple.png";
 import redEndPoint from "../assets/EndPoint_Red.png";
 import yellowEndPoint from "../assets/EndPoint_Yellow.png";
 
+// Powerups
+import superStrength from "../assets/super-strength.png";
+import pullingStrength from "../assets/pulling-strength.png";
+
 import { characterImages } from "./levels";
 
 const storageLocations = [
@@ -104,6 +108,11 @@ const walls = [
     grayWall
 ];
 
+export const powerUps = [
+    superStrength,
+    pullingStrength
+]
+
 
 const charImages = [ characterImages.down]
 
@@ -116,3 +125,50 @@ export const layout = [
     cratesOnStorageLocation,
     charImages
 ]
+
+const sandTheme = [
+    sand,
+    brownWall,
+    brownCrate,
+    sandGround,
+    brownEndPoint,
+    characterImages.down,
+    brownCrateStorage
+]
+
+const dullTheme = [
+    concrete,
+    blackWall,
+    concreteGround,
+    grayCrate,
+    grayEndPoint,
+    characterImages.down,
+    grayCrateStorage
+]
+
+const natureTheme = [
+    grass,
+    beigeWall,
+    brownCrate,
+    grassGround,
+    redEndPoint,
+    characterImages.down,
+    brownCrateStorage
+]
+
+const vampireTheme = [
+    concrete,
+    blackWall,
+    purpleCrate,
+    sandGround,
+    redEndPoint,
+    characterImages.down,
+    purpleCrateStorage
+]
+
+export const themes = {
+    sand: sandTheme,
+    dull: dullTheme,
+    nature: natureTheme,
+    vampire: vampireTheme,
+}

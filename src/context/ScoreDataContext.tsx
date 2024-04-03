@@ -2,7 +2,7 @@ import { ReactElement, createContext, useState, useEffect } from "react";
 import { IHighscore } from "../interface";
 import { getHighscores, saveNewHighscore } from "../data/functions";
 
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 
 type IntervalId = ReturnType<typeof setInterval>;
 
@@ -33,6 +33,8 @@ interface IScoreData {
     isAudioPlaying: boolean
   ) => void;
   setLevel: (level: number) => void;
+  settings: boolean;
+  toggleSettings: () => void;
 }
 
 interface IScoreDataContextProps {
@@ -51,6 +53,8 @@ export const ScoreDataContext = createContext({} as IScoreData);
 
 export function ScoreDataContextProvider({ children }: IScoreDataContextProps) {
   const params = useParams();
+  const location = useLocation();
+  console.log(location.pathname)
   const lvl = params.id ? parseInt(params.id) : 0;
   const [level, setLevel] = useState<number>(lvl);
 
@@ -73,6 +77,7 @@ export function ScoreDataContextProvider({ children }: IScoreDataContextProps) {
   });
   const [score, setScore] = useState(0);
   const [isNewHighscore, setIsNewHighscore] = useState<boolean>(false);
+  const [settings, setSettings] = useState<boolean>(false);
 
 
   function updateConter(counter: number) {
@@ -189,6 +194,10 @@ export function ScoreDataContextProvider({ children }: IScoreDataContextProps) {
     setGameEnded(false);
   };
 
+  const toggleSettings = () => {
+    setSettings(!settings);
+  };
+
   useEffect(() => {
     if (start) {
       setUpInterval();
@@ -225,6 +234,8 @@ export function ScoreDataContextProvider({ children }: IScoreDataContextProps) {
     level,
     saveHighscore,
     setLevel,
+    settings,
+    toggleSettings,
   };
 
   return (

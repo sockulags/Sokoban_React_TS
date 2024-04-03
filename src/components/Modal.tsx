@@ -43,12 +43,12 @@ const Modal = ({
           <div className="modal-header">
             <img className="modal-logo" src={Logo} />
           </div>
-          <h2>{title}</h2>
+          <h2 className="title">{title}</h2>
           <p>{message1}</p>
           <p>{message2}</p>
           {data && (
             <div className="highscore-list">
-              <h2>Highscores</h2>
+              <h2 className="highscore">Highscores</h2>
               <ol>
                 {data.map((score, index) => (
                   <li key={index}>

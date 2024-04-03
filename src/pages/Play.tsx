@@ -12,6 +12,17 @@ export const Play = () => {
     const changeMode = (mode:boolean) => {
         setMode(mode);
     }
+
+    const getCustomLevels = () => {
+        const customLevels = localStorage.getItem('customLevels');
+        if(customLevels){
+           return JSON.parse(customLevels);
+        } else{
+            return [];
+        }
+    }
+
+    const customLevels = getCustomLevels();
     return (
         <>
         <ModeSelector normalMode={normalMode} changeMode={changeMode}/>
@@ -19,6 +30,12 @@ export const Play = () => {
            {levels.map((x, index) =>{
             const disabled = index >= level + 1;
             return <Level key={index} level={x.level} image={x.image} disabled={disabled}/>
+           })}
+        </div>
+        <div className='play-container'>
+            Custom
+           {customLevels.map((x, index) =>{
+            return <Level key={index} level={index}/>
            })}
         </div>
         </>

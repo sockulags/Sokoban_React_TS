@@ -1,37 +1,45 @@
 .highscore-data {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    width: 100%;
-    background-color: #8b2b2b;
-    span {
-        font-size: 1.5rem;
-        color:#ece3ce;
-    }
+  position: absolute;
+  top: 0;
+  right: 0; 
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  background-color: #8b2b2b;
+  z-index: 1; 
 }
 
-.reset-btn {
-    background-color: transparent;
-    color: #ece3ce;
-    padding: .5rem 1rem;
-    font-size: 1.5rem;
-    outline: none;
-    border: none;
-    cursor: pointer;
-    border-left: 5px solid #ece3ce;
-    border-right: 5px solid #ece3ce;
-    border-radius: 30%;
-    div{
-        color: #1e1e1e;
-        p{
-            color: #1e1e1e;
-        }
-    }
-}
+
+.reset-btn,
+.level-btn {
+  background-color: transparent;
+  color: #ece3ce;
+  padding: 0.5rem 1rem;
+  font-size: 1.5rem;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  border-left: 3px solid #ece3ce;
+  border-right: 3px solid #ece3ce;
+  div {
+    color: #1e1e1e;
+    p {
+      color: #1e1e1e;
 
 .audio-btn {
     background-color: transparent;
     border: none;
+    outline: none;
+    cursor: pointer;
+    padding: .5rem;
+}
+
+.instruction-btn {
+    background-color: transparent;
+    font-size: 2rem;
+    border: none;
+    border-radius: 50%;
     outline: none;
     cursor: pointer;
     padding: .5rem;
@@ -51,11 +59,45 @@
   
     .time{
         font-size: 1rem;
-    }
-    .reset-btn{
-        right: 10px;
-        padding: 8px 13px;
+
+.highscore-data span {
+  font-size: 1.5rem;
+  color: #ece3ce;
+}
 
     }
-    
-} 
+  }
+}
+
+.level-btn {
+  display: none;
+}
+
+@media screen and (max-height: 480px) and (orientation: landscape),
+  (max-width: 810px) {
+  .highscore-data {
+    position: fixed;
+    align-items: center;
+    font-size: 0.5rem;
+    div {
+      font-size: 1rem;
+    }
+  }
+  #level {
+    font-size: 1rem;
+  }
+
+  .time {
+    font-size: 1rem;
+  }
+  .reset-btn,
+  .level-btn {
+    padding: 8px 13px;
+    font-size: 1rem;
+    border-left: 1px solid #ece3ce;
+    border-right: 1px solid #ece3ce;
+  }
+  .level-btn {
+    display: flex;
+  }
+}

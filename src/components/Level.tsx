@@ -3,7 +3,7 @@ import './Level.css';
 
 interface LevelProps{
     level: number;
-    image: string;
+    image?: string;
     disabled?: boolean;
 }
 
@@ -11,7 +11,10 @@ interface LevelProps{
 export const Level = ({level, image, disabled= false}: LevelProps) => {
     const nav = useNavigate();
     const handleClick = (level: number) => {
+        if(image)
         nav("/play/" + level);
+    else
+    nav("/play/custom/" + level);
     }
 
     return (

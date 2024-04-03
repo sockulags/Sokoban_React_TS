@@ -1,65 +1,63 @@
-.game-container{
-    display: flex;
-    flex-direction: column;
-    background-color: #ece3ce;
-     box-shadow:
-     0 0 1px 4px #ece3ce,
-     0 0 5px 6px #1e1e1e;    
-    border-radius: 10px;  
-    margin: 0 auto;   
-    height: 75vh;   
+.game-container {
+  display: flex;
+  flex-direction: column;
+  background-color: #ece3ce;
+  box-shadow: 0 0 1px 4px #ece3ce, 0 0 5px 6px #1e1e1e;
+  border-radius: 10px;
+  margin: 0 auto;
+  height: 75vh;
+  position: relative;
 }
 
 .board {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: auto;
+  padding: 10px;
+  height: 90%;
+}
+
+.row {
+  height: calc(100% / var(--numRows));
+  display: flex;
+}
+
+.tile {
+  aspect-ratio: 1;
+  height: 100%;
+  background-color: #ece3ce;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tile img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+.board:focus {
+  outline: none;
+}
+
+@media screen and (max-height: 480px) and (orientation: landscape) {
+  .game-container {
+    height: 100dvh;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .board {
+    margin-top: 2rem;
+    max-height: 95dvh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     width: 100%;
-    margin: auto;
-    padding: 10px;
-    height: 100%;
-}
-.row{
-    height: calc(100% / var(--numRows));
-    max-height: 64px;
+  }
 }
 
-.tile {  
-    aspect-ratio: 1; 
-    height: 100%;
-    background-color: #ece3ce;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.tile img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain; 
-}
-.board:focus{
-    outline: none;
-}
-
-.row{
-    display: flex;
-}
-
-
-@media screen and (max-height:480px) and (orientation: landscape){    
-    .game-container{      
-        height: 100dvh;  
-        width: auto; 
-        .board{
-            height: 100dvh;
-            padding-top: 12dvh;
-            .tile{
-                
-            }
-        }     
-    } 
-
-    
-} 

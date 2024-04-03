@@ -1,0 +1,13 @@
+.control-container {
+    margin-top: 2rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    font-size: 1.2rem;
+    .control-item {
+        .action {
+            color: #ecc010;
+            margin-bottom: .2rem;
+        }
+    }
+}
