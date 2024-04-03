@@ -19,6 +19,7 @@ import { Arrows } from "./Arrows";
 
 // import superStrength from "../assets/superStrength.";
 import gameMusic from "../sounds/gameMusic.mp3"
+import Settings from "./Settings";
 
 
 const deepCopy = (arr: number[][]): number[][] => {
@@ -41,13 +42,14 @@ const Board = () => {
      updatePushesCount,
      moves,
      updateMovesCount,
-     time,   
-     startGame, 
+     time,
+     startGame,
      updateGameEnded,
-     gameEnded,   
+     gameEnded,
      gameEndMessages,
      isNewHighscore,
-     resetLevel,    
+     resetLevel,
+     settings,
    } = useContext(ScoreDataContext);
 
   const [boardSize, setBoardSize] = useState({ numRows: 0, numCols: 0 });
@@ -64,12 +66,16 @@ const Board = () => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const gameAudioRef = useRef<HTMLAudioElement>(null);
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
+  const [isMusicPlaying, setIsMusicPlaying] = useState(false);
+  const [volume, setVolume] = useState<number>(0.1);
+
 
   useEffect(() => {
     setCharPos(getCharStartPosition());
 
     setStorageLocation(getStorageLocations(level));
   }, []);
+
 
   useEffect(() => {
     const newBoard = deepCopy(levels[level].board);
@@ -87,17 +93,61 @@ const Board = () => {
 
 
   useEffect(() => {
-    const audio = gameAudioRef.current;
-    if (audio && isAudioPlaying) {
-      audio.loop = true;
-      audio.volume = 0.1;
-      audio.play();
+    const savedVolume = localStorage.getItem("volume");
+    if (savedVolume !== null) {
+      setVolume(parseFloat(savedVolume));
     }
-    return () => {if (audio) {audio.pause();}};
-  }, [isAudioPlaying]);
+    const savedAudioSetting = localStorage.getItem("isAudioPlaying");
+    if (savedAudioSetting !== null) {
+      setIsAudioPlaying(JSON.parse(savedAudioSetting));
+    }
+    const savedMusicSetting = localStorage.getItem("isMusicPlaying");
+    if (savedMusicSetting !== null) {
+      setIsMusicPlaying(JSON.parse(savedMusicSetting));
+    }
+    const audio = gameAudioRef.current;
+    const playMusic = () => {
+      if (audio && isMusicPlaying) {
+        audio.loop = true;
+        audio.volume = volume;
+        audio.play().catch((error) => {
+          console.error("Failed to play music:", error);
+        });
+      }
+    };
+    document.addEventListener("click", playMusic);
+    document.addEventListener("keyup", playMusic);
+    return () => {
+      document.removeEventListener("click", playMusic);
+      document.removeEventListener("keyup", playMusic);
+      if (audio) {
+        audio.pause();
+      }
+    };
+  }, [volume, isMusicPlaying, isAudioPlaying]);
+
+  const musicVolumeChange = (volume: number) => {
+    const audio = gameAudioRef.current;
+    if (audio) {
+      audio.volume = volume;
+      setVolume(volume);
+      localStorage.setItem("volume", volume.toString());
+    }
+  }
 
   const toggleAudio = () => {
-    setIsAudioPlaying((prevIsAudioPlaying) => !prevIsAudioPlaying);
+    setIsAudioPlaying((prevIsAudioPlaying) => {
+      const newIsIsAudioPlaying = !prevIsAudioPlaying;
+      localStorage.setItem("isAudioPlaying", JSON.stringify(newIsIsAudioPlaying));
+      return newIsIsAudioPlaying;
+    });
+  };
+  const toggleMusic = () => {
+    setIsMusicPlaying((prevIsMusicPlaying) => {
+      const newIsMusicPlaying = !prevIsMusicPlaying;
+      localStorage.setItem("isMusicPlaying", JSON.stringify(newIsMusicPlaying));
+      return newIsMusicPlaying;
+    });
   };
 
 
@@ -291,8 +341,6 @@ const Board = () => {
         moves={moves}
         time={time}
         restartLevel={restartLevel}
-        toggleAudio={toggleAudio}
-        isAudioPlaying={isAudioPlaying}
       />
 
       {gameEnded && (
@@ -307,6 +355,16 @@ const Board = () => {
       )}
       {isNewHighscore && (
         <InputModal audioRef={audioRef} isAudioPlaying={isAudioPlaying} />
+      )}
+      {settings && (
+        <Settings
+          isAudioPlaying={isAudioPlaying}
+          toggleAudio={toggleAudio}
+          isMusicPlaying={isMusicPlaying}
+          toggleMusic={toggleMusic}
+          volume={volume}
+          musicVolumeChange={musicVolumeChange}
+        />
       )}
       <div
         className="board"

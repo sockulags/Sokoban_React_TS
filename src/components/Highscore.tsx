@@ -1,3 +1,5 @@
+
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import Moves from "./Moves";
 import Pushes from "./Pushes";
@@ -10,8 +12,6 @@ interface IHighscoreProps {
   time: string;
   restartLevel: () => void;
   level: number;
-  toggleAudio: () => void;
-  isAudioPlaying: boolean;
 }
 
 // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -22,7 +22,7 @@ const Highscore = (props: IHighscoreProps) => {
     nav("/play/");
   };
 
-
+  const {toggleSettings} = useContext(ScoreDataContext);
   return (
     <>
       <div className="highscore-data">
@@ -47,6 +47,9 @@ const Highscore = (props: IHighscoreProps) => {
         <Moves moves={props.moves} />
         <Pushes pushes={props.pushes} />
         <Time time={props.time} />
+        <button className="instruction-btn" onClick={toggleSettings}>
+          <span className="material-symbols-outlined">settings</span>
+        </button>
       </div>
     </>
   );

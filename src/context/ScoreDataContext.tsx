@@ -33,6 +33,8 @@ interface IScoreData {
     isAudioPlaying: boolean
   ) => void;
   setLevel: (level: number) => void;
+  settings: boolean;
+  toggleSettings: () => void;
 }
 
 interface IScoreDataContextProps {
@@ -75,6 +77,7 @@ export function ScoreDataContextProvider({ children }: IScoreDataContextProps) {
   });
   const [score, setScore] = useState(0);
   const [isNewHighscore, setIsNewHighscore] = useState<boolean>(false);
+  const [settings, setSettings] = useState<boolean>(false);
 
 
   function updateConter(counter: number) {
@@ -191,6 +194,10 @@ export function ScoreDataContextProvider({ children }: IScoreDataContextProps) {
     setGameEnded(false);
   };
 
+  const toggleSettings = () => {
+    setSettings(!settings);
+  };
+
   useEffect(() => {
     if (start) {
       setUpInterval();
@@ -227,6 +234,8 @@ export function ScoreDataContextProvider({ children }: IScoreDataContextProps) {
     level,
     saveHighscore,
     setLevel,
+    settings,
+    toggleSettings,
   };
 
   return (
