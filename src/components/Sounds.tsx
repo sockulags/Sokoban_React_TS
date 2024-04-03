@@ -5,9 +5,21 @@ interface ISoundsProps {
   toggleAudio: () => void;
   isMusicPlaying: boolean;
   toggleMusic: () => void;
+  volume: number;
+  musicVolumeChange: (volume: number) => void;
 }
 
-const Sounds = ({ toggleAudio, isAudioPlaying,isMusicPlaying, toggleMusic }: ISoundsProps) => {
+const Sounds = ({
+  toggleAudio,
+  isAudioPlaying,
+  isMusicPlaying,
+  toggleMusic,
+  volume,
+  musicVolumeChange,
+}: ISoundsProps) => {
+  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    musicVolumeChange(parseFloat(e.target.value));
+  };
   return (
     <div className="sounds">
       <div className="music-toggle">
@@ -19,6 +31,14 @@ const Sounds = ({ toggleAudio, isAudioPlaying,isMusicPlaying, toggleMusic }: ISo
             <span className="material-symbols-outlined">volume_off</span>
           )}
         </button>
+        <input
+          type="range"
+          min="0"
+          max="1"
+          step="0.01"
+          defaultValue={volume}
+          onChange={handleVolumeChange}
+        />
       </div>
       <div className="music-toggle">
         <h4>Sound effects</h4>

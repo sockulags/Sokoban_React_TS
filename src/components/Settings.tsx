@@ -9,6 +9,8 @@ interface ISettingsProps {
   toggleAudio: () => void;
   isMusicPlaying: boolean;
   toggleMusic: () => void;
+  volume: number;
+  musicVolumeChange: (volume: number) => void;
 }
 
 const Settings = ({
@@ -16,6 +18,8 @@ const Settings = ({
   isAudioPlaying,
   isMusicPlaying,
   toggleMusic,
+  volume,
+  musicVolumeChange,
 }: ISettingsProps) => {
   const { toggleSettings } = useContext(ScoreDataContext);
   const [showControl, setShowControl] = useState(true);
@@ -41,7 +45,9 @@ const Settings = ({
               Sounds<span className="material-symbols-outlined">volume_up</span>
             </button>
           </div>
-          <button className="close-btn" onClick={toggleSettings}>X</button>
+          <button className="close-btn" onClick={toggleSettings}>
+            X
+          </button>
         </div>
         <div className="content">
           {showControl ? (
@@ -52,6 +58,8 @@ const Settings = ({
               toggleAudio={toggleAudio}
               isMusicPlaying={isMusicPlaying}
               toggleMusic={toggleMusic}
+              volume={volume}
+              musicVolumeChange={musicVolumeChange}
             />
           )}
         </div>

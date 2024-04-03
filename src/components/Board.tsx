@@ -61,6 +61,7 @@ const Board = () => {
   const gameAudioRef = useRef<HTMLAudioElement>(null);
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
+  const [volume, setVolume] = useState<number>(0.1);
 
 
   useEffect(() => {
@@ -87,6 +88,10 @@ const Board = () => {
   }, []);
 
   useEffect(() => {
+    const savedVolume = localStorage.getItem("volume");
+    if (savedVolume !== null) {
+      setVolume(parseFloat(savedVolume));
+    }
     const savedAudioSetting = localStorage.getItem("isAudioPlaying");
     if (savedAudioSetting !== null) {
       setIsAudioPlaying(JSON.parse(savedAudioSetting));
@@ -96,18 +101,34 @@ const Board = () => {
       setIsMusicPlaying(JSON.parse(savedMusicSetting));
     }
     const audio = gameAudioRef.current;
-    if (audio && isMusicPlaying) {
-      audio.loop = true;
-      audio.volume = 0.1;
-      audio.play();
-    }
+    const playMusic = () => {
+      if (audio && isMusicPlaying) {
+        audio.loop = true;
+        audio.volume = volume;
+        audio.play().catch((error) => {
+          console.error("Failed to play music:", error);
+        });
+      }
+    };
+    document.addEventListener("click", playMusic);
+    document.addEventListener("keyup", playMusic);
     return () => {
+      document.removeEventListener("click", playMusic);
+      document.removeEventListener("keyup", playMusic);
       if (audio) {
         audio.pause();
       }
     };
-  }, [isMusicPlaying, isAudioPlaying]);
+  }, [volume, isMusicPlaying, isAudioPlaying]);
 
+  const musicVolumeChange = (volume: number) => {
+    const audio = gameAudioRef.current;
+    if (audio) {
+      audio.volume = volume;
+      setVolume(volume);
+      localStorage.setItem("volume", volume.toString());
+    }
+  }
 
   const toggleAudio = () => {
     setIsAudioPlaying((prevIsAudioPlaying) => {
@@ -124,7 +145,8 @@ const Board = () => {
     });
   };
 
-   const getCharStartPosition = (resetBoard?: number[][]) => {
+
+  const getCharStartPosition = (resetBoard?: number[][]) => {
 
     const newBoard = resetBoard ?? board;
     const posY = newBoard.findIndex((row) => row.includes(5));
@@ -331,6 +353,8 @@ const Board = () => {
           toggleAudio={toggleAudio}
           isMusicPlaying={isMusicPlaying}
           toggleMusic={toggleMusic}
+          volume={volume}
+          musicVolumeChange={musicVolumeChange}
         />
       )}
       <div
