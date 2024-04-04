@@ -15,8 +15,10 @@ export const Level = ({level, image, disabled= false}: LevelProps) => {
         if(image && !powerImg){
             nav("/play/" + level);
         } else if (image && powerImg) {
+            nav("/play/powerups/" + level);
+        } else{
             nav("/play/custom/" + level);
-        } 
+        }
         }
 
     return (
