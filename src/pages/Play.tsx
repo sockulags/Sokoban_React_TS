@@ -43,7 +43,7 @@ export const Play = () => {
         )}
         {!normalMode && (
           <div className="play-container">
-            Custom
+        
             {customLevels.map((x, index) => {
               return <Level key={index} level={index} />;
             })}

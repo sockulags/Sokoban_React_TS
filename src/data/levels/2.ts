@@ -13,5 +13,7 @@ const level2 = [
   [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 ];
 
+const customLevel2 =[[3,1,1,1,1,1,1],[3,1,3,3,3,4,1],[1,1,10,3,3,4,1],[1,20,2,1,3,1,1],[1,1,2,1,3,1,3],[3,1,5,3,3,1,3],[3,1,1,1,1,1,3]]
+ export const cl2 = { level: 2 , board: customLevel2}
 
 export const l2 = { level: 2, board: level2, image: lvl2image}

@@ -79,6 +79,7 @@ const Board = () => {
     setBoard(newBoard);
     setCharPos(getCharStartPosition(newBoard));
     setStorageLocation(getStorageLocations(level));
+    console.log(JSON.stringify(board))
     setBoardSize({ numRows: newBoard.length, numCols: newBoard[0].length });
   }, [level]);
 
