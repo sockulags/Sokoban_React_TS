@@ -8,7 +8,7 @@ interface Props {
 export const Arrows = ({ onKeyDown }: Props) => {
     const [currentPosition, setCurrentPosition] = useState({ x: window.innerWidth * 0.8, y: window.innerHeight / 2 });
     const [dragging, setDragging] = useState(false);
-    let longPressTimer:number;
+    let longPressTimer:NodeJS.Timeout;
 
     const handleTouchStart = () => {
         longPressTimer = setTimeout(() => {
@@ -36,7 +36,7 @@ export const Arrows = ({ onKeyDown }: Props) => {
         position: 'absolute',
         top: `${currentPosition.y}px`,
         left: `${currentPosition.x}px`,
-        cursor: dragging ? 'grabbing' : 'grab' // Change cursor style when dragging
+        cursor: dragging ? 'grabbing' : 'grab' 
     };
 
     return (

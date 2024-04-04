@@ -28,18 +28,14 @@ const routes: NavbarRoutes[] = [
   {
     id: 4,
     name: "Play",
-    path: "/play",
+    path: "/levels/normal",
   },
   {
     id:5,
     name: "Highscore",
     path: "/highscore",
   },
-  {
-    id: 6,
-    name: "Create Level",
-    path: "/create-level",
-  },
+
 ];
 
 export const Navbar = () => {
@@ -69,7 +65,7 @@ export const Navbar = () => {
       <div className={`navbar-links ${isMenuOpen ? "active" : ""}`}>
         <ul>
           {routes.map((route) => (
-            <li key={route.id} onClick={() => handleClick(route.path)}>
+            <li key={route.id} className={isActive(route.path) ? "active" : ""} onClick={() => handleClick(route.path)}>
               {route.name}
             </li>
           ))}
