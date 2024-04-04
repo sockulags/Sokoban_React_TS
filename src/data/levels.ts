@@ -19,19 +19,19 @@ import characterLeft from "../assets/Character1.png";
 import characterRight from "../assets/Character2.png";
 
 //levels
-import {l0} from "./levels/0";
-import {l1} from "./levels/1";
-import {l2} from "./levels/2";
-import {l3} from "./levels/3";
-import {l4} from "./levels/4";
-import {l5} from "./levels/5";
-import {l6} from "./levels/6";
-import {l7} from "./levels/7";
-import {l8} from "./levels/8";
-import {l9} from "./levels/9";
-import {l10} from "./levels/10";
-import {l11} from "./levels/11";
-import {l12} from "./levels/12";
+import {l0, cl0} from "./levels/0";
+import {l1, cl1} from "./levels/1";
+import {l2, cl2} from "./levels/2";
+import {l3,cl3} from "./levels/3";
+import {l4, cl4} from "./levels/4";
+import {l5, cl5} from "./levels/5";
+import {l6,cl6} from "./levels/6";
+import {l7, cl7} from "./levels/7";
+import {l8, cl8} from "./levels/8";
+import {l9, cl9} from "./levels/9";
+import {l10, cl10} from "./levels/10";
+import {l11, cl11} from "./levels/11";
+import {l12, cl12} from "./levels/12";
 import {l13} from "./levels/13";
 import {l14} from "./levels/14";
 import {l15} from "./levels/15";
@@ -57,5 +57,5 @@ export const characterImages = {
   left: characterLeft,
   right: characterRight,
 };
-
+export const powerLevels = [cl0, cl1, cl2, cl3, cl4, cl5, cl6, cl7, cl8 , cl9, cl10, cl11, cl12];
 export const levels = [l0, l1, l2, l3, l4, l5, l6, l7, l8 , l9, l10, l11, l12, l13, l14, l15, l16, l17, l18, l19, l20];
