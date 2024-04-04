@@ -1,6 +1,6 @@
 import { ReactElement, createContext, useState, useEffect } from "react";
 import { IHighscore } from "../interface";
-import {levels as originalLevels} from "../data/levels";
+import {levels as originalLevels, powerLevels} from "../data/levels";
 import { getHighscores, saveNewHighscore } from "../data/functions";
 
 import { useParams, useLocation } from "react-router-dom";
@@ -79,7 +79,7 @@ export let lvls: ILevels[];
 
 const getLevelType = (isCustomLevel:boolean) => {
   const custom = getCustomLevels();
-  lvls = isCustomLevel ? custom : originalLevels;
+  lvls = isCustomLevel ? powerLevels : originalLevels;
   return lvls;
 }
 

@@ -1,15 +1,18 @@
 import './Play.css';
-import { levels} from "../data/levels.ts";
+import { levels, powerLevels} from "../data/levels.ts";
 import {Level} from "../components/Level.tsx";
 import { getCurrentLevel } from '../data/functions.ts';
 import ModeSelector from '../components/ModeSelector.tsx';
 import { useState } from 'react';
+import { PlayMode } from '../interface.ts';
+
+
 
 export const Play = () => {
     const level = getCurrentLevel();
-    const [normalMode, setMode] = useState<boolean>(true);
+    const [mode, setMode] = useState<PlayMode>("normal");
 
-    const changeMode = (mode:boolean) => {
+    const changeMode = (mode:PlayMode) => {
         setMode(mode);
     }
 
@@ -25,8 +28,8 @@ export const Play = () => {
     const customLevels = getCustomLevels();
     return (
       <>
-        <ModeSelector normalMode={normalMode} changeMode={changeMode} />
-        {normalMode && (
+        <ModeSelector mode={mode} changeMode={changeMode} />
+        {mode === "normal" && (
           <div className="play-container">
             {levels.map((x, index) => {
               const disabled = index >= level + 1;
@@ -41,7 +44,15 @@ export const Play = () => {
             })}
           </div>
         )}
-        {!normalMode && (
+        {mode === "powerups" && (
+          <div className="play-container">
+        
+            {powerLevels.map((x, index) => {
+              return <Level key={index} level={index} />;
+            })}
+          </div>
+        )}
+        {mode === "custom" && (
           <div className="play-container">
         
             {customLevels.map((x, index) => {
