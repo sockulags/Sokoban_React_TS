@@ -356,6 +356,8 @@ const Board = () => {
     setBoxLocations(getBoxLocations(level));
     setCharacterDirection("down");
     resetLevel();
+    setHasPullStrength(false);
+    setHasSuperStrength(false);
   };
 
 
