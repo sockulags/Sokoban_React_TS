@@ -6,11 +6,11 @@ const About = () => {
   const [activeTabPlay, setActiveTabPlay] = useState("goal");
   const [activeTabCreate, setActiveTabCreate] = useState("HowItWorks");
 
-  const toggleTabPlay = (tabName) => {
+  const toggleTabPlay = (tabName:string) => {
     setActiveTabPlay(tabName === activeTabPlay ? "" : tabName);
   };
 
-  const toggleTabCreate = (tabName) => {
+  const toggleTabCreate = (tabName:string) => {
     setActiveTabCreate(tabName === activeTabCreate ? "" : tabName);
   };
 

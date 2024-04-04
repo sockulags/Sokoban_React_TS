@@ -38,16 +38,17 @@
 }
 
 .modal-confirm {
-    color: #1e1e1e;
-    padding: 0.2rem 0.5rem;
-    background-color: #ecc010;
-    border: 1px solid #1e1e1e;
-    border-radius: 4px;
-    cursor: pointer;
+  color: #1e1e1e;
+  padding: 0.2rem 0.5rem;
+  background-color: #ecc010;
+  border: 1px solid #1e1e1e;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 7px;
 }
 
 .modal-confirm:hover {
-    background-color: #ecc010b4;
+  background-color: #ecc010b4;
 }
 
 .highscore-list {
