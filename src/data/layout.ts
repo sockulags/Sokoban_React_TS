@@ -139,8 +139,8 @@ const sandTheme = [
 const dullTheme = [
     concrete,
     blackWall,
-    concreteGround,
     grayCrate,
+    concreteGround,
     grayEndPoint,
     characterImages.down,
     grayCrateStorage
