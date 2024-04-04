@@ -6,6 +6,7 @@ import successSound from "../sounds/success.mp3";
 import wallHitSound from "../sounds/wallHit.mp3";
 import completeSound from "../sounds/complete.mp3";
 import highscoreSound from "../sounds/highscore.mp3";
+import powerSound from "../sounds/power.mp3";
 
 
 
@@ -157,6 +158,9 @@ export const playSound = (
       break;
     case "highscore":
       soundFile = highscoreSound;
+      break;
+    case "power":
+      soundFile = powerSound;
       break;
     default:
       return;

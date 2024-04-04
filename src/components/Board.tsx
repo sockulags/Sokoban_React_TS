@@ -27,13 +27,6 @@ const deepCopy = (arr: number[][]): number[][] => {
   return arr.map((subArr) => [...subArr]);
 };
 
-const customLevels = (level: number) => {
-  const customLevels = localStorage.getItem("customLevels");
-  if(customLevels){
-    const parsed = JSON.parse(customLevels);
-    return parsed[level];
-  }
-}
 
 const Board = () => {
 
@@ -305,18 +298,32 @@ const Board = () => {
   
 
     if (![0,1,2].includes(board[newPos.y][newPos.x])) {
-      if(board[newPos.y][newPos.x] === 20) setHasPullStrength(true);
-      if(board[newPos.y][newPos.x] === 10) setHasSuperStrength(true);
+      if(board[newPos.y][newPos.x] === 20) {
+        setHasPullStrength(true);
+        playSound(audioRef, "power", isAudioPlaying);
+      }
+      if(board[newPos.y][newPos.x] === 10){
+         setHasSuperStrength(true)
+         playSound(audioRef, "power", isAudioPlaying);
+      }
       updateBoard(newPos.y, newPos.x);
       console.log(hasPullStrength)
       return;
     }
 
-    if (hasSuperStrength && [2].includes(board[newPos.y][newPos.x]) && [2].includes(board[newBoxPos.y][newBoxPos.x])&& [3,4].includes(board[secondBoxNewPos.y][secondBoxNewPos.x])){
+    if (hasSuperStrength && [2].includes(board[newPos.y][newPos.x]) && [2].includes(board[newBoxPos.y][newBoxPos.x])&& [3].includes(board[secondBoxNewPos.y][secondBoxNewPos.x])){
       updateBoxPosition(secondBoxNewPos.y, secondBoxNewPos.x);
       updateBoxPosition(newBoxPos.y, newBoxPos.x);
       updateBoard(newPos.y, newPos.x);
       playSound(audioRef, "push", isAudioPlaying);
+      return;
+    }
+
+    if (hasSuperStrength && [2].includes(board[newPos.y][newPos.x]) && [2].includes(board[newBoxPos.y][newBoxPos.x])&& [4].includes(board[secondBoxNewPos.y][secondBoxNewPos.x])){
+      updateBoxPosition(secondBoxNewPos.y, secondBoxNewPos.x);
+      updateBoxPosition(newBoxPos.y, newBoxPos.x);
+      updateBoard(newPos.y, newPos.x);
+      playSound(audioRef, "success", isAudioPlaying);
       return;
     }
 

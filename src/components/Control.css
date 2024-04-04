@@ -9,5 +9,13 @@
             color: #ecc010;
             margin-bottom: .2rem;
         }
+        .key {
+            img {
+                background-color: #fff;
+                margin-left: .5rem;
+                width: 25px;
+                height: 25px;
+            }
+        }
     }
 }

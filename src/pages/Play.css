@@ -1,5 +1,5 @@
 .play-container{
-    margin: 0 30px;
+    margin: 30px;
     display:flex;   
     flex-wrap: wrap;
    gap: 20px;

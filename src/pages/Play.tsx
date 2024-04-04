@@ -24,20 +24,31 @@ export const Play = () => {
 
     const customLevels = getCustomLevels();
     return (
-        <>
-        <ModeSelector normalMode={normalMode} changeMode={changeMode}/>
-        <div className='play-container'>
-           {levels.map((x, index) =>{
-            const disabled = index >= level + 1;
-            return <Level key={index} level={x.level} image={x.image} disabled={disabled}/>
-           })}
-        </div>
-        <div className='play-container'>
+      <>
+        <ModeSelector normalMode={normalMode} changeMode={changeMode} />
+        {normalMode && (
+          <div className="play-container">
+            {levels.map((x, index) => {
+              const disabled = index >= level + 1;
+              return (
+                <Level
+                  key={index}
+                  level={x.level}
+                  image={x.image}
+                  disabled={disabled}
+                />
+              );
+            })}
+          </div>
+        )}
+        {!normalMode && (
+          <div className="play-container">
             Custom
-           {customLevels.map((x, index) =>{
-            return <Level key={index} level={index}/>
-           })}
-        </div>
-        </>
+            {customLevels.map((x, index) => {
+              return <Level key={index} level={index} />;
+            })}
+          </div>
+        )}
+      </>
     );
 }
