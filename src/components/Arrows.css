@@ -1,24 +1,39 @@
 .arrows-container {
    display: none;
     position: absolute;     
-    width: 100px; /* Adjust this value to fit the circle */
-    height: 100px; /* Adjust this value to fit the circle */
-    margin: auto; /* Center the container */
+    width: 100px; 
+    height: 100px; 
+    margin: auto; 
     border-radius: 50%;     
     z-index: 1;
    transform: translate(-50%,-50%);
     box-shadow: 0px 0px 1px 2px rgba(143, 143, 143, 0.5);
     background: radial-gradient(circle, rgba(235, 235, 235, 1)  0%, rgba(235, 235, 235, 0.9) 40%, rgb(199, 199, 199) 70%);
   }
+
+  .ctrl-container {
+    display: none;
+     position: absolute;     
+     width: 100px; 
+     height: 50px; 
+     margin: auto; 
+     border-radius: 5%;     
+     z-index: 1;
+    transform: translate(-50%,-50%);
+     box-shadow: 0px 0px 1px 2px rgba(143, 143, 143, 0.5);
+     background:rgba(199, 199, 199, 0.9);
+     color: rgb(56, 56, 56);
+     font-size: 25px;
+     font-weight: 600;
+    }
   
   .arrow {
     position: absolute;
     width:auto;
-    height: 40px; /* Adjust arrow size */
+    height: 40px; 
     background-color: transparent;
     border: none;
-    border-radius: 50%;
-    /* background-color: rgba(0,0,0,0.4); */
+    border-radius: 50%;    
     outline: none;
     display:flex;
     align-items: center;
@@ -52,8 +67,7 @@
     left: 10%;
   }
   
-  .arrow-right {
-    /* No rotation needed for the right arrow */
+  .arrow-right {   
     transform: translateY(-50%) translateX(-50%);
     top: 50%;
     left: 90%;
@@ -67,15 +81,28 @@
   'opsz' 24
 }
 @media screen and (max-height:480px) and (orientation: landscape){  
-    .arrows-container{
+    .arrows-container
+    {
         display: block;
+    }
+
+    .ctrl-container{
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 }
 
 /* Show arrows on touchscreen */
 @media (pointer: coarse) {
-  .arrows-container{
+  .arrows-container
+  {
     display: block; 
+  }
+  .ctrl-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 
