@@ -1,4 +1,5 @@
 import lvl8image from "../../assets/level_images/level_8.png";
+import Clvl8image from "../../assets/power_up_level_images/level_8.png";
 
 const level8 = [
   [3, 3, 1, 1, 1, 1, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
@@ -34,6 +35,6 @@ const customLevel8 = [
   [1, 1, 1, 1, 1, 1, 3, 1, 1, 1],
 ];
 
-export const cl8 = { level: 8, board: customLevel8 };
+export const cl8 = { level: 8, board: customLevel8, image:Clvl8image };
 
 export const l8 = { level: 8, board: level8, image: lvl8image };

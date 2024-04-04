@@ -22,16 +22,11 @@ const routes: NavbarRoutes[] = [
   },
   {
     id: 3,
-    name: "How To Play",
-    path: "/how-to-play",
-  },
-  {
-    id: 4,
     name: "Play",
     path: "/levels/normal",
   },
   {
-    id:5,
+    id:4,
     name: "Highscore",
     path: "/highscore",
   },

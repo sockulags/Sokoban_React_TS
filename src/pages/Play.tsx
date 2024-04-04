@@ -74,7 +74,13 @@ export const Play = () => {
           <div className="play-container">
         
             {powerLevels.map((x, index) => {
-              return <Level key={index} level={index} />;
+              return (
+                <Level
+                  key={index}
+                  level={x.level}
+                  image={x.image}
+                />
+              );
             })}
           </div>
         )}
