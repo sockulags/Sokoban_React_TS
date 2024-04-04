@@ -16,4 +16,6 @@ const level5 = [
   [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 1, 3],
 ];
 
+const customLevel5 = [[3,1,1,1,1,3,3,3],[3,1,2,20,1,3,3,3],[3,1,3,3,1,1,1,3],[3,1,10,3,4,4,1,3],[3,1,4,2,2,5,1,3],[3,1,1,1,1,1,1,3],[3,3,3,3,3,3,3,3],[3,3,3,3,3,3,3,3]]
+export const cl5 = {level: 5, board: customLevel5}
 export const l5 = { level: 5, board: level5, image: lvl5image}
