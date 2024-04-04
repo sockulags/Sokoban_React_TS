@@ -6,12 +6,15 @@ interface Props {
 }
 
 export const Arrows = ({ onKeyDown }: Props) => {
-    const [currentPosition, setCurrentPosition] = useState({ x: window.innerWidth * 0.8, y: window.innerHeight / 2 });
+    const [currentArrowsPosition, setCurrentArrowsPosition] = useState({ x: window.innerWidth * 0.8, y: window.innerHeight / 2 });
+    const [currentCtrlPosition, setCurrentCtrlPosition] = useState({ x: window.innerWidth * 0.1, y: window.innerHeight *0.8 });
     const [dragging, setDragging] = useState(false);
-    let longPressTimer:number;
+    const [isArrows, setIsArrows] = useState(true);
+    let longPressTimer:NodeJS.Timeout;
 
-    const handleTouchStart = () => {
+    const handleTouchStart = (arrow: boolean) => {
         longPressTimer = setTimeout(() => {
+            setIsArrows(arrow);
             setDragging(true);
         }, 500); 
     };
@@ -19,9 +22,14 @@ export const Arrows = ({ onKeyDown }: Props) => {
     const handleTouchMove = (event : React.TouchEvent) => {
         if (dragging) {
             const touch = event.touches[0];
-            setCurrentPosition({ x: touch.clientX, y: touch.clientY });
+            if(isArrows) {
+            setCurrentArrowsPosition({ x: touch.clientX, y: touch.clientY });}
+            else{
+                setCurrentCtrlPosition({ x: touch.clientX, y: touch.clientY });}
+
+            }
         }
-    };
+    
 
     const handleTouchEnd = () => {
         clearTimeout(longPressTimer);    
@@ -34,15 +42,22 @@ export const Arrows = ({ onKeyDown }: Props) => {
 
     const arrowContainerStyle: React.CSSProperties = {
         position: 'absolute',
-        top: `${currentPosition.y}px`,
-        left: `${currentPosition.x}px`,
-        cursor: dragging ? 'grabbing' : 'grab' // Change cursor style when dragging
+        top: `${currentArrowsPosition.y}px`,
+        left: `${currentArrowsPosition.x}px`,
+        cursor: dragging ? 'grabbing' : 'grab' 
+    };
+
+    const ctrlContainerStyle: React.CSSProperties = {
+        position: 'absolute',
+        top: `${currentCtrlPosition.y}px`,
+        left: `${currentCtrlPosition.x}px`,
+        cursor: dragging ? 'grabbing' : 'grab' 
     };
 
     return (
-        <div 
+        <>        <div 
             className="arrows-container"
-            onTouchStart={handleTouchStart}
+            onTouchStart={() => handleTouchStart(true)}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
             style={arrowContainerStyle}
@@ -52,5 +67,15 @@ export const Arrows = ({ onKeyDown }: Props) => {
             <button className="arrow arrow-right" onClick={() => handleClick("ArrowRight")}><span className="material-symbols-outlined">play_arrow</span></button>
             <button className="arrow arrow-down" onClick={() => handleClick("ArrowDown")}><span className="material-symbols-outlined">play_arrow</span></button>
         </div>
+        <div className="ctrl-container"
+              onTouchStart={() => handleTouchStart(false)}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+              style={ctrlContainerStyle}
+        >
+           CTRL
+        </div>
+        </>
+
     );
 };

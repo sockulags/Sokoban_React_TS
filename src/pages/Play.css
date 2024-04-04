@@ -13,4 +13,38 @@
             font-size: 32px;
         }
     }
+    
 }
+
+.create-level-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #1e1e1e;
+    padding: 0.4rem 0.6rem;
+    background-color: #ecc010;
+    border: 1px solid #1e1e1e;
+    border-radius: 4px;
+    margin-left: 30px;
+    font-size: 1.2rem;
+    bottom: 10px;
+    right: 50px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.1s;
+    span{
+        position: relative;
+        top: 1px;
+        margin-right: 5px;
+        font-size: 2rem;
+        color: #1e1e1e;
+    }
+
+ 
+  }
+
+  .create-level-btn:hover{
+   transform: scale(1.05);
+   font-weight: 700;
+ 
+  }

@@ -1,5 +1,5 @@
 import { ReactElement, createContext, useState, useEffect } from "react";
-import { IHighscore } from "../interface";
+import { IHighscore, PlayMode } from "../interface";
 import {levels as originalLevels, powerLevels} from "../data/levels";
 import { getHighscores, saveNewHighscore } from "../data/functions";
 
@@ -43,7 +43,7 @@ interface IScoreData {
   settings: boolean;
   toggleSettings: () => void;
   levels: ILevels[];
-  isCustomLevel: boolean;
+  isCustomLevel: PlayMode;
 }
 
 interface IScoreDataContextProps {
@@ -77,9 +77,17 @@ const getCustomLevels = () => {
 
 export let lvls: ILevels[];
 
-const getLevelType = (isCustomLevel:boolean) => {
-  const custom = getCustomLevels();
-  lvls = isCustomLevel ? powerLevels : originalLevels;
+const getLevelType = (isCustomLevel:PlayMode) => {
+  if(isCustomLevel === "normal"){
+    lvls = originalLevels
+  } else if(isCustomLevel === "powerups"){
+    lvls = powerLevels;
+  } else if(isCustomLevel === "custom"){
+    const custom = getCustomLevels();
+    lvls = custom;
+  }
+  
+  
   return lvls;
 }
 
@@ -88,12 +96,12 @@ export const ScoreDataContext = createContext({} as IScoreData);
 export function ScoreDataContextProvider({ children }: IScoreDataContextProps) {
   const params = useParams();
   const location = useLocation();
-  // console.log(location.pathname)
-
-  
   const lvl = params.id ? parseInt(params.id) : 0;
   const [level, setLevel] = useState<number>(lvl);
-  const [isCustomLevel] = useState<boolean>(location.pathname.includes("custom"))
+  const [isCustomLevel] = useState<PlayMode>(
+    location.pathname.includes("custom") ? "custom" : 
+    location.pathname.includes("powerups") ? "powerups" :
+    "normal")
   const levels = getLevelType(isCustomLevel);
   const [moves, setMoves] = useState<number>(0);
   const [pushes, setPushes] = useState<number>(0);

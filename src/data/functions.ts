@@ -127,7 +127,6 @@ export const getCurrentLevel = () => {
   if (savedLevels) {
     const parsedLevels:number[] = JSON.parse(savedLevels).map((lvl: string) => parseInt(lvl));
     const maxLevel = Math.max(...parsedLevels);
-    console.log(levels)
     return maxLevel + 1 < levels.length ? maxLevel+1 : levels.length;    
   } else
   return 0;

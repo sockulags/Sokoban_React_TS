@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./LevelCreator.css";
 import Tile from "../components/Tile";
 import { themes, powerUps } from "../data/layout";
+import { useNavigate } from "react-router-dom";
 
 const renderBoard = (size: number): number[][] => {
   const board: number[][] = [];
@@ -62,7 +63,7 @@ const LevelCreator = () => {
       return newBoard;
     });
   };
-
+  const nav = useNavigate();
   const saveCustomLevel = () => {
     const customLevels = localStorage.getItem('customLevels');
     if(customLevels){
@@ -75,6 +76,7 @@ const LevelCreator = () => {
       localStorage.setItem('customLevels', JSON.stringify(levels));
     }
     setBoard(renderBoard(selectedSize));
+    nav("/levels/custom");
   }
 
   return (
