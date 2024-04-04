@@ -59,16 +59,22 @@ interface IGameEndProps {
 }
 
 const getCustomLevels = () => {
-  const data = localStorage.getItem("customLevels");
-  let customLevels;
-  if(data){
-    customLevels = JSON.parse(data);
+  try {
+    const data = localStorage.getItem("customLevels");
+    let customLevels = [];
+    if (data) {
+      customLevels = JSON.parse(data);
+    }
+    const custom: ILevels[] = customLevels.map((b: number[][], l: number) => {
+      return { level: l, board: b };
+    });
+    return custom;
+  } catch (error) {
+    console.error("Error while fetching custom levels:", error);
+    return [];
   }
-  const custom:ILevels[] = customLevels.map((b:number[][], l:number) => {
-   return {level: l, board: b}
-  })
-  return custom;
-}
+};
+
 export let lvls: ILevels[];
 
 const getLevelType = (isCustomLevel:boolean) => {
