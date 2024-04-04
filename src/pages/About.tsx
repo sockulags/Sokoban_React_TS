@@ -227,7 +227,7 @@ const About = () => {
           </button>
           <button
             className={`tab-button ${
-              activeTabPlay === "TipsforLevelDesign" ? "active" : ""
+              activeTabCreate === "TipsforLevelDesign" ? "active" : ""
             }`}
             onClick={() => toggleTabCreate("TipsforLevelDesign")}
           >
@@ -235,7 +235,7 @@ const About = () => {
           </button>
           <button
             className={`tab-button ${
-              activeTabPlay === "ReadytoCreate?" ? "active" : ""
+              activeTabCreate === "ReadytoCreate?" ? "active" : ""
             }`}
             onClick={() => toggleTabCreate("ReadytoCreate?")}
           >
