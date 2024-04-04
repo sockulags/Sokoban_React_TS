@@ -1,4 +1,3 @@
-
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import Moves from "./Moves";
@@ -20,16 +19,15 @@ const Highscore = (props: IHighscoreProps) => {
   const nav = useNavigate();
 
   const handleGoBack = () => {
-    nav("/play/");
+    nav("/levels/normal");
   };
 
-  const {toggleSettings} = useContext(ScoreDataContext);
+  const { toggleSettings } = useContext(ScoreDataContext);
   return (
     <>
       <div className="highscore-data">
         <button className="level-btn" onClick={handleGoBack}>
           Levels
-
         </button>
         <button className="reset-btn" onClick={props.restartLevel}>
           Reset Level
