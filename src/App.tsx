@@ -4,12 +4,12 @@ import { Navbar } from "./components/Navbar";
 import { Home } from "./pages/Home";
 import "./App.css";
 import "./fonts/edmund-free.ttf";
-import { About } from "./pages/About";
+import About  from "./pages/About";
 import { Play } from "./pages/Play";
 import { HighscorePage } from "./pages/HighscorePage";
 import GamePlay from "./pages/GamePlay";
 import LevelCreator from "./pages/LevelCreator";
-import HowToPlay from "./pages/HowToPlay";
+
 
 export function App() {
   const location = useLocation();
@@ -89,7 +89,6 @@ export function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
-        <Route path="/how-to-play" element={<HowToPlay />} />
         <Route path="/play" element={<Play />} />
         <Route path="/play/:id" element={<GamePlay />} />
         <Route path="/play/custom/:id" element={<GamePlay />} />

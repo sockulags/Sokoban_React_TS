@@ -1,11 +1,59 @@
-.about-container{
-   
-    width: 95%;
-    margin: 0 auto;
-    h1, h2{
-        margin-top: 20px;
-    }
-    p{
-        margin-bottom:10px;
-    }
+.how-to-container {
+  width: 90%;
+  max-width: 700px;
+  margin: 0 auto;
+  margin-bottom: 3rem;
+  h1,
+  h2 {
+    margin-top: 20px;
+  }
+  h1{
+     margin-bottom: 10px;
+  }
+  p {
+    margin-bottom: 10px;
+  }
+  h3 {
+    margin-top: 10px;
+  }
+  li {
+    margin-top: 10px;
+  }
+}
+.tabs {
+  padding-top: 1rem;
+  display: flex;
+  gap: 2px;
+}
+.tab-button {
+  color: #1e1e1e;
+  padding: 0.2rem 0.5rem;
+  background-color: #ecc010;
+  border: 1px solid #1e1e1e;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.tabs button.active {
+  background-color: #ccc;
+  color: #333;
+  font-weight: bold;
+}
+
+.tab {
+  display: none;
+}
+
+.tab.active {
+  display: block;
+}
+
+.content-container {
+  padding-bottom: 2rem;
+  border-bottom: #ecc010 1px solid;
+}
+.content-play {
+  height: 300px;
+}
+.content-create {
+  height: 600px;
 }
