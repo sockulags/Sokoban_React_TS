@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./About.css";
+import VideoPlayer from "../components/VideoPlayer";
 
 const About = () => {
   const [activeTabPlay, setActiveTabPlay] = useState("goal");
@@ -316,6 +317,7 @@ const About = () => {
           challenge fellow Sokoban enthusiasts
         </div>
       </div>
+        <VideoPlayer/>
     </div>
   );
 };

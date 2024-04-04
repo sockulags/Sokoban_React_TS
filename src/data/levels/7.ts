@@ -1,4 +1,5 @@
 import lvl7image from "../../assets/level_images/level_7.png";
+import Clvl7image from "../../assets/power_up_level_images/level_7.png";
 
 export const level7 = [
   [3, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 3],
@@ -28,5 +29,5 @@ const customLevel7 = [
   [3, 3, 3, 1, 1, 1, 3, 1, 1, 1],
 ];
 
-export const cl7 = { level: 7, board: customLevel7 };
+export const cl7 = { level: 7, board: customLevel7, image: Clvl7image };
 export const l7 = { level: 7, board: level7, image: lvl7image };

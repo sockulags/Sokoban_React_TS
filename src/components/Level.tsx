@@ -10,12 +10,14 @@ interface LevelProps{
 
 export const Level = ({level, image, disabled= false}: LevelProps) => {
     const nav = useNavigate();
+    const powerImg = image?.includes('power_up');
     const handleClick = (level: number) => {
-        if(image)
-        nav("/play/" + level);
-    else
-    nav("/play/custom/" + level);
-    }
+        if(image && !powerImg){
+            nav("/play/" + level);
+        } else if (image && powerImg) {
+            nav("/play/custom/" + level);
+        } 
+        }
 
     return (
         <div className={`level-container ${disabled ? 'disabled' : ''}`} onClick={() => handleClick(level)}>

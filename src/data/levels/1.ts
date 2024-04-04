@@ -1,4 +1,5 @@
 import lvl1image from  "../../assets/level_images/level_1.png";
+import Clvl1image from  "../../assets/power_up_level_images/level_1.png";
 
 const level1 = [
     [0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -16,5 +17,5 @@ const level1 = [
 
 const customLevel1 = [[3,3,1,1,1,1,1,3,3,3],[3,3,1,4,3,3,1,3,3,3],[3,3,1,4,10,3,1,3,3,3],[3,3,1,2,1,3,1,3,3,3],[3,3,1,2,1,3,1,3,3,3],[3,3,1,5,1,3,1,3,3,3],[3,3,1,3,3,3,1,3,3,3],[3,3,1,1,1,1,1,3,3,3],[3,3,3,3,3,3,3,3,3,3],[3,3,3,3,3,3,3,3,3,3]]
 
-export const cl1 = { level: 1, board: customLevel1}
+export const cl1 = { level: 1, board: customLevel1, image: Clvl1image}
 export const l1 = { level: 1, board: level1, image: lvl1image}

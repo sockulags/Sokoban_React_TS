@@ -1,4 +1,5 @@
 import lvl9image from "../../assets/level_images/level_9.png";
+import Clvl9image from "../../assets/power_up_level_images/level_9.png";
 
 const level9 = [
   [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 1, 1],
@@ -36,6 +37,6 @@ const custumLevel9 = [
   [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
 ];
 
-export const cl9 = { level :9, board: custumLevel9}
+export const cl9 = { level :9, board: custumLevel9, image: Clvl9image}
 
 export const l9 = { level: 9, board: level9, image: lvl9image };
