@@ -178,7 +178,7 @@ const Board = () => {
 
   const checkCompletion = () => {
     const correct = getCorrectBoxCount(storageLocations, boxLocations);
-    if (correct === storageLocations.length) {
+    if (correct === 0) {
       updateGameEnded(level);
       setCharacterDirection("down");
       playSound(audioRef, "complete", isAudioPlaying);
