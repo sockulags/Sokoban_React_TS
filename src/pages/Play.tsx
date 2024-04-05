@@ -90,7 +90,7 @@ export const Play = () => {
           <div className="play-container">
         
             {customLevels.length === 0 ? <p>You haven't created any levels yet. Create your first to play.</p> : customLevels.map((x:number[][], index:number) => {
-              return <Level key={index} level={index} />;
+              return <Level key={x.length +index} level={index} />;
             })}
           </div>
           <button className="create-level-btn" onClick={createLevelClick}><span>+</span> Create Level</button>

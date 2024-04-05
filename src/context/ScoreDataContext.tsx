@@ -1,9 +1,10 @@
 import { ReactElement, createContext, useState, useEffect } from "react";
-import { IHighscore, PlayMode } from "../interface";
+import {  PlayMode } from "../interface";
 import {levels as originalLevels, powerLevels} from "../data/levels";
 import { getHighscores, saveNewHighscore } from "../data/functions";
 
 import { useParams, useLocation } from "react-router-dom";
+import { HighscoreProps } from "../pages/HighscorePage";
 
 type IntervalId = ReturnType<typeof setInterval>;
 
@@ -54,7 +55,7 @@ interface IGameEndProps {
   title: string;
   message1: string;
   message2: string;
-  data?: IHighscore[];
+  data?:HighscoreProps[];
   onConfirm: IScoreData["handleGameEnd"];
 }
 
@@ -116,7 +117,7 @@ export function ScoreDataContextProvider({ children }: IScoreDataContextProps) {
     title: "",
     message1: "",
     message2: "",
-    data: [{ name: "", points: 0 }],
+    data: [{ name: "", score: 0 }],
     onConfirm: () => handleGameEnd(),
   });
   const [score, setScore] = useState(0);
@@ -146,16 +147,17 @@ export function ScoreDataContextProvider({ children }: IScoreDataContextProps) {
       //setIntervalId(null);
     }
     const highscoreList = getHighscores(level);
+    // const highScoreModal: IHighscore[] = highscoreList.map(h =>  {name: h.name, points: h.points})
 
     setGameEndMessages({
       title: `Congratulations, you finished ${isCustomLevel ? "custom ": ""}level ${level}`,
       message1: "Moves: " + moves + " Pushes: " + pushes + " Time: " + time,
       message2: "Points: " + newScore,
-      data: isCustomLevel? undefined : highscoreList,
+      data: isCustomLevel === "normal" ? undefined : highscoreList,
       onConfirm: () => handleGameEnd(),
     });
    
-    if (!highscoreList || highscoreList.length < 5 || highscoreList?.some(s => s.points < newScore)) setIsNewHighscore(!isCustomLevel);
+    if (!highscoreList || highscoreList.length < 5 || highscoreList?.some(s => s.score < newScore)) setIsNewHighscore(!isCustomLevel);
   }
 
   function updateGameTime(time: string) {
@@ -215,7 +217,7 @@ export function ScoreDataContextProvider({ children }: IScoreDataContextProps) {
     audioRef: React.RefObject<HTMLAudioElement>,
     isAudioPlaying: boolean
   ) => {
-    if(isCustomLevel) return;
+    if(isCustomLevel !== "normal") return;
     setIsNewHighscore(false);
     setGameEndMessages((prev) => ({
       ...prev,

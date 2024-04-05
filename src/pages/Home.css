@@ -1,4 +1,6 @@
 .homepage{
-    width: 95%;
+    width: 90%;
+    max-width: 700px;
     margin: 0 auto;
+    margin-bottom: 3rem;
 }

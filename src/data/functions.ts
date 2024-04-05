@@ -7,6 +7,7 @@ import wallHitSound from "../sounds/wallHit.mp3";
 import completeSound from "../sounds/complete.mp3";
 import highscoreSound from "../sounds/highscore.mp3";
 import powerSound from "../sounds/power.mp3";
+import { HighscoreProps } from "../pages/HighscorePage";
 
 
 
@@ -54,9 +55,10 @@ function getLocations(level: number, tileType: number, board?: number[][]) {
 export const getHighscores = (level: number) => {
   const highscoresString = localStorage.getItem(`sokoban-level${level}`); 
   if(highscoresString) {
-    const highscores: { name: string; points: number; moves:number, time:string }[] = JSON.parse(highscoresString);
+    const highscores: HighscoreProps[] = JSON.parse(highscoresString);
     return highscores;
   }
+  return [];
 }
 
 export const saveNewHighscore = (

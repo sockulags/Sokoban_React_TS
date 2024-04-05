@@ -21,8 +21,7 @@ export const Home = () => {
         <p>
           It's a challenging test of your spatial reasoning and problem-solving
           skills.
-        </p>
-        <a>Read More...</a>
+        </p>       
       </section>
       <section className="features-section">
         <h2>Features</h2>

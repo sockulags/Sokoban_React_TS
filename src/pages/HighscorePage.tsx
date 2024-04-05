@@ -2,12 +2,12 @@ import "./HighscorePage.css";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getCurrentLevel, getHighscores } from "../data/functions";
-interface HighscoreProps {
-  id: number;
+export interface HighscoreProps {
+  id?: number;
   name: string;
   score: number;
-  time: string;
-  moves: number;
+  time?: string;
+  moves?: number;
 }
 export const HighscorePage = () => {
   const lastCompletedLevel = getCurrentLevel() -1;
@@ -16,7 +16,8 @@ export const HighscorePage = () => {
  const nav = useNavigate();
   useEffect(() => {
     if (id) {
-      const highscore: HighscoreProps[] = getHighscores(parseInt(id ?? 0));
+      const idNr = parseInt(id);
+      const highscore: HighscoreProps[] = getHighscores(idNr);
       if (highscore) {
         setLeaderboard(highscore);
       } else {

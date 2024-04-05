@@ -1,16 +1,16 @@
 import "./modal.css"
 import Logo from "../assets/sokoban-header.png";
-import { IHighscore } from "../interface";
 import { useNavigate } from "react-router-dom";
 import { ScoreDataContext } from "../context/ScoreDataContext";
 import { useContext } from "react";
+import { HighscoreProps } from "../pages/HighscorePage";
 
 interface IModalProps {
   title: string;
   message1: string;
   message2?: string;
   onConfirm: () => void;
-  data?: IHighscore[];
+  data?: HighscoreProps[];
   restart: () => void;
 }
 
@@ -53,7 +53,7 @@ const Modal = ({
                 {data.map((score, index) => (
                   <li key={index}>
                     <span className="highscore-name">{score.name}: </span>
-                    <span className="highscore-points">{score.points}</span>
+                    <span className="highscore-points">{score.score}</span>
                   </li>
                 ))}
               </ol>
